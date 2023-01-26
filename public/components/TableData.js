@@ -1,26 +1,33 @@
 class TableData extends HTMLElement{
     constructor(){
         super();
+        this.t = document.createElement('table');
+        this.th = document.createElement('thead');
+        this.tb = document.createElement('tbody');
     }
 
     connectedCallback(){
-        this.t = document.createElement('table')
-        this.th = document.createElement('thead');
-        this.tb = document.createElement('tbody')
         this.t.append(this.th, this.tb)
         this.append(this.t)
     }
 
 
     populate_data(table_name){
-        console.log('asd')
+
+        this.clear();
         window.API.get_rows(table_name).then(rows => {
             window.API.get_schema(table_name).then(schema => {
-                for(var i = 0; i < 100; i++){
+                this.th.append(this.header_row(Object.entries(schema)))
+                for(var i = 0; i < 20; i++){
                     this.tb.append(this.empty_row(schema))
                 }
             })
         })
+    }
+
+    clear(){
+        this.th.innerHTML = '';
+        this.tb.innerHTML = '';
     }
 
     empty_row(schema){
@@ -35,6 +42,17 @@ class TableData extends HTMLElement{
             row.append(td)
         })
         //row.append()
+        return row;
+    }
+
+    header_row(cols){
+        var row = document.createElement('tr');
+        cols.forEach(col => {
+            console.log(col)
+            var td = document.createElement('th');
+            td.innerHTML = col[0];
+            row.append(td)
+        })
         return row;
     }
 

@@ -74,7 +74,7 @@ class Grenvintory{
         var w = 600
         var x = (document.body.clientWidth / 2) - (w / 2);
         console.log(w)
-        this.maincontent.append(this.window({x:x, y: 0, width: w, height: 800, el: table_data}))
+        this.maincontent.append(this.window({x:x, y: 20, width: w, height: 500, el: table_data}))
 
     }
 

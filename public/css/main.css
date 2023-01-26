@@ -1,0 +1,20 @@
+*{
+    --input-active-color:'grey'
+}
+
+td, tr, th{
+    color:white;
+}
+
+table{
+
+}
+
+input[type=text]{
+    border-radius:5px;
+    outline:none;
+}
+
+input[type=text]:focus{
+    background:var(--input-active-color);
+}

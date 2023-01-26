@@ -13,6 +13,7 @@ class Window extends HTMLElement{
         this.style.left = `${data.x}px`;
         this.style.width = `${data.width}px`;
         this.style.height = `${data.height}px`;
+        this.style.overflow = 'scroll'
         this.append(data.el)
         return this;
     }
