@@ -1,20 +1,9 @@
 class TableData extends HTMLElement{
-<<<<<<< HEAD
-    constructor(){
-=======
     constructor(props){
->>>>>>> 4ffc0ab (work)
         super();
         this.t = document.createElement('table');
         this.th = document.createElement('thead');
         this.tb = document.createElement('tbody');
-<<<<<<< HEAD
-    }
-
-    connectedCallback(){
-        console.log(window.innerWidth - this.offsetWidth / 2 + 'px')
-        this.style.marginLeft = window.innerWidth - this.offsetWidth / 2 + 'px';
-=======
         this.props = props
     }
 
@@ -26,7 +15,6 @@ class TableData extends HTMLElement{
         this.th.display = 'block'
         this.th.background = 'blue'
 
->>>>>>> 4ffc0ab (work)
         this.t.append(this.th, this.tb)
         this.append(this.t)
     }
@@ -40,13 +28,8 @@ class TableData extends HTMLElement{
             window.API.get_schema(table_name).then(schema => {
                 console.log(schema)
                 this.th.append(this.header_row(Object.entries(schema)))
-<<<<<<< HEAD
-                for(var i = 0; i < 20; i++){
-                    this.tb.append(this.empty_row(schema))
-=======
                 for(var i = 0; i < 200; i++){
                     this.tb.append(this.empty_row(i, schema))
->>>>>>> 4ffc0ab (work)
                 }
             })
         })
@@ -57,7 +40,6 @@ class TableData extends HTMLElement{
         this.tb.innerHTML = '';
     }
 
-    empty_row(schema){
     empty_row(row_num, schema){
         var row = document.createElement('tr')
         Object.entries(schema).forEach(el => {
