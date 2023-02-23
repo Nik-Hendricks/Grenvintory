@@ -58,9 +58,15 @@ class Grenvintory{
     }
 
     createMainView(){
+<<<<<<< HEAD
         var table_data = new TableData();
         table_data.populate_data('inventory')
         this.maincontent.append(table_data)
+=======
+        var table_data = new TableData({width:500, height: 500});
+        table_data.populate_data('inventory');
+        this.maincontent.append(table_data);
+>>>>>>> 4ffc0ab (work)
 
     }
 

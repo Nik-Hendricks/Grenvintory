@@ -6,7 +6,11 @@ var datastores = require('../db/datastores.js')
 var uniqid = require('uniqid'); 
 var db_schema = {
     customers:{name:'string', SO_number: 'number'},
+<<<<<<< HEAD
     inventory:{to:'string', from:'string', quantity:'number', item_name: 'string', serial_number:'serial_number', date: 'date'}
+=======
+    inventory:{to:'string', from:'string', by:'string', quantity:'number', item_name: 'string', serial_number:'serial_number'}
+>>>>>>> 4ffc0ab (work)
 }
 //private functions
 
