@@ -10,10 +10,8 @@ class TableData extends HTMLElement{
     connectedCallback(){
         this.style.width = this.props.width + 'px'
         this.style.height = this.props.height + 'px'
-        this.style.display = 'block'
-        this.style.overflow = 'scroll'
-        this.th.display = 'block'
-        this.th.background = 'blue'
+
+ 
 
         this.t.append(this.th, this.tb)
         this.append(this.t)
@@ -21,12 +19,9 @@ class TableData extends HTMLElement{
 
 
     populate_data(table_name){
-
         this.clear();
         window.API.get_rows(table_name).then(rows => {
-            console.log(rows)
             window.API.get_schema(table_name).then(schema => {
-                console.log(schema)
                 this.th.append(this.header_row(Object.entries(schema)))
                 for(var i = 0; i < 200; i++){
                     this.tb.append(this.empty_row(i, schema))
@@ -57,7 +52,6 @@ class TableData extends HTMLElement{
                 if(ev.target.getAttribute('id').split(',')[0] == 'serial_number'){
                     // id looks like {col},{data_type},{row}
                     var e = document.getElementsByTagName('input')
-                    console.log(schema)
                     var data = {}
                     var i = 0;
                     for(var input of e){
@@ -66,11 +60,12 @@ class TableData extends HTMLElement{
                             i++
                         }
                     }
-                    console.log(data)
+                    window.API.set_row('inventory', data).then(res => {
+                        console.log(res)
+                    })
                 }
             }
         })
-        //row.append()
         return row;
     }
 

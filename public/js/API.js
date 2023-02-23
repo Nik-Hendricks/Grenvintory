@@ -53,6 +53,14 @@ const API = {
         return new Promise(resolve => {
             
         })
+    },
+
+    create_user(username, password, permission_level){
+        return new Promise(resolve =>{ 
+            this.http_fetch('/API/create_user', {username:username, password: password, permission_level: permission_level}, "POST").then(res => {
+                resolve(res)
+            })
+        })
     }
     
 }

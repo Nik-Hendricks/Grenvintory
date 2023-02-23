@@ -2,6 +2,7 @@
 import API from '/js/API.js'
 import Window from '/components/Window.js'
 import TableData from '/components/TableData.js'
+import UserTabBar from '/components/UserTabBar.js'
 
 class DataCell extends HTMLElement{
     constructor(props){
@@ -55,12 +56,14 @@ class Grenvintory{
         this.margin = (typeof props.margin !== 'undefined') ? props.margin : 20;
         this.maincontent = (typeof props.maincontent !== 'undefined') ? props.maincontent : document.getElementById('maincontent');
         this.createMainView(); 
+        //window.API.create_user('Nik', 'pass', '2')
     }
 
     createMainView(){
+        var user_tab_bar = new UserTabBar()
         var table_data = new TableData({width:500, height: 500});
         table_data.populate_data('inventory');
-        this.maincontent.append(table_data);
+        this.maincontent.append( user_tab_bar, table_data);
     }
 
     window(data){

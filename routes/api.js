@@ -6,11 +6,7 @@ var datastores = require('../db/datastores.js')
 var uniqid = require('uniqid'); 
 var db_schema = {
     customers:{name:'string', SO_number: 'number'},
-<<<<<<< HEAD
-    inventory:{to:'string', from:'string', quantity:'number', item_name: 'string', serial_number:'serial_number', date: 'date'}
-=======
     inventory:{to:'string', from:'string', by:'string', quantity:'number', item_name: 'string', serial_number:'serial_number'}
->>>>>>> 4ffc0ab (work)
 }
 //private functions
 
@@ -85,6 +81,7 @@ function _set_row(table_name, data){
     return new Promise(resolve => {
         if(table_exists(table_name)){
             datastores[table_name].insert(data, (err, res) => {
+                console.log(res)
                 resolve(res)
             })
         }else{
@@ -131,6 +128,17 @@ module.exports = (() => {
         _get_rows(table_name).then(rows => {
             res.json(rows);
         })
+    })
+
+    API.post('/create_user', (req, res) => {
+        var username = req.body.username;
+        var password = req.body.password;
+        var permission_level = req.body.permission_level;
+        if((username == null || undefined) || (password == null || undefined) || (permission_level == null || undefined)){
+            return
+        }else{
+            _set_row('users', {username, username, password: password, permission_level: permission_level});
+        }
     })
     //public routes here
     
