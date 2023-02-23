@@ -57,19 +57,13 @@ class TableData extends HTMLElement{
         this.tb.innerHTML = '';
     }
 
-<<<<<<< HEAD
     empty_row(schema){
-=======
     empty_row(row_num, schema){
->>>>>>> 4ffc0ab (work)
         var row = document.createElement('tr')
         Object.entries(schema).forEach(el => {
             var td = document.createElement('td');
             var inpt = document.createElement('input')
-<<<<<<< HEAD
-=======
             inpt.setAttribute('id',`${el},${row_num}`)
->>>>>>> 4ffc0ab (work)
             inpt.setAttribute('type', 'text')
             inpt.style.width = '100%'
             td.style.width = `${el[0].length * 16 + 10}px`
@@ -77,9 +71,7 @@ class TableData extends HTMLElement{
             row.append(td)
 
             inpt.onchange = (ev) => {
-<<<<<<< HEAD
                 console.log(ev.target.value)
-=======
                 if(ev.target.getAttribute('id').split(',')[0] == 'serial_number'){
                     // id looks like {col},{data_type},{row}
                     var e = document.getElementsByTagName('input')
@@ -94,7 +86,6 @@ class TableData extends HTMLElement{
                     }
                     console.log(data)
                 }
->>>>>>> 4ffc0ab (work)
             }
         })
         //row.append()
