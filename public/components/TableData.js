@@ -7,6 +7,8 @@ class TableData extends HTMLElement{
     }
 
     connectedCallback(){
+        console.log(window.innerWidth - this.offsetWidth / 2 + 'px')
+        this.style.marginLeft = window.innerWidth - this.offsetWidth / 2 + 'px';
         this.t.append(this.th, this.tb)
         this.append(this.t)
     }
@@ -16,7 +18,9 @@ class TableData extends HTMLElement{
 
         this.clear();
         window.API.get_rows(table_name).then(rows => {
+            console.log(rows)
             window.API.get_schema(table_name).then(schema => {
+                console.log(schema)
                 this.th.append(this.header_row(Object.entries(schema)))
                 for(var i = 0; i < 20; i++){
                     this.tb.append(this.empty_row(schema))
@@ -40,6 +44,10 @@ class TableData extends HTMLElement{
             td.style.width = `${el[0].length * 16 + 10}px`
             td.append(inpt)
             row.append(td)
+
+            inpt.onchange = (ev) => {
+                console.log(ev.target.value)
+            }
         })
         //row.append()
         return row;

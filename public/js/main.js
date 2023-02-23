@@ -54,27 +54,13 @@ class Grenvintory{
         var props = (typeof props !== 'undefined') ? props : {}; 
         this.margin = (typeof props.margin !== 'undefined') ? props.margin : 20;
         this.maincontent = (typeof props.maincontent !== 'undefined') ? props.maincontent : document.getElementById('maincontent');
-        this.cols = ['to', 'from', 'quantity', 'item name', 'serial number', 'reason'];
         this.createMainView(); 
     }
 
     createMainView(){
-        this.maincontent.style.position = 'absolute'
-        this.maincontent.style.background = '#212432'
-        this.maincontent.style.top = '0px';
-        this.maincontent.style.left = '0px';
-        this.maincontent.style.right = '0px'
-        this.maincontent.style.bottom = '0px'
-        this.maincontent.style.width = '100%'
-        this.maincontent.style.height = '100%'
-        this.maincontent.style.overflow = 'scroll'
-        
         var table_data = new TableData();
         table_data.populate_data('inventory')
-        var w = 600
-        var x = (document.body.clientWidth / 2) - (w / 2);
-        console.log(w)
-        this.maincontent.append(this.window({x:x, y: 20, width: w, height: 500, el: table_data}))
+        this.maincontent.append(table_data)
 
     }
 

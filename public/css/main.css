@@ -1,5 +1,37 @@
 *{
-    --input-active-color:'grey'
+    --input-active-color:'grey';
+    --window-color-1: #27303e;
+    --window-color-2: #1d2631;
+    --window-color-3: #2e3c49;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  ds
+  /* Track */
+  ::-webkit-scrollbar-track {
+    display:none;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+#maincontent{
+    position:absolute;
+    top:0px;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    background-color: var(--window-color-2);
 }
 
 td, tr, th{
@@ -17,4 +49,14 @@ input[type=text]{
 
 input[type=text]:focus{
     background:var(--input-active-color);
+}
+
+custom-window{
+    background: var(--window-color-1);
+}
+
+custom-window .title-bar{
+    height:30px;
+    width:100%;
+    background: #1d2631;
 }
