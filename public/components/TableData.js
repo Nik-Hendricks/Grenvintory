@@ -8,13 +8,18 @@ class TableData extends HTMLElement{
     }
 
     connectedCallback(){
-        this.style.width = this.props.width + 'px'
-        this.style.height = this.props.height + 'px'
+        var margin = 10;
+        this.style.width = '100%'
+        this.style.height = this.props.height + 'px';
+        this.style.display = 'block';
+        this.style.overflow = 'scroll';
 
- 
+        this.t.style.width = '100%';
+        this.t.style.height = '100%';
 
         this.t.append(this.th, this.tb)
         this.append(this.t)
+        return this;
     }
 
 
@@ -23,11 +28,12 @@ class TableData extends HTMLElement{
         window.API.get_rows(table_name).then(rows => {
             window.API.get_schema(table_name).then(schema => {
                 this.th.append(this.header_row(Object.entries(schema)))
-                for(var i = 0; i < 200; i++){
+                for(var i = 0; i < 20; i++){
                     this.tb.append(this.empty_row(i, schema))
                 }
             })
         })
+        return this;
     }
 
     clear(){
@@ -48,23 +54,43 @@ class TableData extends HTMLElement{
             row.append(td)
 
             inpt.onchange = (ev) => {
-                console.log(ev.target.value)
-                if(ev.target.getAttribute('id').split(',')[0] == 'serial_number'){
-                    // id looks like {col},{data_type},{row}
-                    var e = document.getElementsByTagName('input')
-                    var data = {}
-                    var i = 0;
-                    for(var input of e){
-                        if (input.getAttribute('id').split(',')[2] == ev.target.getAttribute('id').split(',')[2]){
-                            data[Object.entries(schema)[i][0]] = input.value;
-                            i++
-                        }
-                    }
-                    window.API.set_row('inventory', data).then(res => {
-                        console.log(res)
-                    })
-                }
+                this.submit_row(ev, schema, row_num)
             }
+        })
+        return row;
+    }
+
+    submit_row(ev, schema, row_num){
+        var col = ev.target.getAttribute('id').split(',')[0]
+        if(col == 'serial_number'){
+            //here we set timer to wait a while before submitting data to server
+            setTimeout(() => {
+                // id looks like {col},{data_type},{row}
+                var e = this.getElementsByTagName('input')
+                var data = {}
+                var i = 0;
+                for(var input of e){
+                    var input_row_num = input.getAttribute('id').split(',')[2]
+                    if (Number(input_row_num) == row_num){
+                        data[Object.entries(schema)[i][0]] = input.value;
+                        console.log(input.value)
+                        i++
+                    }
+                }
+
+                window.API.set_row(window.UserManager.current_user, 'inventory', data).then(res => {
+                    console.log(res)
+                })
+            }, /*1000 * 60 * 5*/ 0);
+        }
+    }
+
+    data_to_row(data){
+        var row = document.createElement('tr');
+        Object.entries(data).forEach(el => {
+            var td = document.createElement('td');
+            td.innerHTML = el[1];
+            row.append(td)
         })
         return row;
     }
@@ -72,9 +98,9 @@ class TableData extends HTMLElement{
     header_row(cols){
         var row = document.createElement('tr');
         cols.forEach(col => {
-            console.log(col)
             var td = document.createElement('th');
             td.innerHTML = col[0];
+            td.style.color = 'white';
             row.append(td)
         })
         return row;

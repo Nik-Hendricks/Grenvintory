@@ -16,9 +16,9 @@ const API = {
         })
     },
 
-    set_row(table_name, data){
+    set_row(user, table_name, data){
         return new Promise(resolve => {
-            this.http_fetch(`/API/set_row`, {table_name: table_name, data: data}, "POST").then(res => {
+            this.http_fetch(`/API/set_row`, {user: user, table_name: table_name, data: data}, "POST").then(res => {
                 resolve(res)
             })
         })
@@ -49,15 +49,25 @@ const API = {
     },
 
     
-    get_inventory(){
+    get_inventory(user){
         return new Promise(resolve => {
-            
+            this.http_fetch('/API/get_inventory', {user: user}, "POST").then(res => {
+                resolve(res);
+            })
         })
     },
 
-    create_user(username, password, permission_level){
+    create_user(first_name, last_name, username, password, permission_level){
         return new Promise(resolve =>{ 
-            this.http_fetch('/API/create_user', {username:username, password: password, permission_level: permission_level}, "POST").then(res => {
+            this.http_fetch('/API/create_user', {first_name: first_name, last_name: last_name, username:username, password: password, permission_level: permission_level}, "POST").then(res => {
+                resolve(res)
+            })
+        })
+    },
+
+    get_users(){
+        return new Promise(resolve => {
+            this.http_fetch('/API/get_users', {}, "POST").then(res => {
                 resolve(res)
             })
         })

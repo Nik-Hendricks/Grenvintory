@@ -108,11 +108,12 @@ module.exports = (() => {
     })
     
     API.post('/set_row', (req, res) => {
-      var data = req.body.data;
-      var table_name = req.body.table_name;
-      _set_row(table_name, data).then(ret => {
-        res.json(ret);
-      })
+        var user = req.body.user;
+        var data = req.body.data;
+        var table_name = req.body.table_name;
+        _set_row(table_name, data).then(ret => {
+          res.json(ret);
+        })
     })
     
     API.post('/get_row', (req, res) => {
@@ -131,16 +132,32 @@ module.exports = (() => {
     })
 
     API.post('/create_user', (req, res) => {
+        var first_name = req.body.first_name;
+        var last_name = req.body.last_name;
         var username = req.body.username;
         var password = req.body.password;
         var permission_level = req.body.permission_level;
-        if((username == null || undefined) || (password == null || undefined) || (permission_level == null || undefined)){
+        if((username == null || undefined) || (permission_level == null || undefined)){
             return
         }else{
-            _set_row('users', {username, username, password: password, permission_level: permission_level});
+            _set_row('users', {first_name: first_name, last_name: last_name, username, username, password: password, permission_level: permission_level});
         }
     })
-    //public routes here
     
+    API.post('/get_users', (req, res) => {
+        _get_rows('users').then(rows => {
+            rows.forEach(row => {
+                delete row.password;
+            })
+            res.json(rows);
+        })
+    })
+
+    API.post('/get_inventory', (req, res) => {
+        _get_rows('inventory').then(rows => {
+            res.json(rows);
+        })
+    })
+
     return API;
 })();

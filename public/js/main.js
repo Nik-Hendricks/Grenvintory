@@ -3,6 +3,9 @@ import API from '/js/API.js'
 import Window from '/components/Window.js'
 import TableData from '/components/TableData.js'
 import UserTabBar from '/components/UserTabBar.js'
+import UserControls from '/components/UserControls.js'
+import UserManager from '/js/UserManager.js'
+
 
 class DataCell extends HTMLElement{
     constructor(props){
@@ -48,30 +51,39 @@ window.customElements.define('data-cell', DataCell);
 
 class Grenvintory{
     constructor(props){
-        this.init(props);
+            window.UserManager.load().then(users => {
+                this.left_view = document.createElement('div');
+                this.middle_view = document.createElement('div');
+                this.right_view = document.createElement('div');
+
+                this.left_view.style.width = '50%';
+                this.left_view.style.float = 'left';
+                this.left_view.style.display = 'block';
+
+                this.right_view.style.width = '30%';
+                this.right_view.style.float = 'right';
+                this.right_view.style.display = 'block';
+
+                this.middle_view.style.width = '20%';
+                this.middle_view.style.float = 'left';
+                this.middle_view.style.display = 'block';
+                this.middle_view.style.height = 'calc(100% - 58px)';
+
+
+                this.createMainView(users); 
+            });        
     }
 
-    init(props){
-        var props = (typeof props !== 'undefined') ? props : {}; 
-        this.margin = (typeof props.margin !== 'undefined') ? props.margin : 20;
-        this.maincontent = (typeof props.maincontent !== 'undefined') ? props.maincontent : document.getElementById('maincontent');
-        this.createMainView(); 
-        //window.API.create_user('Nik', 'pass', '2')
-    }
-
-    createMainView(){
-        var user_tab_bar = new UserTabBar()
-        var table_data = new TableData({width:500, height: 500});
-        table_data.populate_data('inventory');
-        this.maincontent.append( user_tab_bar, table_data);
+    createMainView(users){
+        this.left_view.append(new TableData({width:500, height: 532}).populate_data('inventory'));
+        this.middle_view.append(new UserControls())
+        document.getElementById('maincontent').append(new UserTabBar(users), this.left_view, this.middle_view, this.right_view);   
     }
 
     window(data){
         var w = new Window();
         return w.create(data);
     }
-
-
 }
 
 

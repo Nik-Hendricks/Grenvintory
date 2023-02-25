@@ -3,13 +3,16 @@
     --window-color-1: #27303e;
     --window-color-2: #1d2631;
     --window-color-3: #2e3c49;
+    font-family: helvetica;
+    font-weight: lighter;
 }
 
 /* width */
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 3px;
+    height:3px;
   }
-  ds
+  
   /* Track */
   ::-webkit-scrollbar-track {
     display:none;
@@ -34,40 +37,8 @@
     background-color: var(--window-color-2);
 }
 
-td, tr, th{
-    color:white;
-}
-
-table thead tr{
-  display:block;
-}
-
-table th,table td{
-  width:100px;
-}
-
-
-table  tbody{
-display:block;
-height:200px;
-overflow:auto;
-}
-
-input[type=text]{
-    border-radius:5px;
-    outline:none;
-}
 
 input[type=text]:focus{
     background:var(--input-active-color);
-}
-
-custom-window{
-    background: var(--window-color-1);
-}
-
-custom-window .title-bar{
-    height:30px;
-    width:100%;
-    background: #1d2631;
+    color:white;
 }
