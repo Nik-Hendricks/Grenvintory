@@ -59,10 +59,12 @@ class Grenvintory{
                 this.left_view.style.width = '50%';
                 this.left_view.style.float = 'left';
                 this.left_view.style.display = 'block';
+                this.left_view.style.height = 'calc(100% - 58px)';
 
                 this.right_view.style.width = '30%';
                 this.right_view.style.float = 'right';
                 this.right_view.style.display = 'block';
+                this.right_view.style.height = 'calc(100% - 58px)';
 
                 this.middle_view.style.width = '20%';
                 this.middle_view.style.float = 'left';
@@ -75,9 +77,12 @@ class Grenvintory{
     }
 
     createMainView(users){
-        this.left_view.append(new TableData({width:500, height: 532}).populate_data('inventory'));
-        this.middle_view.append(new UserControls())
-        document.getElementById('maincontent').append(new UserTabBar(users), this.left_view, this.middle_view, this.right_view);   
+        window.UserControls = new UserControls();
+        window.UserTabBar = new UserTabBar(users);
+        window.TableData = new TableData().populate_data('inventory');
+        this.left_view.append(window.TableData);
+        this.middle_view.append(window.UserControls)
+        document.getElementById('maincontent').append(window.UserTabBar, this.left_view, this.middle_view, this.right_view);   
     }
 
     window(data){

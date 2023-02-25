@@ -8,6 +8,7 @@ export default class UserControls extends HTMLElement{
                     console.log('history');
                     window.API.get_inventory(window.UserManager.current_user).then(res => {
                         console.log(res)
+                        window.TableData.append_rows(res);
                     })
                 }
             },
@@ -15,6 +16,17 @@ export default class UserControls extends HTMLElement{
                 name: 'Query',
                 onclick: () => {
                     console.log('query');
+                }
+            },
+            {
+                name: 'Export .Xlsx',
+                onclick: () => {
+                    window.API.export_xlsx().then(res => {
+                        console.log(res)
+                        window.open('/API/download', '_blank');
+                    })
+                    //send request to server to convert all data to xlsx
+                    //then we will redirect user to download file in a new tab automatically
                 }
             }
         ];

@@ -18,8 +18,7 @@ export default class UserTabBar extends HTMLElement{
     populate_tabs(){
         this.users.forEach(user => {
             var tab = new Tab(user.username, () => {
-                window.UserManager.switchUser(user)
-                this.switchTab(user.username);
+                window.UserManager.checkCanSwitchUser(user)
             })
             this.append(tab)
             this.tabs.push(tab)

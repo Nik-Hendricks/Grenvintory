@@ -1,7 +1,8 @@
 // Created 6:30 PM 10/28/2021 Nik Hendricks
 // reused 8:19 PM 1/25/23 Nik Hendricks
 // routes/api.js
-
+var fs = require('fs')
+const xl = require('excel4node');
 var datastores = require('../db/datastores.js')
 var uniqid = require('uniqid'); 
 var db_schema = {
@@ -159,5 +160,78 @@ module.exports = (() => {
         })
     })
 
+    API.post('/set_inventory', (req, res) => {
+        var user = req.body.user;
+        var data = req.body.data;
+        data.by = `${user.first_name.charAt(0)}${user.last_name.charAt(0)}`
+        _set_row('inventory', data).then(ret => {
+          res.json(ret);
+        })
+    })
+
+    API.post('/export_xlsx', (req, res) => {
+        _get_rows('inventory').then(data => {
+            const wb = new xl.Workbook();
+            const ws = wb.addWorksheet('Worksheet Name');
+
+            //Write Column Title in Excel file
+            let headingColumnIndex = 1;
+            Object.entries(db_schema['inventory']).forEach(heading => {
+                ws.cell(1, headingColumnIndex++)
+                    .string(heading[0])
+            });
+
+            //Write Data in Excel file
+            let rowIndex = 2;
+            data.forEach( record => {
+                let columnIndex = 1;
+                Object.keys(record ).forEach(columnName =>{
+                    ws.cell(rowIndex,columnIndex++)
+                        .string(record [columnName])
+                });
+                rowIndex++;
+            }); 
+            wb.write('data.xlsx');
+            res.json({filename: 'data.xlsx'})
+        })
+    })
+
+    API.get('/download', function(req, res){
+        res.sendFile(__dirname.split('routes')[0] + 'data.xlsx');
+    })
+
+    API.post('/check_auth', (req, res) => {
+        var user = req.body.user;
+        if(user != null){
+            console.log(user);
+            console.log(user.permission_level)
+            if(user.permission_level > 0){
+                res.json({auth: 'prompt'})
+            }else{
+                res.json({auth: true, user: user})
+            }
+        }else{
+            res.json({auth: false})
+        }
+    })
+
+    API.post('/login', (req, res) => {
+        var username = req.body.username;
+        var password = req.body.password;
+        _get_rows('users').then(rows => {
+            var user = rows.find(row => row.username == username);
+            if(user != null){
+                if(user.password == password){
+                    res.json({user: user, auth: true})
+                }else{
+                    res.json({auth: false})
+                }
+            }else{
+                res.json({auth: false})
+            }
+        })
+    })
+
     return API;
+    
 })();

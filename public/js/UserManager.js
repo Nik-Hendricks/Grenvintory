@@ -14,17 +14,35 @@ const UserManager = {
     },
 
 
+    checkCanSwitchUser(user){
+        return new Promise(resolve => {
+            window.API.check_auth(user).then(res => {
+                if(res.auth == true){
+                    this.switchUser(res.user)
+                    resolve(true);
+                }else if(res.auth == 'prompt'){
+                    var password = prompt('Enter Password', 'Password')
+                    window.API.login(user.username, password).then(res => {
+                        if(res.auth == true){
+                            this.switchUser(res.user)
+                            alert('Login Successful')
+                            resolve(true);
+                        }else{
+                            alert('Incorrect Password')
+                            resolve(false);
+                        }
+                    })
+
+                }
+
+            })
+        })
+    },
 
     switchUser(user){
-        return new Promise(resolve => {
-            //if(user.permission_level > 0){
-            //    //locked user server side login time
-//
-            //}
-            window.localStorage.setItem('user', JSON.stringify(user))
-            console.log(user);
-            resolve(true);
-        })
+        this.current_user = user;
+        window.localStorage.setItem('user', JSON.stringify(user))
+        window.UserTabBar.switchTab(user.username);
     }
 
 

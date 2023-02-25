@@ -16,9 +16,9 @@ const API = {
         })
     },
 
-    set_row(user, table_name, data){
+    set_row(table_name, data){
         return new Promise(resolve => {
-            this.http_fetch(`/API/set_row`, {user: user, table_name: table_name, data: data}, "POST").then(res => {
+            this.http_fetch(`/API/set_row`, {user: window.UserManager.current_user, table_name: table_name, data: data}, "POST").then(res => {
                 resolve(res)
             })
         })
@@ -26,7 +26,7 @@ const API = {
 
     get_row(table_name, row_uuid){
         return new Promise(resolve => {
-            this.http_fetch('/API/get_row', {table_name: table_name, row_uuid: row_uuid}, "POST").then(res => {
+            this.http_fetch('/API/get_row', {user: window.UserManager.current_user, table_name: table_name, row_uuid: row_uuid}, "POST").then(res => {
                 resolve(res);
             })
         })
@@ -34,7 +34,7 @@ const API = {
 
     get_rows(table_name){
         return new Promise(resolve => {
-            this.http_fetch('/API/get_rows', {table_name: table_name}, "POST").then(res => {
+            this.http_fetch('/API/get_rows', {user: window.UserManager.current_user, table_name: table_name}, "POST").then(res => {
                 resolve(res);
             })
         })
@@ -48,10 +48,17 @@ const API = {
         })
     },
 
-    
-    get_inventory(user){
+    set_inventory(data){
         return new Promise(resolve => {
-            this.http_fetch('/API/get_inventory', {user: user}, "POST").then(res => {
+            this.http_fetch('/API/set_inventory', {user: window.UserManager.current_user, data: data}, "POST").then(res => {
+                resolve(res);
+            })
+        })
+    },
+
+    get_inventory(){
+        return new Promise(resolve => {
+            this.http_fetch('/API/get_inventory', {user: window.UserManager.current_user}, "POST").then(res => {
                 resolve(res);
             })
         })
@@ -68,6 +75,30 @@ const API = {
     get_users(){
         return new Promise(resolve => {
             this.http_fetch('/API/get_users', {}, "POST").then(res => {
+                resolve(res)
+            })
+        })
+    },
+
+    export_xlsx(){
+        return new Promise(resolve => {
+            this.http_fetch('/API/export_xlsx', {}, "POST").then(res => {
+                resolve(res)
+            })
+        })
+    },
+
+    check_auth(user){
+        return new Promise(resolve => {
+            this.http_fetch('/API/check_auth', {user: user}, "POST").then(res => {
+                resolve(res)
+            })
+        })
+    },
+
+    login(username, password){
+        return new Promise(resolve => {
+            this.http_fetch('/API/login', {username: username, password: password}, "POST").then(res => {
                 resolve(res)
             })
         })
