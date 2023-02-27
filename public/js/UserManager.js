@@ -43,9 +43,12 @@ const UserManager = {
         this.current_user = user;
         window.localStorage.setItem('user', JSON.stringify(user))
         window.UserTabBar.switchTab(user.username);
+        window.TableData.create_structure();
+    },
+
+    getInitials(){
+        return this.current_user.first_name[0] + this.current_user.last_name[0]
     }
-
-
 
 }
 

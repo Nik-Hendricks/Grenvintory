@@ -6,49 +6,6 @@ import UserTabBar from '/components/UserTabBar.js'
 import UserControls from '/components/UserControls.js'
 import UserManager from '/js/UserManager.js'
 
-
-class DataCell extends HTMLElement{
-    constructor(props){
-        super();
-        this.props = (typeof props !== 'undefined') ? props : {};
-        this.row = this.props.row;
-        this.col = this.props.col;
-        window.API.get_data(this.row, this.col).then(res => {
-            this.data = res;
-            console.log(res)
-        })
-        
-    }
-
-    connectedCallback(){
-        this.append(this.createInput()); 
-    }
-
-    createInput(){
-        this.input = document.createElement('input')
-        this.input.setAttribute('row', this.row);
-        this.input.setAttribute('col', this.col);
-        this.input.setAttribute('data', this.data);  
-        this.input.setAttribute('type', 'text');
-        this.input.style.width = '100%'
-        this.input.style.margin = '0px'
-        this.input.style.background = 'transparent';
-        this.input.style.border = 'none';
-        this.input.style.color = 'white'
-
-        //get data then set data attr
-        this.input.addEventListener("change", (ev) => {
-            var row = ev.target.parentElement.parentElement.getAttribute('row_id')
-            var row_num = ev.target.parentElement.parentElement.getAttribute('row_num')
-            window.API.set_data(this.row, this.col, ev.target.value);
-        });
-
-        return this.input;
-    }
-}
-
-window.customElements.define('data-cell', DataCell);
-
 class Grenvintory{
     constructor(props){
             window.UserManager.load().then(users => {
@@ -79,7 +36,7 @@ class Grenvintory{
     createMainView(users){
         window.UserControls = new UserControls();
         window.UserTabBar = new UserTabBar(users);
-        window.TableData = new TableData().populate_data('inventory');
+        window.TableData = new TableData({table_name:'inventory'});
         this.left_view.append(window.TableData);
         this.middle_view.append(window.UserControls)
         document.getElementById('maincontent').append(window.UserTabBar, this.left_view, this.middle_view, this.right_view);   

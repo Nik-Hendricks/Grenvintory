@@ -7,7 +7,7 @@ var datastores = require('../db/datastores.js')
 var uniqid = require('uniqid'); 
 var db_schema = {
     customers:{name:'string', SO_number: 'number'},
-    inventory:{to:'string', from:'string', by:'string', quantity:'number', item_name: 'string', serial_number:'serial_number'}
+    inventory:{to:'string', from:'string', by:'string', quantity:'number', item_name: 'string', serial_number:'serial_number', date:'string'}
 }
 //private functions
 
@@ -149,6 +149,7 @@ module.exports = (() => {
         _get_rows('users').then(rows => {
             rows.forEach(row => {
                 delete row.password;
+                delete row._id;
             })
             res.json(rows);
         })
@@ -185,7 +186,7 @@ module.exports = (() => {
             let rowIndex = 2;
             data.forEach( record => {
                 let columnIndex = 1;
-                Object.keys(record ).forEach(columnName =>{
+                Object.keys(record).forEach(columnName =>{
                     ws.cell(rowIndex,columnIndex++)
                         .string(record [columnName])
                 });
@@ -231,6 +232,7 @@ module.exports = (() => {
             }
         })
     })
+
 
     return API;
     

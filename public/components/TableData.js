@@ -1,39 +1,53 @@
+import DataCell from '/Components/DataCell.js'
+
 class TableData extends HTMLElement{
     constructor(props){
         super();
-        this.t = document.createElement('table');
-        this.th = document.createElement('thead');
-        this.tb = document.createElement('tbody');
         this.props = props
+        this.table_name = props.table_name;
+        this.row_count = 20;
+        this.row_cells = Array(this.row_count).fill([]);
+        this.mode = 'data';
     }
 
     connectedCallback(){
-        var margin = 10;
-        this.style.width = '100%'
-        this.style.height = 'auto';
-        this.style.display = 'block';
-        this.style.overflow = 'scroll';
+        window.API.get_schema(this.table_name).then(schema => {
+            this.schema = schema;
+            this.t = document.createElement('table');
+            this.th = document.createElement('thead');
+            this.tb = document.createElement('tbody');
+    
+            this.style.width = '100%'
+            this.style.height = 'auto';
+            this.style.display = 'block';
+            this.style.overflow = 'scroll';
+            this.t.style.width = '100%';
+            this.t.style.height = '100%';
+            this.tb.style.borderRadius = '5px';
+    
+            this.t.append(this.th, this.tb)
+            this.append(this.t)
 
-        this.t.style.width = '100%';
-        this.t.style.height = '100%';
+            this.create_structure()
+            return this;
+        })
+    }
 
-        this.t.append(this.th, this.tb)
-        this.append(this.t)
+
+    create_structure(){
+        this.full_clear();
+        this.th.append(this.header_row(Object.entries(this.schema)))
+        for(var i = 0; i < this.row_count; i++){
+            var r = this.new_row(i, {});
+            this.tb.append(r)
+        }
+    
         return this;
     }
 
-    populate_data(table_name){
-        this.clear();
-        window.API.get_rows(table_name).then(rows => {
-            window.API.get_schema(table_name).then(schema => {
-                this.schema = schema;
-                this.th.append(this.header_row(Object.entries(schema)))
-                for(var i = 0; i < 20; i++){
-                    this.tb.append(this.new_row(i, {}))
-                }
-            })
-        })
-        return this;
+    full_clear(){
+        this.th.innerHTML = '';
+        this.tb.innerHTML = '';
     }
 
     clear(){
@@ -42,47 +56,30 @@ class TableData extends HTMLElement{
         })
     }
 
-    submit_row(row_num){
-        //here we set timer to wait a while before submitting data to server
-        setTimeout(() => {
-            // id looks like {col},{data_type},{row}
-            var e = this.getElementsByTagName('input')
-            var data = {}
-            var i = 0;
-            for(var input of e){
-                var input_row_num = input.getAttribute('id').split(',')[2]
-                if (Number(input_row_num) == row_num){
-                    data[Object.entries(this.schema)[i][0]] = input.value;
-                    console.log(input.value)
-                    i++
-                }
-            }
-            window.API.set_inventory(data).then(res => {
-                console.log(res)
-            })
-        }, /*1000 * 60 * 5*/ 0);
-    }
 
     new_row(row_num,  data){
         var row = document.createElement('tr')
+        row.style.display = 'table-row';
+        row.style.height = '22px !important';
         Object.entries(this.schema).forEach(el => {
-            var td = document.createElement('td');
-            var inpt = document.createElement('input')
-            var value = (typeof data[el[0]] !== 'undefined') ? data[el[0]] : ''
-            inpt.value = value
-            inpt.setAttribute('id',`${el},${row_num}`)
-            inpt.setAttribute('type', 'text')
-            inpt.style.width = '100%'
-            td.append(inpt)
-            row.append(td)
+            console.log(typeof data)
+            console.log(el[0])
 
-            inpt.onchange = (ev) => {
-                var col = ev.target.getAttribute('id').split(',')[0]
-                if(col == 'serial_number'){
-                    this.submit_row(row_num)
+            var text = (Object.entries(data).length == 0) ? (el[0] == 'by') ? window.UserManager.getInitials() : (el[0] == 'date') ? new Date().toLocaleDateString() : '' : data[el[0]];
+
+            var dc = new DataCell({text: text, type: el[1], row_num: row_num, col: el[0]})
+            row.append(dc)
+
+            dc.onchange = (ev) => {
+                var d = this.get_row_data(row_num)
+                if(!d.error){
+                    window.API.set_inventory(d).then(res => {
+                        console.log(res)
+                    })
                 }
             }
         })
+        this.row_cells[row_num] = row;
         return row;
     }
 
@@ -90,8 +87,11 @@ class TableData extends HTMLElement{
         this.clear();
         for(var d of data){
             var empty_row  = this.find_next_empty_row();
-            var original_row = this.tb.getElementsByTagName('tr')[empty_row]
+            console.log(empty_row)
+            var original_row = this.row_cells[empty_row]
+            console.log(original_row)
             original_row.parentNode.replaceChild(this.new_row(empty_row, d), original_row);
+            this.row_cells
         }
     }
 
@@ -116,16 +116,37 @@ class TableData extends HTMLElement{
         return row;
     }
 
+
+    get_row_data(row_num){
+        console.log(this.row_cells)
+        var cells = this.row_cells[row_num].getElementsByTagName('input')
+        var ret = {}
+        for(var cell of cells){
+            if(cell.value == '' || cell.value == null || cell.value == undefined || typeof cell.value == 'undefined'){
+                return {error: 'empty cell'};
+            }
+            ret[cell.getAttribute('id').split(',')[1]] = cell.value;
+        }
+        return ret;
+    }
+
     find_next_empty_row(){
-        var cells = this.tb.getElementsByTagName('td');
-        for(var i = 0; i < cells.length; i++){
-            var cell = cells[i];
-            var inpt = cell.getElementsByTagName('input')[0];
-            if(inpt.value == '' || inpt.value == null){
-                return inpt.getAttribute('id').split(',')[2];
+        for(var row in this.row_cells){
+            if(this.get_row_data(row).error){
+                return row;
             }
         }
-        return null;
+
+
+        //var cells = this.tb.getElementsByTagName('data-cell');
+        //for(var i = 0; i < cells.length; i++){
+        //    var cell = cells[i];
+        //    var inpt = cell.getElementsByTagName('input')[0];
+        //    if(inpt.value == '' || inpt.value == null){
+        //        return inpt.getAttribute('id').split(',')[2];
+        //    }
+        //}
+        //return null;
     }
 }
 
