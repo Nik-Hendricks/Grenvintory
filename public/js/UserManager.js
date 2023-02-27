@@ -1,3 +1,5 @@
+import AuthenticationPrompt from '/components/AuthenticationPrompt.js';
+
 const UserManager = {
     
     load(){
@@ -21,18 +23,19 @@ const UserManager = {
                     this.switchUser(res.user)
                     resolve(true);
                 }else if(res.auth == 'prompt'){
-                    var password = prompt('Enter Password', 'Password')
-                    window.API.login(user.username, password).then(res => {
-                        if(res.auth == true){
-                            this.switchUser(res.user)
-                            alert('Login Successful')
-                            resolve(true);
-                        }else{
-                            alert('Incorrect Password')
-                            resolve(false);
-                        }
+                    var ap = new AuthenticationPrompt();
+                    document.body.append(ap)
+                    ap.init(password => {
+                        window.API.login(user.username, password).then(res => {
+                            if(res.auth == true){
+                                this.switchUser(res.user)
+                                resolve(true);
+                            }else{
+                                alert('Incorrect Password')
+                                resolve(false);
+                            }
+                        })
                     })
-
                 }
 
             })

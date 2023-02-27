@@ -62,14 +62,9 @@ class TableData extends HTMLElement{
         row.style.display = 'table-row';
         row.style.height = '22px !important';
         Object.entries(this.schema).forEach(el => {
-            console.log(typeof data)
-            console.log(el[0])
-
             var text = (Object.entries(data).length == 0) ? (el[0] == 'by') ? window.UserManager.getInitials() : (el[0] == 'date') ? new Date().toLocaleDateString() : '' : data[el[0]];
-
             var dc = new DataCell({text: text, type: el[1], row_num: row_num, col: el[0]})
             row.append(dc)
-
             dc.onchange = (ev) => {
                 var d = this.get_row_data(row_num)
                 if(!d.error){
