@@ -18,12 +18,12 @@ class Grenvintory{
                 this.left_view.style.display = 'block';
                 this.left_view.style.height = 'calc(100% - 58px)';
 
-                this.right_view.style.width = '30%';
+                this.right_view.style.width = '25%';
                 this.right_view.style.float = 'right';
                 this.right_view.style.display = 'block';
                 this.right_view.style.height = 'calc(100% - 58px)';
 
-                this.middle_view.style.width = '20%';
+                this.middle_view.style.width = '25%';
                 this.middle_view.style.float = 'left';
                 this.middle_view.style.display = 'block';
                 this.middle_view.style.height = 'calc(100% - 58px)';

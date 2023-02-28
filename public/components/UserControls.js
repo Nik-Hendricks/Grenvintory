@@ -1,3 +1,6 @@
+import CustomInput from '/components/CustomInput.js'
+
+
 export default class UserControls extends HTMLElement{
     constructor(){
         super();
@@ -8,8 +11,8 @@ export default class UserControls extends HTMLElement{
                 onclick: () => {
                     console.log('history');
                     window.API.get_inventory(window.UserManager.current_user).then(res => {
-                        console.log(res)
-                        window.TableData.append_rows(res);
+                        console.log(window.API.sort(res, 'date', true))
+                        window.TableData.append_rows(window.API.sort(res, 'date', true));
                     })
                 }
             },
@@ -87,26 +90,14 @@ class QueryControls extends HTMLElement{
         this.style.color = 'white';
         this.style.paddingTop = '5px'
         this.innerHTML = '<p style="text-align:center; margin:0px;">Query Controls</p>';
-        
-        var query_by_container = document.createElement('div');
-        query_by_container.style.display = 'block';
-        query_by_container.style.width = 'auto';
-        query_by_container.style.height = '60px';
-        query_by_container.style.margin = '5px';
-        query_by_container.style.borderRadius = '5px';
-        query_by_container.style.background = 'var(--window-color-2)';
-        this.append(query_by_container)
-
-        var column_selector_container = document.createElement('div');
-        column_selector_container.style.display = 'block';
-        column_selector_container.style.width = 'auto';
-        column_selector_container.style.height = '25px';
-        column_selector_container.style.margin = '5px';
-        column_selector_container.style.borderRadius = '5px';
-        column_selector_container.style.background = 'var(--window-color-2)';
-        this.append(column_selector_container)
+  
+        this.append(new CustomInput({type: 'button', text:'Test', width: '100%', height: '30px', margin: '5px'}), new CustomInput({type: 'button', text:'test', icon:'info', width: '50%', height: '30px', margin: '5px'}))
     }
 }
+
+//search by any feild.
+//sort by date, 
+//sort alpabetically by item_name
 
 
 window.customElements.define('query-controls', QueryControls);

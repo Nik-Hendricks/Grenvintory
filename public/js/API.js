@@ -102,6 +102,25 @@ const API = {
                 resolve(res)
             })
         })
+    },
+
+    sort(arr, type, ascending){
+        if(type == 'date'){
+            const sortedArray = arr.sort((a, b) => {
+                const dateA = new Date(a['date']);
+                const dateB = new Date(b['date']);
+                let comparison = 0;
+                if (dateA > dateB) {
+                  comparison = 1;
+                } else if (dateA < dateB) {
+                  comparison = -1;
+                }
+                return ascending ? comparison : comparison * -1;
+            });
+            return sortedArray;
+        }else{
+            return arr;
+        }
     }
     
 }

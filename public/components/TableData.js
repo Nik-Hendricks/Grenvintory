@@ -23,7 +23,8 @@ class TableData extends HTMLElement{
             this.style.overflow = 'scroll';
             this.t.style.width = '100%';
             this.t.style.height = '100%';
-            this.tb.style.borderRadius = '5px';
+            this.tb.style.borderRadius = '5px !important';
+            this.tb.style.overflow = 'hidden';
     
             this.t.append(this.th, this.tb)
             this.append(this.t)

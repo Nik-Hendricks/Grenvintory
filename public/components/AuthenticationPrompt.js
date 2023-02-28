@@ -3,6 +3,7 @@ export default class AuthenticationPrompt extends HTMLElement{
             super();
             this.obsfucator = document.createElement('div');
             this.content_container = document.createElement('div');
+            this.title_el = document.createElement('p');
     
             this.obsfucator.style.position = 'fixed';
             this.obsfucator.style.top = '0px';
@@ -17,11 +18,24 @@ export default class AuthenticationPrompt extends HTMLElement{
             this.content_container.style.left = '50%';
             this.content_container.style.transform = 'translate(-50%, -50%)';
             this.content_container.style.width = '170px';
-            this.content_container.style.height = '50px';
+            this.content_container.style.height = '70px';
             this.content_container.style.background = 'var(--window-color-1)';
             this.content_container.style.borderRadius = '5px';
             this.content_container.style.zIndex = '1001';
+
+            this.title_el.style.margin = '0px';
+            this.title_el.style.padding = '0px';
+            this.title_el.style.textAlign = 'center';
+            this.title_el.style.color = 'white';
+            this.title_el.style.width = '100%';
+            this.title_el.style.height = '20px';
+            this.title_el.style.background = 'var(--window-color-2)';
+            this.title_el.style.borderTopLeftRadius = '5px';
+            this.title_el.style.borderTopRightRadius = '5px';
     
+            this.title_el.innerHTML = 'Enter PIN';
+
+            this.content_container.append(this.title_el);
             this.append(this.obsfucator, this.content_container);   
             return this;
 
