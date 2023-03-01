@@ -123,6 +123,20 @@ class PartsNeededList extends HTMLElement{
         this.style.color = 'white';
         this.style.paddingTop = '5px'
         this.innerHTML = '<p style="text-align:center; margin:0px;">Parts Needed List</p>';
+        this.textarea = document.createElement('textarea');
+        this.textarea.setAttribute('placeholder', 'Enter parts needed here');
+        this.textarea.style.width = 'calc(100% - 10px)';
+        this.textarea.style.height = 'calc(100% - 30px)';
+        this.textarea.style.margin = '5px';
+        this.textarea.style.borderRadius = '5px';
+        this.textarea.style.border = 'none';
+        this.textarea.style.background = 'var(--window-color-2)';
+        this.textarea.style.color = 'white';
+        this.textarea.style.padding = '5px';
+        this.textarea.style.resize = 'none';
+        this.textarea.style.outline = 'none';
+
+        this.append(this.textarea);
     }
 }
 
