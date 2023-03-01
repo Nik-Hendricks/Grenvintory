@@ -5,27 +5,34 @@ export default class DataCell extends HTMLElement{
         this.type = this.props.type;
         this.row_num = this.props.row_num;
         this.col = this.props.col;
+        this.table = props.table;
 
-        if(this.type === 'string'){
-            this.input = document.createElement('input')
-            var value = (typeof this.props.text !== 'undefined') ? this.props.text : ''
-            this.input.value = value
-            this.input.setAttribute('type', 'text')
-        }else if(this.type === 'number'){
-            this.input = document.createElement('input')
-            var value = (typeof this.props.text !== 'undefined') ? this.props.text : ''
-            this.input.value = value
-            this.input.setAttribute('type', 'text')
-        }else if(this.type === 'serial_number'){
-            this.input = document.createElement('input')
-            var value = (typeof this.props.text !== 'undefined') ? this.props.text : ''
-            this.input.value = value
-            this.input.setAttribute('type', 'text')
-        }
+        this.input = document.createElement('input')
+        var value = (typeof this.props.text !== 'undefined') ? this.props.text : ''
+        this.input.value = value
+        this.input.setAttribute('type', 'text')
 
         
 
         this.append(this.input)
+
+
+
+        this.input.addEventListener('focus', (ev) => {
+            console.log('focus')
+            this.table.current_cell = this;
+            this.table.detailed_cell.value = this.input.value;
+            this.input.addEventListener('input', (ev) => {
+                this.table.detailed_cell.value = this.input.value;
+                var d = this.table.get_row_data(this.row_num)
+                if(!d.error){
+                    window.API.set_inventory(d).then(res => {
+                        console.log(res)
+                    })
+                }
+            })
+        })
+
     }
 
     connectedCallback(){
@@ -37,6 +44,8 @@ export default class DataCell extends HTMLElement{
         this.input.style.width = '100%'
         this.input.style.display = 'table-cell !important'
     }
+
+
 
 
 }

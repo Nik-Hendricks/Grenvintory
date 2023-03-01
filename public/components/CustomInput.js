@@ -20,6 +20,14 @@ export default class CustomInput extends HTMLElement{
         return this;
     };
 
+    set value(x){
+        this.textContent = x;
+    }
+
+    get value(){
+        return this.textContent;
+    }
+
     connectedCallback(){
         this.preStyle()
 
@@ -51,7 +59,6 @@ export default class CustomInput extends HTMLElement{
 
     preStyle(){
         this.style.position = 'relative';
-        this.style.float = 'left'
         this.style.display = 'block';
         this.style.width = `calc(${this.width} - ${this.margin} * 2)`;
         this.style.height = this.height;

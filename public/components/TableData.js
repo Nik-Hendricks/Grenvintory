@@ -1,4 +1,5 @@
-import DataCell from '/Components/DataCell.js'
+import DataCell from '/components/DataCell.js'
+import CustomInput from '/components/CustomInput.js'
 
 class TableData extends HTMLElement{
     constructor(props){
@@ -7,6 +8,9 @@ class TableData extends HTMLElement{
         this.table_name = props.table_name;
         this.row_count = 20;
         this.row_cells = Array(this.row_count).fill([]);
+        this.row = 0;
+        this.col = 0;
+        this.current_cell = null;
         this.mode = 'data';
     }
 
@@ -16,18 +20,26 @@ class TableData extends HTMLElement{
             this.t = document.createElement('table');
             this.th = document.createElement('thead');
             this.tb = document.createElement('tbody');
+            this.detailed_cell = new CustomInput({width: '100%', height: '35px', type: 'text', text: 'Detailed View', icon:'info', margin:'5px'})
+
+            this.detailed_cell.addEventListener('input', (ev) => {
+                this.current_cell.input.value = ev.target.value;
+            })
     
             this.style.width = '100%'
             this.style.height = 'auto';
             this.style.display = 'block';
             this.style.overflow = 'scroll';
-            this.t.style.width = '100%';
-            this.t.style.height = '100%';
+            this.t.style.width = 'calc(100% - 10px)';
+            this.t.style.height = 'calc(100% - 30px)';
+            this.t.style.margin = '5px';
             this.tb.style.borderRadius = '5px !important';
             this.tb.style.overflow = 'hidden';
+
+            this.detailed_cell.setAttribute('type', 'text')
     
             this.t.append(this.th, this.tb)
-            this.append(this.t)
+            this.append(this.t, this.detailed_cell)
 
             this.create_structure()
             return this;
@@ -37,6 +49,7 @@ class TableData extends HTMLElement{
 
     create_structure(){
         this.full_clear();
+        this.t.append(this.th, this.tb)
         this.th.append(this.header_row(Object.entries(this.schema)))
         for(var i = 0; i < this.row_count; i++){
             var r = this.new_row(i, {});
@@ -64,16 +77,9 @@ class TableData extends HTMLElement{
         row.style.height = '22px !important';
         Object.entries(this.schema).forEach(el => {
             var text = (Object.entries(data).length == 0) ? (el[0] == 'by') ? window.UserManager.getInitials() : (el[0] == 'date') ? new Date().toLocaleDateString() : '' : data[el[0]];
-            var dc = new DataCell({text: text, type: el[1], row_num: row_num, col: el[0]})
+            var dc = new DataCell({table: this, text: text, type: el[1], row_num: row_num, col: el[0]})
+
             row.append(dc)
-            dc.onchange = (ev) => {
-                var d = this.get_row_data(row_num)
-                if(!d.error){
-                    window.API.set_inventory(d).then(res => {
-                        console.log(res)
-                    })
-                }
-            }
         })
         this.row_cells[row_num] = row;
         return row;
@@ -114,13 +120,28 @@ class TableData extends HTMLElement{
 
 
     get_row_data(row_num){
-        console.log(this.row_cells)
         var cells = this.row_cells[row_num].getElementsByTagName('input')
         var ret = {}
+        var quantity = 0;
         for(var cell of cells){
+            console.log(quantity)
+            console.log(cell.getAttribute('id').split(',')[1])
             if(cell.value == '' || cell.value == null || cell.value == undefined || typeof cell.value == 'undefined'){
                 return {error: 'empty cell'};
             }
+
+            if(cell.getAttribute('id').split(',')[1] == 'quantity'){
+                quantity = cell.value;
+            }
+
+            if(cell.getAttribute('id').split(',')[1] == 'serial_number'){
+                if(quantity > 0){
+                    console.log('stay')
+
+                }
+            }
+
+
             ret[cell.getAttribute('id').split(',')[1]] = cell.value;
         }
         return ret;
@@ -132,17 +153,6 @@ class TableData extends HTMLElement{
                 return row;
             }
         }
-
-
-        //var cells = this.tb.getElementsByTagName('data-cell');
-        //for(var i = 0; i < cells.length; i++){
-        //    var cell = cells[i];
-        //    var inpt = cell.getElementsByTagName('input')[0];
-        //    if(inpt.value == '' || inpt.value == null){
-        //        return inpt.getAttribute('id').split(',')[2];
-        //    }
-        //}
-        //return null;
     }
 }
 

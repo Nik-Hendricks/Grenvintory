@@ -161,6 +161,16 @@ module.exports = (() => {
         })
     })
 
+    API.post('/get_inventory_by_user', (req, res) => {
+        var user = req.body.user;
+        _get_rows('inventory').then(rows => {
+            var user_rows = rows.filter(row => {
+                return row.by == `${user.first_name.charAt(0)}${user.last_name.charAt(0)}`
+            })
+            res.json(user_rows);
+        })
+    })
+
     API.post('/set_inventory', (req, res) => {
         var user = req.body.user;
         var data = req.body.data;

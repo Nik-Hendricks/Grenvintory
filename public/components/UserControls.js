@@ -26,24 +26,34 @@ export default class UserControls extends HTMLElement{
             {   
                 type:'button',
                 name: 'Export .Xlsx',
+                auth_required: true,
                 onclick: () => {
                     window.API.export_xlsx().then(res => {
                         console.log(res)
                         window.open('/API/download', '_blank');
                     })
-                    //send request to server to convert all data to xlsx
-                    //then we will redirect user to download file in a new tab automatically
                 }
             },
             {
+                auth_required: true,
                 type:"query_controls",
                 name: 'Query Controls',
+            },
+            {
+                auth_required: false,
+                type:'parts_needed_list',
+                name: 'Parts Needed List',
             }
         ];
         return this;
     }
 
     connectedCallback(){
+        this.create_structure();
+    }
+
+    create_structure(){
+        this.innerHTML = '';
         this.controls.forEach(item => {
             if(item.type == 'button'){
                 var e = document.createElement('input')
@@ -68,7 +78,13 @@ export default class UserControls extends HTMLElement{
             if(item.type == 'query_controls'){
                 var e = new QueryControls();
             }
-            this.append(e)
+            if(item.type == 'parts_needed_list'){
+                var e = new PartsNeededList();
+            }
+
+            item.auth_required ? window.UserManager.current_user.permission_level == 1 ? this.append(e) : {} : this.append(e)
+           
+
 
             this.style.display = 'block';
         })
@@ -95,6 +111,21 @@ class QueryControls extends HTMLElement{
     }
 }
 
+
+class PartsNeededList extends HTMLElement{
+    constructor(){
+        super();
+        this.style.display = 'block';
+        this.style.background = 'var(--window-color-1)';
+        this.style.borderRadius = '5px';
+        this.style.height = '200px';
+        this.style.margin = '5px';
+        this.style.color = 'white';
+        this.style.paddingTop = '5px'
+        this.innerHTML = '<p style="text-align:center; margin:0px;">Parts Needed List</p>';
+    }
+}
+
 //search by any feild.
 //sort by date, 
 //sort alpabetically by item_name
@@ -102,3 +133,4 @@ class QueryControls extends HTMLElement{
 
 window.customElements.define('query-controls', QueryControls);
 window.customElements.define('user-controls', UserControls);
+window.customElements.define('parts-needed-list', PartsNeededList);

@@ -5,6 +5,7 @@ import TableData from '/components/TableData.js'
 import UserTabBar from '/components/UserTabBar.js'
 import UserControls from '/components/UserControls.js'
 import UserManager from '/js/UserManager.js'
+import CustomInput from '/components/CustomInput.js'
 
 class Grenvintory{
     constructor(props){
@@ -13,7 +14,7 @@ class Grenvintory{
                 this.middle_view = document.createElement('div');
                 this.right_view = document.createElement('div');
 
-                this.left_view.style.width = '50%';
+                this.left_view.style.width = '75%';
                 this.left_view.style.float = 'left';
                 this.left_view.style.display = 'block';
                 this.left_view.style.height = 'calc(100% - 58px)';
@@ -23,10 +24,6 @@ class Grenvintory{
                 this.right_view.style.display = 'block';
                 this.right_view.style.height = 'calc(100% - 58px)';
 
-                this.middle_view.style.width = '25%';
-                this.middle_view.style.float = 'left';
-                this.middle_view.style.display = 'block';
-                this.middle_view.style.height = 'calc(100% - 58px)';
 
 
                 this.createMainView(users); 
@@ -38,7 +35,7 @@ class Grenvintory{
         window.UserTabBar = new UserTabBar(users);
         window.TableData = new TableData({table_name:'inventory'});
         this.left_view.append(window.TableData);
-        this.middle_view.append(window.UserControls)
+        this.right_view.append(window.UserControls)
         document.getElementById('maincontent').append(window.UserTabBar, this.left_view, this.middle_view, this.right_view);   
     }
 

@@ -64,6 +64,14 @@ const API = {
         })
     },
 
+    get_inventory_by_user(){
+        return new Promise(resolve => {
+            this.http_fetch('/API/get_inventory_by_user', {user: window.UserManager.current_user}, "POST").then(res => {
+                resolve(res);
+            })
+        })
+    },
+
     create_user(first_name, last_name, username, password, permission_level){
         return new Promise(resolve =>{ 
             this.http_fetch('/API/create_user', {first_name: first_name, last_name: last_name, username:username, password: password, permission_level: permission_level}, "POST").then(res => {
