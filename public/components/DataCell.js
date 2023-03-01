@@ -16,20 +16,26 @@ export default class DataCell extends HTMLElement{
 
         this.append(this.input)
 
-
+        this.input.addEventListener('change', (ev) => {
+            var d = this.table.get_row_data(this.row_num)
+            if(!d.error){
+                window.API.set_inventory(d).then(res => {
+                    console.log(res)
+                })
+            }
+        })
 
         this.input.addEventListener('focus', (ev) => {
-            console.log('focus')
             this.table.current_cell = this;
             this.table.detailed_cell.value = this.input.value;
 
-            if(this.col == 'by' || this.col == 'date'){
-                console.log(this.nextElementSibling)
+            if(this.col == 'by'){
                 ev.preventDefault();
                 this.nextElementSibling.input.focus();
-            }
-
-            if(this.col == 'serial_number'){
+            }else if(this.col == 'date'){
+                ev.preventDefault();
+                this.table.row_cells[this.row_num + 1].getElementsByTagName('data-cell')[0].input.focus();
+            }else if(this.col == 'serial_number'){
                 if(this.table.current_quantity > 1){
                     this.table.detailed_cell.focus();
                 }
@@ -37,24 +43,10 @@ export default class DataCell extends HTMLElement{
 
             this.input.addEventListener('keydown', (ev) => {
                 this.table.detailed_cell.value = this.input.value;
-
-
-
-
+                //set tables current row quantity if the current cell is the quantity cell
                 if(this.col == 'quantity'){
                     this.table.current_quantity = this.input.value;
                 }
-
-
-
-
-                var d = this.table.get_row_data(this.row_num)
-                if(!d.error){
-                    window.API.set_inventory(d).then(res => {
-                        console.log(res)
-                    })
-                }
-                console.log(this.table.current_quantity)
             })
         })
 
