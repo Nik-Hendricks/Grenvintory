@@ -11,6 +11,7 @@ class TableData extends HTMLElement{
         this.row = 0;
         this.col = 0;
         this.current_cell = null;
+        this.current_quantity = 0;
         this.mode = 'data';
     }
 
@@ -22,8 +23,20 @@ class TableData extends HTMLElement{
             this.tb = document.createElement('tbody');
             this.detailed_cell = new CustomInput({width: '100%', height: '35px', type: 'text', text: 'Detailed View', icon:'info', margin:'5px'})
 
-            this.detailed_cell.addEventListener('input', (ev) => {
+            this.detailed_cell.addEventListener('keydown', (ev) => {
                 this.current_cell.input.value = ev.target.value;
+
+                if (ev.keyCode == 9){
+                    if(this.detailed_cell.value.split(',').length < this.current_quantity){
+                        ev.preventDefault();
+                        this.detailed_cell.value = this.detailed_cell.value + ", "
+                        this.detailed_cell.putCursorAtEnd()
+                    }else{
+                        ev.preventDefault();
+                        this.current_cell.nextElementSibling.input.focus();
+                    }
+                } 
+                
             })
     
             this.style.width = '100%'
@@ -124,24 +137,9 @@ class TableData extends HTMLElement{
         var ret = {}
         var quantity = 0;
         for(var cell of cells){
-            console.log(quantity)
-            console.log(cell.getAttribute('id').split(',')[1])
             if(cell.value == '' || cell.value == null || cell.value == undefined || typeof cell.value == 'undefined'){
                 return {error: 'empty cell'};
             }
-
-            if(cell.getAttribute('id').split(',')[1] == 'quantity'){
-                quantity = cell.value;
-            }
-
-            if(cell.getAttribute('id').split(',')[1] == 'serial_number'){
-                if(quantity > 0){
-                    console.log('stay')
-
-                }
-            }
-
-
             ret[cell.getAttribute('id').split(',')[1]] = cell.value;
         }
         return ret;
@@ -154,6 +152,7 @@ class TableData extends HTMLElement{
             }
         }
     }
+
 }
 
 window.customElements.define('table-data', TableData)

@@ -37,6 +37,10 @@ export default class AuthenticationPrompt extends HTMLElement{
 
             this.content_container.append(this.title_el);
             this.append(this.obsfucator, this.content_container);   
+            this.obsfucator.addEventListener('click', () => {
+                this.remove();
+            })        
+
             return this;
 
     }

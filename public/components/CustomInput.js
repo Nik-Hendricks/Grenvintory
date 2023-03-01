@@ -97,6 +97,23 @@ export default class CustomInput extends HTMLElement{
         }
     }
 
+    putCursorAtEnd(){
+        if(this.innerText && document.createRange)
+        {
+          window.setTimeout(() =>
+            {
+              let selection = document.getSelection();
+              let range = document.createRange();
+    
+              range.setStart(this.childNodes[0],this.innerText.length);
+              range.collapse(true);
+              selection.removeAllRanges();
+              selection.addRange(range);
+            }
+          ,1);
+        }
+    }
+
 }
 window.customElements.define('custom-input', CustomInput);
 

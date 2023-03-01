@@ -9,7 +9,7 @@ const UserManager = {
                 users.forEach(user => {
                     this.users.push(user)
                 })
-                this.current_user = (window.localStorage.getItem('user') == null) ? this.users[0] : JSON.parse(window.localStorage.getItem('user')),
+                this.current_user = (window.localStorage.getItem('user') == null) ? this.users[1] : JSON.parse(window.localStorage.getItem('user')),
                 resolve(this.users)
             })
         })
