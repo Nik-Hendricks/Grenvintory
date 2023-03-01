@@ -10,7 +10,7 @@ export default class CustomInput extends HTMLElement{
         this.text = (typeof this.props.text !== 'undefined') ? this.props.text : this.getAttribute('text');
         this.secondary = (typeof this.props.secondary !== 'undefined') ? this.props.secondary : this.getAttribute('secondary')
         this.variant = (typeof this.props.variant !== 'undefined') ? this.props.variant : this.getAttribute('variant');
-        this.rows = (typeof this.props.rows !== 'undefined') ? this.props.rows : this.getAttribute('rows');
+        this.items = (typeof this.props.items !== 'undefined') ? this.props.items : this.getAttribute('items');
         this.toggle = (typeof this.props.toggle !== 'undefined') ? this.props.toggle : this.hasAttribute('toggle')
         this.width = (typeof this.props.width !== 'undefined') ? this.props.width : this.getAttribute('width');
         this.height = (typeof this.props.width !== 'undefined') ? this.props.height : this.getAttribute('height');
@@ -21,11 +21,19 @@ export default class CustomInput extends HTMLElement{
     };
 
     set value(x){
-        this.textContent = x;
+        if(this.type == 'dropdown'){
+            this.getElementsByTagName('p')[0].textContent = x
+        }else{
+            this.textContent = x;
+        }
     }
 
     get value(){
-        return this.textContent;
+        if(this.type == 'dropdown'){
+            return this.getElementsByTagName('p')[0].textContent;
+        }else{
+            return this.textContent;
+        }
     }
 
     connectedCallback(){
@@ -55,6 +63,42 @@ export default class CustomInput extends HTMLElement{
 
     _is_button(){
         this.innerHTML = `<i class="material-icons solid">${this.icon}</i><p>${this.text}</p>`;
+    }
+
+    _is_dropdown(){
+        console.log('is dropdown')
+        this.item_container = document.createElement('div')
+        this.innerHTML =   `<i class="material-icons solid">${this.icon}</i><p>${this.text}</p>`
+        if(this.items){
+            this.append(this.item_container)
+            this.item_container.style.width ='100%'
+            this.item_container.style.height = 'auto'
+            this.item_container.style.background = 'var(--window-color-1)'
+            this.item_container.style.display = 'block'
+            this.item_container.style.position = 'absolute'
+            this.item_container.style.zIndex = '99'
+            this.item_container.style.display = 'none'
+            this.item_container.style.top = '30px'
+            for(var item of this.items){
+
+                var dropdown_item = new CustomInput({type:'button', icon: item.icon, text: item.text, width:'100%', height:'30px', margin:'5px'})
+                dropdown_item.onclick = (ev) => {
+                    console.log(ev)
+                    this.value = event.target.textContent
+                }
+
+                this.getElementsByTagName('div')[0].append(dropdown_item)
+            }
+
+            this.onclick = () => {
+                if(this.item_container.style.display == 'none'){
+                    this.item_container.style.display = 'block'
+                }else{
+                    this.item_container.style.display = 'none'
+                }
+            }
+        }
+
     }
 
     preStyle(){

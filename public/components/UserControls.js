@@ -107,7 +107,22 @@ class QueryControls extends HTMLElement{
         this.style.paddingTop = '5px'
         this.innerHTML = '<p style="text-align:center; margin:0px;">Query Controls</p>';
   
-        this.append(new CustomInput({type: 'button', text:'Test', width: '100%', height: '30px', margin: '5px'}), new CustomInput({type: 'button', text:'test', icon:'info', width: '50%', height: '30px', margin: '5px'}))
+
+        var field_items = [
+            {text:'from', icon: 'person'},
+            {text:'to', icon: 'person'},
+            {text:'quantity', icon: 'info'},
+            {text:'item_name', icon: 'category'},
+            {text:'serial_number', icon: '123'},
+            {text:'by', icon: 'person'},
+            {text:'reason', icon: 'info'},
+            {text:'date', icon: 'calendar_month'}
+        ]
+
+        this.field_selector = new CustomInput({type: 'dropdown', text:'field', icon:'info', width:'100%', height:'30px', margin:'5px', items:field_items})
+        this.search_text_input = new CustomInput({type: 'text', placeholder: 'test', width:'100%', height:'30px', margin:'5px'})
+
+        this.append(this.field_selector, this.search_text_input)
     }
 }
 
