@@ -25,9 +25,11 @@ class TableData extends HTMLElement{
 
             this.detailed_cell.addEventListener('keydown', (ev) => {
                 this.current_cell.input.value = ev.target.value;
-
-                if (ev.keyCode == 9){
-                    if(this.detailed_cell.value.split(',').length < this.current_quantity){
+                if (ev.keyCode == 9 || ev.keyCode == 13){
+                    if(this.detailed_cell.value.toLowerCase() == 'n/a'){
+                        ev.preventDefault();
+                        this.current_cell.nextElementSibling.input.focus();
+                    }else if(this.detailed_cell.value.split(',').length < this.current_quantity){
                         ev.preventDefault();
                         this.detailed_cell.value = this.detailed_cell.value + ", "
                         this.detailed_cell.putCursorAtEnd()

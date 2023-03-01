@@ -22,18 +22,30 @@ export default class DataCell extends HTMLElement{
             console.log('focus')
             this.table.current_cell = this;
             this.table.detailed_cell.value = this.input.value;
+
+            if(this.col == 'by' || this.col == 'date'){
+                console.log(this.nextElementSibling)
+                ev.preventDefault();
+                this.nextElementSibling.input.focus();
+            }
+
+            if(this.col == 'serial_number'){
+                if(this.table.current_quantity > 1){
+                    this.table.detailed_cell.focus();
+                }
+            }
+
             this.input.addEventListener('keydown', (ev) => {
                 this.table.detailed_cell.value = this.input.value;
-                console.log(this.col)
+
+
+
+
                 if(this.col == 'quantity'){
                     this.table.current_quantity = this.input.value;
                 }
 
-                if(this.col == 'serial_number'){
-                    if(this.table.current_quantity > 1){
-                        this.table.detailed_cell.focus();
-                    }
-                }
+
 
 
                 var d = this.table.get_row_data(this.row_num)
