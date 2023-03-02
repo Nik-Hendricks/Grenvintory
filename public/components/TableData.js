@@ -44,20 +44,22 @@ class TableData extends HTMLElement{
             })
 
             this.style.width = '100%'
-            this.style.position = 'absolute'
-            this.style.bottom = '0px'
-            this.style.top = '0px'
+            this.style.height = '100%'
             this.style.overflow = 'none';
 
             this.t.style.overflow = 'scroll'
             this.t.style.width = 'calc(100% - 10px)';
-        
             this.t.style.margin = '5px';
-            this.tb.style.borderRadius = '5px !important';
+
+            
+            this.tb.style.borderRadius = '5px';
             this.tb.style.overflow = 'scroll';
-            this.tb.style.position = 'relative'
+            this.tb.style.position = 'relative';
             this.tb.style.top = '0px'
-            this.tb.style.height =  'calc(100% - 50px)'
+            this.tb.style.height = 'calc(100% - 85px)';
+
+
+
             this.detailed_cell.setAttribute('type', 'text')
     
             this.t.append(this.th, this.tb)
@@ -88,9 +90,8 @@ class TableData extends HTMLElement{
     }
 
     clear(){
-        Object.entries(this.tb.getElementsByTagName('input')).forEach(el => {
-            el[1].value = '';
-        })
+        this.tb.innerHTML = '';
+        this.rows = [];
     }
 
     new_row(row_num, data){
@@ -101,14 +102,12 @@ class TableData extends HTMLElement{
 
     append_rows(data){
         this.clear();
+        var row_count = 0;
         for(var d of data){
-            var empty_row  = this.find_next_empty_row();
-            console.log(empty_row)
-            var original_row = this.rows[empty_row]
-            console.log(original_row)
-            var new_row = this.new_row(empty_row, d)
-            original_row.parentNode.replaceChild(new_row, original_row);
-            this.rows[empty_row] = new_row
+            var new_row = this.new_row(row_count, d)
+            this.rows[row_count] = new_row
+            this.tb.append(new_row)
+            row_count++;
         }
     }
 
@@ -119,7 +118,7 @@ class TableData extends HTMLElement{
             td.style.display = 'inline-block'
             td.style.textAlign = 'center'
             td.style.margin = '0'
-            td.style.width = `calc(100% / ${this.isAdminSchema ? 10 : 8})`
+            td.style.width = `calc(100% / ${window.app.admin_mode ? 10 : 8})`
             td.innerHTML = col[0];
             td.style.color = 'white';
             row.append(td)

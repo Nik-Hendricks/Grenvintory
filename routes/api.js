@@ -5,11 +5,12 @@ var fs = require('fs')
 const xl = require('excel4node');
 var datastores = require('../db/datastores.js')
 var uniqid = require('uniqid'); 
+var stream = require('stream');
 var db_schema = {
     
     pick_tickets:[
         {from:'string', to:'string', quantity:'number', item_name: 'string', serial_number:'serial_number', by:'string', reason:'string', date:'string'},
-    ]
+    ],
 
     inventory:[
         {from:'string', to:'string', quantity:'number', item_name: 'string', serial_number:'serial_number', by:'string', reason:'string', date:'string'},
@@ -18,18 +19,18 @@ var db_schema = {
 }
 //private functions
 
-
-
-function _create_user(username, email, password){
+function _query(table_name, field, value){
     return new Promise(resolve => {
-        var _uniqid = uniqid();
-        var public_uniqid = uniqid();
-        datastore.users.insert({data_type:'user', username:username, email: email, password: password, permisions: [], public_uniqid: public_uniqid, uniqid:_uniqid }, (err, user) => {
-            resolve(user)
-        })
+        if(table_exists(table_name)){
+            datastores[table_name].find({[field]: value}, (err, docs) => {
+                console.log(docs)
+                resolve(docs)
+            })
+        }else{
+            resolve({error:'table does not exists'})
+        }
     })
 }
-
 
 function _get_row(table_uuid, row_uuid){
     return new Promise(resolve => {
@@ -163,7 +164,10 @@ module.exports = (() => {
     })
 
     API.post('/export_xlsx', (req, res) => {
-        _get_rows('inventory').then(data => {
+        var current_query = req.body.current_query;
+
+
+        _query('inventory', current_query.field, current_query.value).then(data => {
             const wb = new xl.Workbook();
             const ws = wb.addWorksheet('Worksheet Name');
 
@@ -184,8 +188,11 @@ module.exports = (() => {
                 });
                 rowIndex++;
             }); 
-            wb.write('data.xlsx');
-            res.json({filename: 'data.xlsx'})
+            wb.writeToBuffer().then(buffer => {
+                res.set('Content-disposition', 'attachment; filename=' + 'file.xlsx');
+                res.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                res.send(buffer);
+            })
         })
     })
 
@@ -225,6 +232,17 @@ module.exports = (() => {
         })
     })
 
+
+    API.post('/query', (req, res) => {
+        var field = req.body.field;
+        var value = req.body.value;
+        var table_name = req.body.table_name;
+        console.log(value)
+        console.log(field)
+        _query(table_name, field, value).then(rows => {
+            res.json(rows);
+        })
+    })
 
     return API;
     

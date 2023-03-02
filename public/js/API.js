@@ -9,10 +9,27 @@ const API = {
             if(method == "POST"){
                 opts.body = JSON.stringify(data);
             }
-            fetch(`${url}`, opts).then(response => response.json())
-                    .then((data) => {
-                        resolve(data)
-                })
+            fetch(`${url}`, opts)
+            .then(response => {
+              if (response.headers.get('content-type').indexOf('application/json') !== -1) {
+                return response.json();
+              } else {
+                return response.blob().then(blob => {
+                  const url = window.URL.createObjectURL(new Blob([blob]));
+                  const link = document.createElement('a');
+                  link.href = url;
+                  link.setAttribute('download', 'file.xlsx');
+                  document.body.appendChild(link);
+                  link.click();
+                  return null;
+                });
+              }
+            })
+            .then(data => {
+              if (data !== null) {
+                resolve(data)
+              }
+            });
         })
     },
 
@@ -90,7 +107,7 @@ const API = {
 
     export_xlsx(){
         return new Promise(resolve => {
-            this.http_fetch('/API/export_xlsx', {}, "POST").then(res => {
+            this.http_fetch('/API/export_xlsx', {current_query: window.app.current_query}, "POST").then(res => {
                 resolve(res)
             })
         })
@@ -129,6 +146,15 @@ const API = {
         }else{
             return arr;
         }
+    },
+
+    query(table_name, field, value){
+        console.log('querying')
+        return new Promise(resolve => {
+            this.http_fetch('/API/query', {user: window.UserManager.current_user, table_name: table_name, field: field, value: value}, "POST").then(res => {
+                resolve(res)
+            })
+        })
     }
     
 }

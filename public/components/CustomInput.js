@@ -15,6 +15,9 @@ export default class CustomInput extends HTMLElement{
         this.width = (typeof this.props.width !== 'undefined') ? this.props.width : this.getAttribute('width');
         this.height = (typeof this.props.width !== 'undefined') ? this.props.height : this.getAttribute('height');
         this.margin = (typeof this.props.margin !== 'undefined') ? this.props.margin : this.getAttribute('margin');
+        this.fontSize = (typeof this.props.fontSize !== 'undefined') ? this.props.fontSize : '12px';
+        this.toggle = (typeof this.props.toggle !== 'undefined') ? this.props.toggle : this.hasAttribute('toggle') ? this.getAttribute('toggle') : false;
+        this.toggled = (typeof this.props.toggled !== 'undefined') ? this.props.toggled : this.hasAttribute('toggled') ? this.getAttribute('toggled') : false;
         this.onfocus = this.style.webkitTransform = 'translate3d(0px,-10000px,0)'; requestAnimationFrame(function() { this.style.webkitTransform = ''; }.bind(this))
         this.init();
         return this;
@@ -22,7 +25,11 @@ export default class CustomInput extends HTMLElement{
 
     set value(x){
         if(this.type == 'dropdown'){
-            this.getElementsByTagName('p')[0].textContent = x
+            this.getElementsByTagName('p')[0].textContent = x;
+            var event = document.createEvent("HTMLEvents");
+            event.initEvent("change", true, true);
+            event.eventName = "change";
+            this.dispatchEvent(event)
         }else{
             this.textContent = x;
         }
@@ -63,6 +70,22 @@ export default class CustomInput extends HTMLElement{
 
     _is_button(){
         this.innerHTML = `<i class="material-icons solid">${this.icon}</i><p>${this.text}</p>`;
+        this.onclick = () => {
+            this.props.onclick();
+            if(this.toggle){
+                console.log('toggle')
+                if(this.toggled){
+                    console.log('was toggled already')
+                    this.toggled = false;
+                    this.style.background = 'var(--window-color-3)';
+                }else{
+                    this.toggled = true;
+                    this.style.background = '#7289da';
+                }
+            }else{
+
+            }
+        }
     }
 
     _is_dropdown(){
@@ -117,6 +140,9 @@ export default class CustomInput extends HTMLElement{
         this.style.border = 'none';
         this.style.textAlign = 'center';
         this.style.userSelect = 'none';
+        this.style.display = 'inline-block'
+        console.log(this.fontSize)
+        this.style.fontSize = this.fontSize
 
         if(this.getElementsByTagName('p').length > 0){
             var p = this.getElementsByTagName('p')[0];

@@ -8,33 +8,37 @@ export default class UserControls extends HTMLElement{
             {
                 type:'button',
                 name: 'View',
+                icons:'info',
+                width: '50%',
+                toggle: true,
                 onclick: () => {
-                    console.log('history');
-                    window.API.get_inventory(window.UserManager.current_user).then(res => {
-                        console.log(window.API.sort(res, 'date', true))
-                        window.TableData.append_rows(window.API.sort(res, 'date', true));
-                    })
-                }
-            },
-            {
-                type:'button',
-                name: 'Edit',
-                onclick: () => {
-                    window.TableData.create_structure();
+                    if(window.app.view_mode == 'view'){
+                        window.app.view_mode = 'edit';
+                        window.TableData.create_structure()
+                    }else{
+                        window.app.view_mode = 'view';
+                        window.API.get_inventory(window.UserManager.current_user).then(res => {
+                            console.log(window.API.sort(res, 'date', true))
+                            window.TableData.append_rows(window.API.sort(res, 'date', true));
+                        })
+                    }
                 }
             },
             {   
                 type:'button',
                 name: 'ADMIN MODE',
+                icons:'info',
+                width: '50%',
+                toggle: true,
                 auth_required: true,
                 onclick: () => {
-                    if(window.TableData.isAdminSchema){
-                        window.TableData.isAdminSchema = false;
+                    if(window.app.admin_mode){
+                        window.app.admin_mode = false;
                     }else{
-                        window.TableData.isAdminSchema = true;
+                        window.app.admin_mode = true;
                     }
 
-                    window.API.get_schema('inventory', window.TableData.isAdminSchema).then(schema => {
+                    window.API.get_schema('inventory', window.app.admin_mode).then(schema => {
                         window.TableData.schema = schema;
                         window.TableData.create_structure();
                     })
@@ -44,20 +48,23 @@ export default class UserControls extends HTMLElement{
             {   
                 type:'button',
                 name: 'Export .Xlsx',
+                width: '100%',
                 auth_required: true,
                 onclick: () => {
                     window.API.export_xlsx().then(res => {
-                        console.log(res)
-                        window.open('/API/download', '_blank');
+                        
+                        window.open(res, '_blank');
                     })
                 }
             },
             {
+                width: '100%',
                 auth_required: true,
                 type:"query_controls",
                 name: 'Query Controls',
             },
             {
+                width: '100%',
                 type:'parts_needed_list',
                 name: 'Parts Needed List',
             }
@@ -72,32 +79,23 @@ export default class UserControls extends HTMLElement{
     create_structure(){
         this.innerHTML = '';
         this.controls.forEach(item => {
+
+
             if(item.type == 'button'){
-                var e = document.createElement('input')
-                e.setAttribute('type', 'button')
-                e.setAttribute('value', item.name)
-                e.onclick = () => {
-                    e.style.background = '#2C7A7B';
-                    setTimeout(() => {
-                        e.style.background = '#38B289';
-                    }, 300)
-                    item.onclick();
-                };
-                e.style.transition = 'background ease-in-out 0.3s';
-                e.style.width = 'calc(100% - 10px)';
-                e.style.height = '30px';
+                var e = new CustomInput({type:'button', text: item.name, icon: item.icon, width: item.width, height: '30px', margin:'5px', onclick: item.onclick, toggle: item.toggle, toggled: item.toggled})
+            }else{
+                if(item.type == 'query_controls'){
+                    var e = new QueryControls();
+                }
+                if(item.type == 'parts_needed_list'){
+                    var e = new PartsNeededList();
+                }
+
                 e.style.margin = '5px';
-                e.style.borderRadius = '5px';
-                e.style.border = 'none';
-                e.style.background = '#38B289';
-                e.style.color = 'white';
+                e.style.width = `calc(${item.width} - 10px)`;
             }
-            if(item.type == 'query_controls'){
-                var e = new QueryControls();
-            }
-            if(item.type == 'parts_needed_list'){
-                var e = new PartsNeededList();
-            }
+
+
 
             item.auth_required ? window.UserManager.current_user.permission_level == 1 ? this.append(e) : {} : this.append(e)
            
@@ -105,6 +103,7 @@ export default class UserControls extends HTMLElement{
             this.style.overflow = 'scroll'
             this.style.display = 'block';
             this.style.position = 'absolute';
+            this.style.width = '100%'
         })
     }
 }
@@ -116,11 +115,10 @@ class QueryControls extends HTMLElement{
     }
 
     connectedCallback(){
-        this.style.display = 'block';
+        this.style.display = 'inline-block';
         this.style.background = 'var(--window-color-1)';
         this.style.borderRadius = '5px';
         this.style.height = '200px';
-        this.style.margin = '5px';
         this.style.color = 'white';
         this.style.paddingTop = '5px'
         this.innerHTML = '<p style="text-align:center; margin:0px;">Query Controls</p>';
@@ -138,12 +136,33 @@ class QueryControls extends HTMLElement{
         ]
 
         this.field_selector = new CustomInput({type: 'dropdown', text:'field', icon:'keyboard_double_arrow_down', width:'100%', height:'30px', margin:'5px', items:field_items})
+        this.search_fields = document.createElement('div');
         this.search_text_input = new CustomInput({type: 'text', placeholder: 'test', width:'100%', height:'30px', margin:'5px'})
-        this.submit_query_button = new CustomInput({type: 'button', text: 'Submit Query', icon:'send', width:'100%', height:'30px', margin:'5px', onclick: () => {
 
-        }})
+        this.field_selector.onchange = (ev) => {
+            if(ev.target.value == 'date'){
+                this.search_fields.innerHTML = '';
+                var range1 = new CustomInput({type: 'text', placeholder: 'test', width:'50%', height:'30px', margin:'5px'})
+                var range2 = new CustomInput({type: 'text', placeholder: 'test', width:'50%', height:'30px', margin:'5px'})
+                this.search_fields.append(range1, range2)
+            }else{
+                this.search_fields.innerHTML = '';
+                this.search_fields.append(this.search_text_input);
+            }
+        }
 
-        this.append(this.field_selector, this.search_text_input, this.submit_query_button)
+        this.submit_query_button = new CustomInput({type: 'button', text: 'Submit Query', icon:'send', width:'100%', height:'30px', margin:'5px'})
+
+        this.submit_query_button.onclick = (ev) => {
+            var field = this.field_selector.value;
+            var value = this.search_text_input.value;
+            window.app.current_query = {field: field, value: value}
+            window.API.query('inventory', field, value).then(res => {
+                window.TableData.append_rows(res)
+            })
+        }
+
+        this.append(this.field_selector, this.search_fields, this.submit_query_button)
     }
 }
 
@@ -151,11 +170,10 @@ class QueryControls extends HTMLElement{
 class PartsNeededList extends HTMLElement{
     constructor(){
         super();
-        this.style.display = 'block';
+        this.style.display = 'inline-block';
         this.style.background = 'var(--window-color-1)';
         this.style.borderRadius = '5px';
         this.style.height = '200px';
-        this.style.margin = '5px';
         this.style.color = 'white';
         this.style.paddingTop = '5px'
         this.innerHTML = '<p style="text-align:center; margin:0px;">Parts Needed List</p>';

@@ -42,7 +42,7 @@ export default class DataCell extends HTMLElement {
           this.nextElementSibling.input.focus();
         } else if (this.col == 'date') {
           ev.preventDefault();
-          if (window.TableData.isAdminSchema) {
+          if (window.app.admin_mode) {
             this.nextElementSibling.input.focus();
           } else {
             this.table.rows[this.row_num + 1].cells[0].input.focus()

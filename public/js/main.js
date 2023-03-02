@@ -10,6 +10,8 @@ import CustomInput from '/components/CustomInput.js'
 class Grenvintory{
     constructor(props){
             window.UserManager.load().then(users => {
+                this.admin_mode = false;
+                this.view_mode = 'edit';
                 this.left_view = document.createElement('div');
                 this.middle_view = document.createElement('div');
                 this.right_view = document.createElement('div');
@@ -17,8 +19,10 @@ class Grenvintory{
                 this.left_view.style.width = '75%';
                 this.left_view.style.float = 'left';
                 this.left_view.style.display = 'block';
-                this.left_view.style.height = 'calc(100% - 58px)';
                 this.left_view.style.position = 'absolute'
+                this.left_view.style.left = '0px'
+                this.left_view.style.top = '35px'
+                this.left_view.style.bottom = '0px'
 
                 this.right_view.style.width = '25%';
                 this.right_view.style.display = 'block';
@@ -37,7 +41,7 @@ class Grenvintory{
     createMainView(users){
         window.UserControls = new UserControls();
         window.UserTabBar = new UserTabBar(users);
-        window.TableData = new TableData({table_name:'pick_tickets'});
+        window.TableData = new TableData({table_name:'inventory'});
         this.left_view.append(window.TableData);
         this.right_view.append(window.UserControls)
         document.getElementById('maincontent').append(window.UserTabBar, this.left_view, this.middle_view, this.right_view);   
@@ -51,5 +55,5 @@ class Grenvintory{
 
 
 var maincontent = document.getElementById('maincontent')
-var app = new Grenvintory({maincontent:maincontent, margin:40});
-console.log(app)
+window.app = new Grenvintory({maincontent:maincontent, margin:40});
+console.log(window.app)
