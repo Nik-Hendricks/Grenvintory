@@ -278,15 +278,25 @@ module.exports = (() => {
     })
 
     API.post('/set_parts_needed', (req, res) => {
-        console.log(req.body.data)
-        _set_row('parts_needed_list', req.body.data).then(ret => {
-            
+        var db = datastores['parts_needed_list'];
+        db.findOne({ list: 'main' }, (err, existingRow) => {
+            if(existingRow){
+                datastores['parts_needed_list'].update({ list: 'main' }, {list: 'main', data: req.body.data}, { upsert: true }, (err, numReplaced) => {
+                    console.log(numReplaced)
+                })
+            }else{
+                datastores['parts_needed_list'].insert({list: 'main', data: req.body.data}, (err, numReplaced) => {
+                    console.log(numReplaced)
+                })
+            }
+            res.json({success: true})
         })
     })
 
     API.post('/get_parts_needed', (req, res) => {
-        _get_rows('parts_needed_list').then(rows => {
-            res.json(rows);
+        datastores['parts_needed_list'].find({ list: 'main' }, (err, docs) => {
+          console.log(docs)  
+          res.json(docs)
         })
     })
 

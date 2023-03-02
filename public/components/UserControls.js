@@ -191,7 +191,7 @@ class PartsNeededList extends HTMLElement{
         this.textarea = document.createElement('textarea');
         this.textarea.setAttribute('placeholder', 'Enter parts needed here');
         this.textarea.style.width = 'calc(100% - 10px)';
-        this.textarea.style.height = 'calc(100% - 30px)';
+        this.textarea.style.height = 'calc(100% - 80px)';
         this.textarea.style.margin = '5px';
         this.textarea.style.borderRadius = '5px';
         this.textarea.style.border = 'none';
@@ -201,12 +201,25 @@ class PartsNeededList extends HTMLElement{
         this.textarea.style.resize = 'none';
         this.textarea.style.outline = 'none';
 
-        this.append(this.textarea);
+        this.submit_button = new CustomInput({type: 'button', text: 'Submit', icon:'send', width:'100%', height:'30px', margin:'5px'})
+        this.submit_button.onclick = (ev) => {
+            window.API.set_parts_needed(this.textarea.value).then(res => {
+                console.log(res)
+                this.update();
+            })
+        }
+
+
+        this.append(this.textarea, this.submit_button);
     }
 
     connectedCallback(){
+        this.update();
+    }
+
+    update(){
         window.API.get_parts_needed().then(res => {
-            console.log(res)
+            this.textarea.value = res[0].data;
         })
     }
 }
