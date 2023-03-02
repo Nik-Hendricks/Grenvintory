@@ -22,10 +22,20 @@ var db_schema = {
 function _query(table_name, field, value){
     return new Promise(resolve => {
         if(table_exists(table_name)){
-            datastores[table_name].find({[field]: value}, (err, docs) => {
-                console.log(docs)
-                resolve(docs)
-            })
+            if(field == 'date' || field == 'posted_date'){
+                const startDate = new Date(value[0]);
+                const endDate = new Date(value[1]);
+
+                datastores[table_name].find({[field]: {$gte: startDate, $lte: endDate}}, (err, docs) => {
+                    console.log(docs)
+                    resolve(docs)
+                })
+            }else{
+                datastores[table_name].find({[field]: value}, (err, docs) => {
+                    console.log(docs)
+                    resolve(docs)
+                })
+            }
         }else{
             resolve({error:'table does not exists'})
         }
@@ -65,6 +75,20 @@ function _set_row(table_name, data){
         }else{
             resolve({error:'table does not exists'})
         }
+    })
+}
+
+function _update_row(table_name, data){
+    return new Promise(resolve => {
+        datastores[table_name].update({ _id: data._id }, { $set: data }, {}, function (err, numReplaced) {
+            if (err) {
+              resolve({error: err})
+            } else if (numReplaced === 0) {
+              resolve({error: 'Record not found'})
+            } else {
+              resolve({success: 'Record updated'})
+            }
+        });
     })
 }
 
@@ -158,10 +182,19 @@ module.exports = (() => {
         var user = req.body.user;
         var data = req.body.data;
         data.by = `${user.first_name.charAt(0)}${user.last_name.charAt(0)}`
-        _set_row('inventory', data).then(ret => {
-          res.json(ret);
-        })
+        data.date = new Date(data.date);
+
+        if(req.body.data._id != null){
+            _update_row('inventory', data).then(ret => {
+                res.json(ret);
+            })
+        }else{
+            _set_row('inventory', data).then(ret => {
+              res.json(ret);
+            })
+        }
     })
+
 
     API.post('/export_xlsx', (req, res) => {
         var current_query = req.body.current_query;
@@ -240,6 +273,19 @@ module.exports = (() => {
         console.log(value)
         console.log(field)
         _query(table_name, field, value).then(rows => {
+            res.json(rows);
+        })
+    })
+
+    API.post('/set_parts_needed', (req, res) => {
+        console.log(req.body.data)
+        _set_row('parts_needed_list', req.body.data).then(ret => {
+            
+        })
+    })
+
+    API.post('/get_parts_needed', (req, res) => {
+        _get_rows('parts_needed_list').then(rows => {
             res.json(rows);
         })
     })

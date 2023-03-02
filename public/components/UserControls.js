@@ -16,6 +16,7 @@ export default class UserControls extends HTMLElement{
                         window.app.view_mode = 'edit';
                         window.TableData.create_structure()
                     }else{
+                        window.TableData.create_structure()
                         window.app.view_mode = 'view';
                         window.API.get_inventory(window.UserManager.current_user).then(res => {
                             console.log(window.API.sort(res, 'date', true))
@@ -41,6 +42,11 @@ export default class UserControls extends HTMLElement{
                     window.API.get_schema('inventory', window.app.admin_mode).then(schema => {
                         window.TableData.schema = schema;
                         window.TableData.create_structure();
+                        if(window.app.view_mode == 'view'){
+                            window.API.get_inventory().then(res => {
+                                window.TableData.append_rows(res);
+                            })
+                        }
                     })
 
                 }
@@ -53,7 +59,7 @@ export default class UserControls extends HTMLElement{
                 onclick: () => {
                     window.API.export_xlsx().then(res => {
                         
-                        window.open(res, '_blank');
+                        //window.open(res, '_blank');
                     })
                 }
             },
@@ -142,9 +148,9 @@ class QueryControls extends HTMLElement{
         this.field_selector.onchange = (ev) => {
             if(ev.target.value == 'date'){
                 this.search_fields.innerHTML = '';
-                var range1 = new CustomInput({type: 'text', placeholder: 'test', width:'50%', height:'30px', margin:'5px'})
-                var range2 = new CustomInput({type: 'text', placeholder: 'test', width:'50%', height:'30px', margin:'5px'})
-                this.search_fields.append(range1, range2)
+                this.range1 = new CustomInput({type: 'text', placeholder: 'test', width:'50%', height:'30px', margin:'5px'})
+                this.range2 = new CustomInput({type: 'text', placeholder: 'test', width:'50%', height:'30px', margin:'5px'})
+                this.search_fields.append(this.range1, this.range2)
             }else{
                 this.search_fields.innerHTML = '';
                 this.search_fields.append(this.search_text_input);
@@ -155,7 +161,12 @@ class QueryControls extends HTMLElement{
 
         this.submit_query_button.onclick = (ev) => {
             var field = this.field_selector.value;
-            var value = this.search_text_input.value;
+            if(this.field_selector.value == 'date'){
+                var value = [this.range1, this.range2];
+            }else{
+                var value = this.search_text_input.value;
+            }
+
             window.app.current_query = {field: field, value: value}
             window.API.query('inventory', field, value).then(res => {
                 window.TableData.append_rows(res)
@@ -191,6 +202,12 @@ class PartsNeededList extends HTMLElement{
         this.textarea.style.outline = 'none';
 
         this.append(this.textarea);
+    }
+
+    connectedCallback(){
+        window.API.get_parts_needed().then(res => {
+            console.log(res)
+        })
     }
 }
 

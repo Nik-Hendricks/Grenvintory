@@ -33,8 +33,8 @@ class Grenvintory{
 
 
                 this.createMainView(users); 
-                //window.API.create_user('Kathy', 'cockrum', 'kathy', 'pass',1)
-                //window.API.create_user('Ron',  'Grennan',  'Ron', '6588',1)
+                //window.API.create_user('Kathy', 'cockrum', 'kathy', 'pass', 1)
+                //window.API.create_user('Ron',  'Grennan',  'Ron', '6588', 1)
             });        
     }
 

@@ -9,7 +9,7 @@ export default class TableRow extends Component{
         this.table = props.table;
         this.row_num = typeof props.row_num !== 'undefined' ? props.row_num : null;
         this.data = typeof props.data !== 'undefined' ? props.data : null;
-        this.id = typeof props.id !== 'undefined' ? props.id : null;
+        this.setAttribute('data-id', typeof this.data._id !== 'undefined' ? this.data._id : null);
         this.cells = [];
         return this;
     }
@@ -22,7 +22,7 @@ export default class TableRow extends Component{
     create_structure(){
         Object.entries(this.table.schema).forEach(el => {
             var text = (Object.entries(this.data).length == 0) ? (el[0] == 'by') ? window.UserManager.getInitials() : (el[0] == 'date') ? new Date().toLocaleDateString() : '' : this.data[el[0]];
-            var dc = new DataCell({table: this.table, text: text, type: el[1], row_num: this.row_num, col: el[0]})
+            var dc = new DataCell({row: this, text: text, type: el[1], row_num: this.row_num, col: el[0]})
             this.append(dc)
             this.cells.push(dc);
             this.table.row_cells[this.row_num] = dc;

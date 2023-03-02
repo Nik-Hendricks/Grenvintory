@@ -30,6 +30,10 @@
     background: #555;
   }
 
+  ::-webkit-scrollbar-corner{
+    display: none;
+  }
+
 #maincontent{
     position:absolute;
     top:0px;

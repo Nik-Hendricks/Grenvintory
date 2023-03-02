@@ -5,7 +5,7 @@ export default class DataCell extends HTMLElement {
       this.type = this.props.type;
       this.row_num = this.props.row_num;
       this.col = this.props.col;
-      this.table = props.table;
+      this.row = this.props.row;
   
       this.input = document.createElement('input');
       var value = (typeof this.props.text !== 'undefined') ? this.props.text : '';
@@ -25,17 +25,24 @@ export default class DataCell extends HTMLElement {
       this.appendChild(this.input);
   
       this.input.addEventListener('change', (ev) => {
-        var d = this.table.get_row_data(this.row_num);
+        var d = this.GetRowValue()
         if (!d.error) {
-          window.API.set_inventory(d).then(res => {
-            console.log(res);
-          });
+          if(this.row.hasAttribute('data-id')){
+            d._id = this.row.getAttribute('data-id');
+            window.API.set_inventory(d).then(res => {
+              this.row.setAttribute('data-id', res._id);
+            });
+          }else{
+            window.API.set_inventory(d).then(res => {
+              this.row.setAttribute('data-id', res._id);
+            });
+          }
         }
       });
   
       this.input.addEventListener('focus', (ev) => {
-        this.table.current_cell = this;
-        this.table.detailed_cell.value = ev.target.value;
+        this.row.table.current_cell = this;
+        this.row.table.detailed_cell.value = ev.target.value;
   
         if (this.col == 'by') {
           ev.preventDefault();
@@ -45,20 +52,20 @@ export default class DataCell extends HTMLElement {
           if (window.app.admin_mode) {
             this.nextElementSibling.input.focus();
           } else {
-            this.table.rows[this.row_num + 1].cells[0].input.focus()
+            this.row.table.rows[this.row_num + 1].cells[0].input.focus()
           }
   
         } else if (this.col == 'serial_number') {
-          if (this.table.current_quantity > 1) {
-            this.table.detailed_cell.focus();
+          if (this.row.table.current_quantity > 1) {
+            this.row.table.detailed_cell.focus();
           }
         }
   
         this.input.addEventListener('keydown', (ev) => {
-          this.table.detailed_cell.value = this.input.value;
+          this.row.table.detailed_cell.value = this.input.value;
           //set tables current row quantity if the current cell is the quantity cell
           if (this.col == 'quantity') {
-            this.table.current_quantity = this.input.value;
+            this.row.table.current_quantity = this.input.value;
           }
         });
       });
@@ -70,6 +77,19 @@ export default class DataCell extends HTMLElement {
       this.style.padding = '0';
       this.style.height = '100%';
       //this.style.float = 'left';
+    }
+
+    GetRowValue(){
+      var cells = this.row.table.rows[this.row_num].getElementsByTagName('input')
+      console.log(cells)
+      var ret = {}
+      for(var cell of cells){
+          if(cell.value == '' || cell.value == null || cell.value == undefined || typeof cell.value == 'undefined'){
+              return {error: 'empty cell'};
+          }
+          ret[cell.getAttribute('id').split(',')[1]] = cell.value;
+      }
+      return ret;
     }
   }
   

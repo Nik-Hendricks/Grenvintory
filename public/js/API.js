@@ -73,6 +73,14 @@ const API = {
         })
     },
 
+    update_inventory(data){
+        return new Promise(resolve => {
+            this.http_fetch('/API/update_inventory', {user: window.UserManager.current_user, data: data}, "POST").then(res => {
+                resolve(res);
+            })
+        })
+    },
+
     get_inventory(){
         return new Promise(resolve => {
             this.http_fetch('/API/get_inventory', {user: window.UserManager.current_user}, "POST").then(res => {
@@ -152,6 +160,22 @@ const API = {
         console.log('querying')
         return new Promise(resolve => {
             this.http_fetch('/API/query', {user: window.UserManager.current_user, table_name: table_name, field: field, value: value}, "POST").then(res => {
+                resolve(res)
+            })
+        })
+    },
+
+    get_parts_needed(){
+        return new Promise(resolve => {
+            this.http_fetch('/API/get_parts_needed', {}, "POST").then(res => {
+                resolve(res)
+            })
+        })
+    },
+
+    set_parts_needed(data){
+        return new Promise(resolve => {
+            this.http_fetch('/API/set_parts_needed', {data: data}, "POST").then(res => {
                 resolve(res)
             })
         })

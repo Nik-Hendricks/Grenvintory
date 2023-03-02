@@ -119,43 +119,20 @@ class TableData extends HTMLElement{
             td.style.textAlign = 'center'
             td.style.margin = '0'
             td.style.width = `calc(100% / ${window.app.admin_mode ? 10 : 8})`
-            td.innerHTML = col[0];
+            td.innerHTML = col[0].split('_').join(' ');
             td.style.color = 'white';
+            td.style.fontSize = '12px'
+            td.style.fontWeight = 'bold'
+            td.style.height = '12px'
+            td.style.textTransform = 'capitalize'
+            td.style.color = '#38B289'
+            td.style.overflow = 'hidden'
+            td.style.lineHeight = '12px'
+            td.style.marginTop = '5px'
+            td.style.marginBottom = '5px'
             row.append(td)
         })
         return row;
-    }
-
-    populated_row(data){
-        var row = document.createElement('tr');
-        Object.entries(data).forEach(el => {
-            var td = document.createElement('td');
-            td.innerHTML = el[1];
-            row.append(td)
-        })
-        return row;
-    }
-
-
-    get_row_data(row_num){
-        var cells = this.row_cells[row_num].getElementsByTagName('input')
-        var ret = {}
-        var quantity = 0;
-        for(var cell of cells){
-            if(cell.value == '' || cell.value == null || cell.value == undefined || typeof cell.value == 'undefined'){
-                return {error: 'empty cell'};
-            }
-            ret[cell.getAttribute('id').split(',')[1]] = cell.value;
-        }
-        return ret;
-    }
-
-    find_next_empty_row(){
-        for(var row in this.row_cells){
-            if(this.get_row_data(row).error){
-                return row;
-            }
-        }
     }
 
 }

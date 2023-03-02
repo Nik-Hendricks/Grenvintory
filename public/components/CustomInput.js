@@ -18,6 +18,7 @@ export default class CustomInput extends HTMLElement{
         this.fontSize = (typeof this.props.fontSize !== 'undefined') ? this.props.fontSize : '12px';
         this.toggle = (typeof this.props.toggle !== 'undefined') ? this.props.toggle : this.hasAttribute('toggle') ? this.getAttribute('toggle') : false;
         this.toggled = (typeof this.props.toggled !== 'undefined') ? this.props.toggled : this.hasAttribute('toggled') ? this.getAttribute('toggled') : false;
+        this.backround_color = (typeof this.props.backround_color !== 'undefined') ? this.props.backround_color : this.hasAttribute('backround_color') ? this.getAttribute('backround_color') : 'var(--window-color-3)';
         this.onfocus = this.style.webkitTransform = 'translate3d(0px,-10000px,0)'; requestAnimationFrame(function() { this.style.webkitTransform = ''; }.bind(this))
         this.init();
         return this;
@@ -73,9 +74,7 @@ export default class CustomInput extends HTMLElement{
         this.onclick = () => {
             this.props.onclick();
             if(this.toggle){
-                console.log('toggle')
                 if(this.toggled){
-                    console.log('was toggled already')
                     this.toggled = false;
                     this.style.background = 'var(--window-color-3)';
                 }else{
@@ -129,7 +128,7 @@ export default class CustomInput extends HTMLElement{
         this.style.display = 'block';
         this.style.width = `calc(${this.width} - ${this.margin} * 2)`;
         this.style.height = this.height;
-        this.style.background = 'var(--window-color-3)';
+        this.style.background = this.backround_color;
         this.style.borderRadius = '5px';
         this.style.margin = this.margin;
         this.style.color = 'white';
