@@ -22,10 +22,14 @@ export default class UserControls extends HTMLElement{
                             window.API.get_inventory(window.UserManager.current_user).then(res => {
                                 window.TableData.append_rows(window.API.sort(res, 'date', true));
                             })
+                            
                         }else{
-                            window.API.query('inventory', {by: window.UserManager.getInitials()}).then(res => {
+                            window.API.get_inventory(window.UserManager.current_user).then(res => {
                                 window.TableData.append_rows(window.API.sort(res, 'date', true));
                             })
+                            //window.API.query('inventory', {by: window.UserManager.getInitials()}).then(res => {
+                            //    window.TableData.append_rows(window.API.sort(res, 'date', true));
+                            //})
                         }
                     }
                 }
