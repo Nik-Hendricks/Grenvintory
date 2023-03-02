@@ -12,13 +12,15 @@ export default class DataCell extends HTMLElement {
       this.input.value = value;
       this.input.setAttribute('type', 'text');
       this.input.setAttribute('id', `${this.type},${this.col},${this.row_num}`);
-      this.input.style.width = '100%';
+      this.input.style.width = 'calc(100% - 5px)';
       this.input.style.height = '100%';
       this.input.style.border = 'none';
       this.input.style.padding = '0';
-      this.input.style.margin = '0';
+      this.input.style.margin = '2.5px';
       this.input.style.display = 'block';
       this.input.style.boxSizing = 'border-box';
+      this.input.style.borderRadius = '5px'
+      this.input.style.height = '25px'
   
       this.appendChild(this.input);
   
@@ -43,7 +45,7 @@ export default class DataCell extends HTMLElement {
           if (window.TableData.isAdminSchema) {
             this.nextElementSibling.input.focus();
           } else {
-            this.table.row_cells[this.row_num + 1].getElementsByTagName('data-cell')[0].input.focus();
+            this.table.rows[this.row_num + 1].cells[0].input.focus()
           }
   
         } else if (this.col == 'serial_number') {

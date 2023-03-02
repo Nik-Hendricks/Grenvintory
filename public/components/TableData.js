@@ -7,8 +7,9 @@ class TableData extends HTMLElement{
         super();
         this.props = props
         this.table_name = props.table_name;
-        this.row_count = 20;
+        this.row_count = 100;
         this.row_cells = Array(this.row_count).fill([]);
+        this.rows = []
         this.row = 0;
         this.col = 0;
         this.current_cell = null;
@@ -19,9 +20,9 @@ class TableData extends HTMLElement{
     connectedCallback(){
         window.API.get_schema(this.table_name).then(schema => {
             this.schema = schema;
-            this.t = document.createElement('table');
-            this.th = document.createElement('thead');
-            this.tb = document.createElement('tbody');
+            this.t = document.createElement('div');
+            this.th = document.createElement('div');
+            this.tb = document.createElement('div');
             this.detailed_cell = new CustomInput({width: '100%', height: '35px', type: 'text', text: 'Detailed View', icon:'info', margin:'5px'})
 
             this.detailed_cell.addEventListener('keydown', (ev) => {
@@ -42,17 +43,21 @@ class TableData extends HTMLElement{
                 
             })
 
-            
             this.style.width = '100%'
-            this.style.height = 'auto';
-            this.style.display = 'block';
-            this.style.overflow = 'scroll';
+            this.style.position = 'absolute'
+            this.style.bottom = '0px'
+            this.style.top = '0px'
+            this.style.overflow = 'none';
+
+            this.t.style.overflow = 'scroll'
             this.t.style.width = 'calc(100% - 10px)';
-            this.t.style.height = 'calc(100% - 30px)';
+        
             this.t.style.margin = '5px';
             this.tb.style.borderRadius = '5px !important';
-            this.tb.style.overflow = 'hidden';
-
+            this.tb.style.overflow = 'scroll';
+            this.tb.style.position = 'relative'
+            this.tb.style.top = '0px'
+            this.tb.style.height =  'calc(100% - 50px)'
             this.detailed_cell.setAttribute('type', 'text')
     
             this.t.append(this.th, this.tb)
@@ -79,6 +84,7 @@ class TableData extends HTMLElement{
     full_clear(){
         this.th.innerHTML = '';
         this.tb.innerHTML = '';
+        this.rows = [];
     }
 
     clear(){
@@ -87,23 +93,10 @@ class TableData extends HTMLElement{
         })
     }
 
-
-    _new_row(row_num,  data){
-        var row = document.createElement('tr')
-        row.style.display = 'table-row';
-        row.style.height = '22px !important';
-        Object.entries(this.schema).forEach(el => {
-            var text = (Object.entries(data).length == 0) ? (el[0] == 'by') ? window.UserManager.getInitials() : (el[0] == 'date') ? new Date().toLocaleDateString() : '' : data[el[0]];
-            var dc = new DataCell({table: this, text: text, type: el[1], row_num: row_num, col: el[0]})
-
-            row.append(dc)
-        })
-        this.row_cells[row_num] = row;
-        return row;
-    }
-
     new_row(row_num, data){
-        return new TableRow({table: this, row_num: row_num, data: data})
+        var row = new TableRow({table: this, row_num: row_num, data: data});
+        this.rows[row_num] = row;
+        return row
     }
 
     append_rows(data){
@@ -111,17 +104,22 @@ class TableData extends HTMLElement{
         for(var d of data){
             var empty_row  = this.find_next_empty_row();
             console.log(empty_row)
-            var original_row = this.row_cells[empty_row]
+            var original_row = this.rows[empty_row]
             console.log(original_row)
-            original_row.parentNode.replaceChild(this.new_row(empty_row, d), original_row);
-            this.row_cells
+            var new_row = this.new_row(empty_row, d)
+            original_row.parentNode.replaceChild(new_row, original_row);
+            this.rows[empty_row] = new_row
         }
     }
 
     header_row(cols){
-        var row = document.createElement('tr');
+        var row = document.createElement('div');
         cols.forEach(col => {
-            var td = document.createElement('th');
+            var td = document.createElement('p');
+            td.style.display = 'inline-block'
+            td.style.textAlign = 'center'
+            td.style.margin = '0'
+            td.style.width = `calc(100% / ${this.isAdminSchema ? 10 : 8})`
             td.innerHTML = col[0];
             td.style.color = 'white';
             row.append(td)

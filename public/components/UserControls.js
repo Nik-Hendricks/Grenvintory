@@ -102,8 +102,9 @@ export default class UserControls extends HTMLElement{
             item.auth_required ? window.UserManager.current_user.permission_level == 1 ? this.append(e) : {} : this.append(e)
            
 
-
+            this.style.overflow = 'scroll'
             this.style.display = 'block';
+            this.style.position = 'absolute';
         })
     }
 }

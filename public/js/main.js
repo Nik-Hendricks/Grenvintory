@@ -18,22 +18,26 @@ class Grenvintory{
                 this.left_view.style.float = 'left';
                 this.left_view.style.display = 'block';
                 this.left_view.style.height = 'calc(100% - 58px)';
+                this.left_view.style.position = 'absolute'
 
                 this.right_view.style.width = '25%';
-                this.right_view.style.float = 'right';
                 this.right_view.style.display = 'block';
-                this.right_view.style.height = 'calc(100% - 58px)';
-
+                this.right_view.style.height = 'calc(100% - 35px)';
+                this.right_view.style.position = 'absolute'
+                this.right_view.style.right = '0px'
+                this.right_view.style.overflowX = 'scroll'
 
 
                 this.createMainView(users); 
+                //window.API.create_user('Kathy', 'cockrum', 'kathy', 'pass',1)
+                //window.API.create_user('Ron',  'Grennan',  'Ron', '6588',1)
             });        
     }
 
     createMainView(users){
         window.UserControls = new UserControls();
         window.UserTabBar = new UserTabBar(users);
-        window.TableData = new TableData({table_name:'inventory'});
+        window.TableData = new TableData({table_name:'pick_tickets'});
         this.left_view.append(window.TableData);
         this.right_view.append(window.UserControls)
         document.getElementById('maincontent').append(window.UserTabBar, this.left_view, this.middle_view, this.right_view);   

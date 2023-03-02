@@ -26,15 +26,13 @@ export default class TableRow extends Component{
             this.append(dc)
             this.cells.push(dc);
             this.table.row_cells[this.row_num] = dc;
+            this.cells.push[this.row_num] = dc;
         })
     }
 
     preStyle(){
         this.style.width = "100%";
-        this.style.height = '30px'
         this.style.display = 'table-row';
-        this.style.float = 'left';
-        this.style.position = 'absolute';
 
     }
 }
