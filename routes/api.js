@@ -198,15 +198,13 @@ module.exports = (() => {
 
     API.post('/export_xlsx', (req, res) => {
         var current_query = req.body.current_query;
-
-
         _query('inventory', current_query.field, current_query.value).then(data => {
             const wb = new xl.Workbook();
             const ws = wb.addWorksheet('Worksheet Name');
 
             //Write Column Title in Excel file
             let headingColumnIndex = 1;
-            Object.entries(db_schema['inventory']).forEach(heading => {
+            Object.entries(db_schema['inventory'][1]).forEach(heading => {
                 ws.cell(1, headingColumnIndex++)
                     .string(heading[0])
             });

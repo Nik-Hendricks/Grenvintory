@@ -18,10 +18,15 @@ export default class UserControls extends HTMLElement{
                     }else{
                         window.TableData.create_structure()
                         window.app.view_mode = 'view';
-                        window.API.get_inventory(window.UserManager.current_user).then(res => {
-                            console.log(window.API.sort(res, 'date', true))
-                            window.TableData.append_rows(window.API.sort(res, 'date', true));
-                        })
+                        if(window.UserManager.current_user.user_level == 1){
+                            window.API.get_inventory(window.UserManager.current_user).then(res => {
+                                window.TableData.append_rows(window.API.sort(res, 'date', true));
+                            })
+                        }else{
+                            window.API.query('inventory', {by: window.UserManager.getInitials()}).then(res => {
+                                window.TableData.append_rows(window.API.sort(res, 'date', true));
+                            })
+                        }
                     }
                 }
             },
