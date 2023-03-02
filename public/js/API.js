@@ -40,10 +40,10 @@ const API = {
         })
     },
 
-    get_schema(table_name){
+    get_schema(table_name, isAdminSchema){
         return new Promise(resolve => {
-            this.http_fetch('/API/db_schema', {}, "GET").then(res => {
-                resolve(res[table_name]);
+            this.http_fetch('/API/db_schema', {table_name: table_name, user: window.UserManager.current_user, isAdminSchema: isAdminSchema}, "POST").then(res => {
+                resolve(res);
             })
         })
     },

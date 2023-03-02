@@ -25,6 +25,24 @@ export default class UserControls extends HTMLElement{
             },
             {   
                 type:'button',
+                name: 'ADMIN MODE',
+                auth_required: true,
+                onclick: () => {
+                    if(window.TableData.isAdminSchema){
+                        window.TableData.isAdminSchema = false;
+                    }else{
+                        window.TableData.isAdminSchema = true;
+                    }
+
+                    window.API.get_schema('inventory', window.TableData.isAdminSchema).then(schema => {
+                        window.TableData.schema = schema;
+                        window.TableData.create_structure();
+                    })
+
+                }
+            },
+            {   
+                type:'button',
                 name: 'Export .Xlsx',
                 auth_required: true,
                 onclick: () => {
@@ -40,7 +58,6 @@ export default class UserControls extends HTMLElement{
                 name: 'Query Controls',
             },
             {
-                auth_required: false,
                 type:'parts_needed_list',
                 name: 'Parts Needed List',
             }
@@ -119,10 +136,13 @@ class QueryControls extends HTMLElement{
             {text:'date', icon: 'calendar_month'}
         ]
 
-        this.field_selector = new CustomInput({type: 'dropdown', text:'field', icon:'info', width:'100%', height:'30px', margin:'5px', items:field_items})
+        this.field_selector = new CustomInput({type: 'dropdown', text:'field', icon:'keyboard_double_arrow_down', width:'100%', height:'30px', margin:'5px', items:field_items})
         this.search_text_input = new CustomInput({type: 'text', placeholder: 'test', width:'100%', height:'30px', margin:'5px'})
+        this.submit_query_button = new CustomInput({type: 'button', text: 'Submit Query', icon:'send', width:'100%', height:'30px', margin:'5px', onclick: () => {
 
-        this.append(this.field_selector, this.search_text_input)
+        }})
+
+        this.append(this.field_selector, this.search_text_input, this.submit_query_button)
     }
 }
 

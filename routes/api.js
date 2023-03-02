@@ -6,42 +6,14 @@ const xl = require('excel4node');
 var datastores = require('../db/datastores.js')
 var uniqid = require('uniqid'); 
 var db_schema = {
-    customers:{name:'string', SO_number: 'number'},
-    inventory:{from:'string', to:'string', quantity:'number', item_name: 'string', serial_number:'serial_number', by:'string', reason:'string', date:'string'}
+    
+    inventory:[
+        {from:'string', to:'string', quantity:'number', item_name: 'string', serial_number:'serial_number', by:'string', reason:'string', date:'string'},
+        {from:'string', to:'string', quantity:'number', item_name: 'string', serial_number:'serial_number', by:'string', reason:'string', date:'string', posted_date:'string', posted_by:'string'},
+    ]
 }
 //private functions
 
-
-function _create_game(name, image_url){
-    if(!url){
-        image_url = null;
-    }
-    datastore.games.insert({data_type:'game', name: name, image: image_url}, (err, doc) => {
-        console.log("ADDED GAME " + name)
-    })
-}
-
-function _create_post(title, content, author_public_uniqid){
-    return new Promise(resolve => {
-        var post_uniqid = uniqid();
-        datastore.posts.insert({data_type:'post', uniqid: post_uniqid, title: title, content: content, author_public_uniqid: author_public_uniqid}, (err, doc) => {
-            datastore.subscriptions.find({to: author_public_uniqid}, (err, subscribers) => {
-                console.log(subscribers)
-                for(var i = 0; i < subscribers.length; i++){
-                    var subscriber_public_uniqid = subscribers[i].from;
-                    console.log(subscriber_public_uniqid)
-                    datastore.post_feeds.insert({subscriber_public_uniqid: subscriber_public_uniqid, post_uniqid: post_uniqid}, (err, doc) => {
-                        if(i == subscribers.length -1){
-                            resolve(doc)
-                        }
-                    })
-                }
-                
-            })
-        })
-
-    })
-}
 
 
 function _create_user(username, email, password){
@@ -104,8 +76,14 @@ module.exports = (() => {
         next()
     })   
 
-    API.get('/db_schema', (req, res) => {
-        res.json(db_schema)
+    API.post('/db_schema', (req, res) => {
+        var user = req.body.user;
+        var isAdminSchema = req.body.isAdminSchema;
+        var table_name = req.body.table_name;
+
+        var index = isAdminSchema ? 1 : 0;
+
+        res.json(db_schema[table_name][index])
     })
     
     API.post('/set_row', (req, res) => {

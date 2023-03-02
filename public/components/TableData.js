@@ -1,5 +1,6 @@
 import DataCell from '/components/DataCell.js'
 import CustomInput from '/components/CustomInput.js'
+import TableRow from '/components/TableRow.js'
 
 class TableData extends HTMLElement{
     constructor(props){
@@ -40,7 +41,8 @@ class TableData extends HTMLElement{
                 } 
                 
             })
-    
+
+            
             this.style.width = '100%'
             this.style.height = 'auto';
             this.style.display = 'block';
@@ -86,7 +88,7 @@ class TableData extends HTMLElement{
     }
 
 
-    new_row(row_num,  data){
+    _new_row(row_num,  data){
         var row = document.createElement('tr')
         row.style.display = 'table-row';
         row.style.height = '22px !important';
@@ -98,6 +100,10 @@ class TableData extends HTMLElement{
         })
         this.row_cells[row_num] = row;
         return row;
+    }
+
+    new_row(row_num, data){
+        return new TableRow({table: this, row_num: row_num, data: data})
     }
 
     append_rows(data){
