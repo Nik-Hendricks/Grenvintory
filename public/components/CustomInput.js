@@ -18,7 +18,8 @@ export default class CustomInput extends HTMLElement{
         this.fontSize = (typeof this.props.fontSize !== 'undefined') ? this.props.fontSize : '12px';
         this.toggle = (typeof this.props.toggle !== 'undefined') ? this.props.toggle : this.hasAttribute('toggle') ? this.getAttribute('toggle') : false;
         this.toggled = (typeof this.props.toggled !== 'undefined') ? this.props.toggled : this.hasAttribute('toggled') ? this.getAttribute('toggled') : false;
-        this.backround_color = (typeof this.props.backround_color !== 'undefined') ? this.props.backround_color : this.hasAttribute('backround_color') ? this.getAttribute('backround_color') : 'var(--window-color-3)';
+        this.backround_color = (typeof this.props.background_color !== 'undefined') ? this.props.background_color : this.hasAttribute('background_color') ? this.getAttribute('background_color') : 'var(--window-color-3)';
+        this.placeholder = (typeof this.props.placeholder !== 'undefined') ? this.props.placeholder : this.hasAttribute('placeholder') ? this.getAttribute('placeholder') : '';
         this.onfocus = this.style.webkitTransform = 'translate3d(0px,-10000px,0)'; requestAnimationFrame(function() { this.style.webkitTransform = ''; }.bind(this))
         this.init();
         return this;
@@ -31,6 +32,8 @@ export default class CustomInput extends HTMLElement{
             event.initEvent("change", true, true);
             event.eventName = "change";
             this.dispatchEvent(event)
+        }else if(this.type == "textarea"){
+            this.textarea.value = x;
         }else{
             this.textContent = x;
         }
@@ -39,6 +42,8 @@ export default class CustomInput extends HTMLElement{
     get value(){
         if(this.type == 'dropdown'){
             return this.getElementsByTagName('p')[0].textContent;
+        }else if(this.type == 'textarea'){        
+            return this.textarea.value;
         }else{
             return this.textContent;
         }
@@ -56,9 +61,22 @@ export default class CustomInput extends HTMLElement{
             this._is_button();
         }else if(this.type == 'dropdown'){
             this._is_dropdown();
+        }else if(this.type == 'textarea'){
+            this._is_textarea();
         }
     }
 
+
+    _is_textarea(){
+        this.textarea = document.createElement('textarea');
+        this.textarea.setAttribute('placeholder', this.placeholder);
+        this.append(this.textarea)
+        this.onkeydown = () => {
+            setTimeout(() => {
+                this.value = this.textContent;
+            }, 200)
+        }
+    }
 
     _is_text(){
         this.setAttribute('contenteditable', true);
@@ -163,6 +181,19 @@ export default class CustomInput extends HTMLElement{
             icon.style.lineHeight = this.height;
             icon.style.position = 'absolute'
             icon.style.marginLeft = '5px';
+        }
+
+        if(this.getElementsByTagName('textarea').length > 0){
+            this.textarea.style.width = '100%';
+            this.textarea.style.height = '100%';
+            this.textarea.style.margin = '0px';
+            this.textarea.style.borderRadius = this.style.borderRadius;
+            this.textarea.style.border = 'none';
+            this.textarea.style.background = 'var(--window-color-2)';
+            this.textarea.style.color = 'white';
+            this.textarea.style.padding = '5px';
+            this.textarea.style.resize = 'none';
+            this.textarea.style.outline = 'none';
         }
     }
 

@@ -27,9 +27,6 @@ export default class UserControls extends HTMLElement{
                             window.API.get_inventory(window.UserManager.current_user).then(res => {
                                 window.TableData.append_rows(window.API.sort(res, 'date', true));
                             })
-                            //window.API.query('inventory', {by: window.UserManager.getInitials()}).then(res => {
-                            //    window.TableData.append_rows(window.API.sort(res, 'date', true));
-                            //})
                         }
                     }
                 }
@@ -119,6 +116,7 @@ export default class UserControls extends HTMLElement{
             this.style.display = 'block';
             this.style.position = 'absolute';
             this.style.width = '100%'
+            this.style.height = '100%'
         })
     }
 }
@@ -127,18 +125,92 @@ export default class UserControls extends HTMLElement{
 class QueryControls extends HTMLElement{
     constructor(){
         super();
+        this.fields = [];
     }
 
     connectedCallback(){
         this.style.display = 'inline-block';
         this.style.background = 'var(--window-color-1)';
         this.style.borderRadius = '5px';
-        this.style.height = '200px';
+        this.style.height = 'auto';
         this.style.color = 'white';
         this.style.paddingTop = '5px'
         this.innerHTML = '<p style="text-align:center; margin:0px;">Query Controls</p>';
   
 
+
+
+        this.query_fields = [];
+        this.query_field_inputs = [];
+
+        this.query_fields_container = document.createElement('div');
+        this.query_field_inputs_container = document.createElement('div');
+
+        this.script_mode = new CustomInput({type: 'button', text: 'Script Mode', icon:'code', background_color:'#e74c3c', width:'50%', height:'30px', margin:'5px', toggle:true, toggled:false})
+        this.easy_mode = new CustomInput({type: 'button', text: 'Easy Mode', icon:'cake', background_color:'#16a085', width:'50%', height:'30px', margin:'5px', toggle:true, toggled:true})
+        this.control_type_container = document.createElement('div');
+        this.control_type_container.style.width = '100%';
+        this.query_field_inputs_container.style.width = '100%';
+        this.query_field_inputs_container.style.height = '40px';
+        this.script_input = new CustomInput({type: 'textarea', placeholder: 'Query Script', width:'100%', height:'120px', margin:'5px'})
+        this.submit_query_button = new CustomInput({type: 'button', text: 'Submit Query', icon:'send', width:'100%', height:'30px', margin:'5px'})
+
+        this.easy_mode.onclick = () => {
+            this.query_mode = 'easy';
+            this.query_fields_container.innerHTML = '';
+            this.control_type_container.innerHTML = '';
+            for(var i = 0; i < 2; i++){
+                var qf = new QueryField(i, this.query_field_inputs_container)
+                this.query_fields_container.append(qf.input)
+                setTimeout(() => {
+                    qf.SetInputContainerWidth();
+                }, 100)
+            }
+
+            this.control_type_container.append(this.query_fields_container, this.query_field_inputs_container);
+        }
+
+        this.script_mode.onclick = () => {
+            this.query_mode = 'script';
+            this.control_type_container.innerHTML = '';
+            this.control_type_container.append(this.script_input)
+        }
+
+        this.submit_query_button.onclick = (ev) => {
+            if(this.query_mode == 'easy'){
+                var field = this.field_selector.value;
+                if(this.field_selector.value == 'date'){
+                    var value = [this.range1, this.range2];
+                }else{
+                    var value = this.search_text_input.value;
+                }
+    
+                window.app.current_query = {field: field, value: value}
+            }
+
+            if(this.query_mode == 'script'){
+                window.app.current_query = {field: field, value: value}
+                
+            }
+
+            window.API.query('inventory', field, value).then(res => {
+                window.TableData.append_rows(res)
+            })
+        }
+       
+
+        this.append(this.easy_mode, this.script_mode, this.control_type_container, this.submit_query_button)
+    }
+}
+
+class QueryField{
+    constructor(id, input_div){
+        this.input_div = input_div;
+        this.input_container = document.createElement('div')
+        
+       
+
+        var colors = ['#2c3e50', '#34495e']
         var field_items = [
             {text:'from', icon: 'person'},
             {text:'to', icon: 'person'},
@@ -150,42 +222,45 @@ class QueryControls extends HTMLElement{
             {text:'date', icon: 'calendar_month'}
         ]
 
-        this.field_selector = new CustomInput({type: 'dropdown', text:'field', icon:'keyboard_double_arrow_down', width:'100%', height:'30px', margin:'5px', items:field_items})
-        this.search_fields = document.createElement('div');
-        this.search_text_input = new CustomInput({type: 'text', placeholder: 'test', width:'100%', height:'30px', margin:'5px'})
+        this.inputs = [];
+        this.input = new CustomInput({type: 'dropdown', text:`Field ${id}`, background_color: colors[id], icon:'keyboard_double_arrow_down', width:'50%', height:'30px', margin:'5px', items:field_items})
+        this.input.setAttribute('field_id', id)
 
-        this.field_selector.onchange = (ev) => {
-            if(ev.target.value == 'date'){
-                this.search_fields.innerHTML = '';
-                this.range1 = new CustomInput({type: 'text', placeholder: 'test', width:'50%', height:'30px', margin:'5px'})
-                this.range2 = new CustomInput({type: 'text', placeholder: 'test', width:'50%', height:'30px', margin:'5px'})
-                this.search_fields.append(this.range1, this.range2)
-            }else{
-                this.search_fields.innerHTML = '';
-                this.search_fields.append(this.search_text_input);
+        this.input.onchange = (ev) => {
+            var field_count = (ev.target.value == 'date' ? 2 : 1);
+            this.ClearInputs();
+            for(var i = 0; i < field_count; i++){
+                this.inputs.push(new QueryFieldInput(ev.target.getAttribute('field_id'), field_count))
+                
+                this.input_container.append(this.inputs[i])
             }
+            this.input_div.append(this.input_container)
         }
 
-        this.submit_query_button = new CustomInput({type: 'button', text: 'Submit Query', icon:'send', width:'100%', height:'30px', margin:'5px'})
+        return this
+    }
 
-        this.submit_query_button.onclick = (ev) => {
-            var field = this.field_selector.value;
-            if(this.field_selector.value == 'date'){
-                var value = [this.range1, this.range2];
-            }else{
-                var value = this.search_text_input.value;
-            }
+    SetInputContainerWidth(){
+        this.input_container.style.width = this.input.offsetWidth + 'px';
+    }
 
-            window.app.current_query = {field: field, value: value}
-            window.API.query('inventory', field, value).then(res => {
-                window.TableData.append_rows(res)
-            })
-        }
-
-        this.append(this.field_selector, this.search_fields, this.submit_query_button)
+    ClearInputs(){
+        this.inputs.forEach(input => {
+            console.log(input)
+            input.remove();
+        })
+        this.inputs = []
     }
 }
 
+
+class QueryFieldInput{
+    constructor(parent_field, count){
+        var colors = ['#2c3e50', '#34495e']
+        var input = new CustomInput({type: 'text', placeholder: `Input ${parent_field}`, background_color: colors[parent_field], width:`calc(50% / ${count})`, height:'30px', margin:'5px'})
+        return input;
+    }
+}
 
 class PartsNeededList extends HTMLElement{
     constructor(){

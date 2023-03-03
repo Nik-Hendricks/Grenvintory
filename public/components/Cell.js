@@ -53,7 +53,7 @@ export default class Cell extends HTMLElement{
             }
         });
 
-        this.input.addEventListener('keydown', (key_ev) => {
+        this.input.addEventListener('keypress', (key_ev) => {
             //set tables current row quantity if the current cell is the quantity cell
             if (this.col == 'quantity') {
                 this.row.current_quantity = this.input.value;
@@ -70,7 +70,9 @@ export default class Cell extends HTMLElement{
                     }
                 }
             }
-            this.row.table.detailed_cell.value = this.input.value;
+            setTimeout(() => {
+                this.row.table.detailed_cell.value = this.input.value;
+            }, 30);
         });
 
         this.input.addEventListener('change', (change_ev) => {
