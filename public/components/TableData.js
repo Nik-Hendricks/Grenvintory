@@ -67,16 +67,9 @@ class TableData extends HTMLElement{
             this.create_structure()
         }else{
             this.create_structure()
-            if(window.UserManager.current_user.user_level == 1){
-                window.API.get_inventory(window.UserManager.current_user).then(res => {
-                    this.append_rows(window.API.sort(res, 'date', true));
-                })
-                
-            }else{
-                window.API.get_inventory(window.UserManager.current_user).then(res => {
-                    this.append_rows(window.API.sort(res, 'date', true));
-                })
-            }
+            window.API.get_rows(this.table_name).then(res => {
+                this.append_rows(window.API.sort(res, 'date', true));
+            })
         }
     }
 
