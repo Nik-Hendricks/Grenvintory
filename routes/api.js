@@ -25,6 +25,10 @@ var db_schema = {
         {from:'string', to:'string', quantity:'number', item_name: 'string', serial_number:'serial_number', by:'string', reason:'string', date:'string'},
     ],
 
+    parts_needed_list:[
+        {part_name:'string', date_posted:'string', ordered:'string'}
+    ],
+
     inventory:[
         {from:'string', to:'string', quantity:'number', item_name: 'string', serial_number:'serial_number', by:'string', reason:'string', date:'string'},
         {from:'string', to:'string', quantity:'number', item_name: 'string', serial_number:'serial_number', by:'string', reason:'string', date:'string', posted_date:'string', posted_by:'string'},
@@ -195,11 +199,23 @@ export default function API() {
         })
     })
 
+    API.post('/set_table_data', (req, res) => {
+        var user = req.body.user;
+        var data = req.body.data;
+        var table_name = req.body.table_name;
+        console.log(`table name is ${table_name}`)
+        data.date_posted = new Date(data.date);
+
+        GrenventoryDB.tables[table_name].SetItem(data).then(ret => {
+            res.json(ret)
+        })
+    })
+
     API.post('/set_inventory', (req, res) => {
         var user = req.body.user;
         var data = req.body.data;
         data.date = new Date(data.date);
-
+        console.log('WEIRD')
         GrenventoryDB.tables.inventory.SetItem(data).then(ret => {
             res.json(ret)
         })
@@ -208,7 +224,8 @@ export default function API() {
 
     API.post('/export_xlsx', (req, res) => {
         var current_query = req.body.current_query;
-        _query('inventory', current_query.field, current_query.value).then(data => {
+        console.log(current_query)
+        _query(current_query).then(data => {
             const wb = new xl.Workbook();
             const ws = wb.addWorksheet('Worksheet Name');
 

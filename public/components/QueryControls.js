@@ -124,27 +124,24 @@ export default class QueryControls extends HTMLElement{
                     }
                 }
 
-                
                 query_fields.forEach(_e => {
-                    //$and: [{ name: 'John' }, { age: 25 }]
                     if(query_fields.length > 1){
                         query_string = {$and: []}
                         var qfc = 0;
                         query_data.forEach(e => {
-                            console.log(query_string)
-                            console.log(qfc)
-                            query_string.$and.push({[query_fields[qfc]]:e})
+                            if(e.length > 0){
+                                query_string.$and.push({[query_fields[qfc]]:e})
+                            }else{
+                                query_fields[qfc] = undefined;
+                            }
                             qfc++;
                         })
                     }else{
                         query_string[_e] = query_data[query_fields.indexOf(_e)]
                     }
-                    
-                })
 
-                console.log(query_fields)
-                console.log(query_data)
-                console.log(query_string)
+                    console.log(query_string)
+                })
                 window.app.current_query = {table_name:'inventory', query:query_string};
             }
             else if(this.mode == 'advanced'){

@@ -1,5 +1,6 @@
 import CustomInput from '/components/CustomInput.js'
 import QueryControls from '/components/QueryControls.js'
+import PartsNeededList from '/components/PartsNeededList.js'
 
 
 export default class UserControls extends HTMLElement{
@@ -13,23 +14,12 @@ export default class UserControls extends HTMLElement{
                 width: '50%',
                 toggle: true,
                 onclick: () => {
-                    if(window.app.view_mode == 'view'){
-                        window.app.view_mode = 'edit';
-                        window.TableData.create_structure()
+                    if(window.TableData.mode == 'view'){
+                        window.TableData.mode = 'edit';
                     }else{
-                        window.TableData.create_structure()
-                        window.app.view_mode = 'view';
-                        if(window.UserManager.current_user.user_level == 1){
-                            window.API.get_inventory(window.UserManager.current_user).then(res => {
-                                window.TableData.append_rows(window.API.sort(res, 'date', true));
-                            })
-                            
-                        }else{
-                            window.API.get_inventory(window.UserManager.current_user).then(res => {
-                                window.TableData.append_rows(window.API.sort(res, 'date', true));
-                            })
-                        }
+                        window.TableData.mode = 'view';
                     }
+                    window.TableData.refresh()
                 }
             },
             {   
@@ -122,59 +112,4 @@ export default class UserControls extends HTMLElement{
     }
 }
 
-
-
-
-class PartsNeededList extends HTMLElement{
-    constructor(){
-        super();
-        this.style.display = 'inline-block';
-        this.style.background = 'var(--window-color-1)';
-        this.style.borderRadius = '5px';
-        this.style.height = '200px';
-        this.style.color = 'white';
-        this.style.paddingTop = '5px'
-        this.innerHTML = '<p style="text-align:center; margin:0px;">Parts Needed List</p>';
-        this.textarea = document.createElement('textarea');
-        this.textarea.setAttribute('placeholder', 'Enter parts needed here');
-        this.textarea.style.width = 'calc(100% - 10px)';
-        this.textarea.style.height = 'calc(100% - 80px)';
-        this.textarea.style.margin = '5px';
-        this.textarea.style.borderRadius = '5px';
-        this.textarea.style.border = 'none';
-        this.textarea.style.background = 'var(--window-color-2)';
-        this.textarea.style.color = 'white';
-        this.textarea.style.padding = '5px';
-        this.textarea.style.resize = 'none';
-        this.textarea.style.outline = 'none';
-
-        this.submit_button = new CustomInput({type: 'button', text: 'Submit', icon:'send', width:'100%', height:'30px', margin:'5px'})
-        this.submit_button.onclick = (ev) => {
-            window.API.set_parts_needed(this.textarea.value).then(res => {
-                console.log(res)
-                this.update();
-            })
-        }
-
-
-        this.append(this.textarea, this.submit_button);
-    }
-
-    connectedCallback(){
-        this.update();
-    }
-
-    update(){
-        window.API.get_parts_needed().then(res => {
-            this.textarea.value = res[0].data;
-        })
-    }
-}
-
-//search by any feild.
-//sort by date, 
-//sort alpabetically by item_name
-
-
 window.customElements.define('user-controls', UserControls);
-window.customElements.define('parts-needed-list', PartsNeededList);

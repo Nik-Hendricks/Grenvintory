@@ -25,7 +25,8 @@ export default class Cell extends HTMLElement{
         this.style.display = 'inline-block';
         this.style.margin = '0';
         this.style.padding = '0';
-        this.style.width = `calc(100% / ${window.app.admin_mode ? 10 : 8})`
+        this.style.width = `calc(100% / ${Object.entries(this.row.table.schema).length})`
+        //this.style.width = `calc(100% / ${window.app.admin_mode ? 10 : 8})`
 
         this.input.style.width = 'calc(100% - 5px)';
         this.input.style.height = '100%';
@@ -74,11 +75,17 @@ export default class Cell extends HTMLElement{
             var d = this.row.GetRowValue()
             if (!d.error) {
                 d._id = this.row._id;
-                window.API.set_inventory(d).then(res => {
+                //window.API.set_inventory(d).then(res => {
+                //    if(res._id !== undefined){
+                //        this.row._id = res._id;
+                //    }
+                //});
+                console.log(this.row.table.table_name)
+                window.API.SetTableData({table_name: this.row.table.table_name, data: d}).then(res => {
                     if(res._id !== undefined){
                         this.row._id = res._id;
                     }
-                });
+                })
             }
         })
     }

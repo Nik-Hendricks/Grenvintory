@@ -73,6 +73,8 @@ const API = {
         })
     },
 
+
+
     update_inventory(data){
         return new Promise(resolve => {
             this.http_fetch('/API/update_inventory', {user: window.UserManager.current_user, data: data}, "POST").then(res => {
@@ -172,22 +174,22 @@ const API = {
         })
     },
 
-    query(table_name, field, value){
-        console.log('querying')
-        return new Promise(resolve => {
-            this.http_fetch('/API/query', {user: window.UserManager.current_user, table_name: table_name, field: field, value: value}, "POST").then(res => {
-                resolve(res)
-            })
-        })
-    },
-
     Query(props){
         return new Promise(resolve => {
             this.http_fetch('/API/Query', props, "POST").then(res => {
                 resolve(res)
             })
         })
-    }
+    },
+
+    SetTableData(props){
+        return new Promise(resolve => {
+            console.log(props.table_name)
+            this.http_fetch('/API/set_table_data', {table_name: props.table_name, user: window.UserManager.current_user, data: props.data}, "POST").then(res => {
+                resolve(res);
+            })
+        })
+    },
     
 }
 

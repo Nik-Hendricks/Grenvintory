@@ -12,11 +12,15 @@ class TableData extends HTMLElement{
         this.row = 0;
         this.col = 0;
         this.current_cell = null;
-        this.mode = 'data';
+        this.hasFormulaInput = (typeof props.hasFormulaInput !== 'undefined') ? props.hasFormulaInput: false;
+        this.mode = (typeof props.mode !== 'undefined') ? props.mode: 'view';
+        console.log(this.mode)
+        
     }
 
     connectedCallback(){
         window.API.get_schema(this.table_name).then(schema => {
+            console.log(schema)
             this.schema = schema;
             this.t = document.createElement('div');
             this.th = document.createElement('div');
@@ -36,20 +40,45 @@ class TableData extends HTMLElement{
             this.tb.style.overflow = 'scroll';
             this.tb.style.position = 'relative';
             this.tb.style.top = '0px'
-            this.tb.style.height = 'calc(100% - 85px)';
+            if(this.hasFormulaInput){
+                this.tb.style.height = 'calc(100% - 85px)';
+            }else{
+                this.tb.style.height = '100%'
+            }
 
 
 
             this.detailed_cell.setAttribute('type', 'text')
     
             this.t.append(this.th, this.tb)
-            this.append(this.t, this.detailed_cell)
+            this.append(this.t)
+            if(this.hasFormulaInput){
+                this.append(this.detailed_cell)
+            }
 
-            this.create_structure()
+            this.refresh()
             return this;
         })
     }
 
+    refresh(){
+        console.log(this.mode)
+        if(this.mode == 'view'){
+            this.create_structure()
+        }else{
+            this.create_structure()
+            if(window.UserManager.current_user.user_level == 1){
+                window.API.get_inventory(window.UserManager.current_user).then(res => {
+                    this.append_rows(window.API.sort(res, 'date', true));
+                })
+                
+            }else{
+                window.API.get_inventory(window.UserManager.current_user).then(res => {
+                    this.append_rows(window.API.sort(res, 'date', true));
+                })
+            }
+        }
+    }
 
     create_structure(){
         this.full_clear();
@@ -59,7 +88,6 @@ class TableData extends HTMLElement{
             var r = this.new_row(i, {});
             this.tb.append(r)
         }
-    
         return this;
     }
 
@@ -98,7 +126,7 @@ class TableData extends HTMLElement{
             td.style.display = 'inline-block'
             td.style.textAlign = 'center'
             td.style.margin = '0'
-            td.style.width = `calc(100% / ${window.app.admin_mode ? 10 : 8})`
+            td.style.width = `calc(100% / ${Object.entries(this.schema).length})`
             td.innerHTML = col[0].split('_').join(' ');
             td.style.color = 'white';
             td.style.fontSize = '12px'

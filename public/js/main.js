@@ -41,7 +41,7 @@ class Grenvintory{
     createMainView(users){
         window.UserControls = new UserControls();
         window.UserTabBar = new UserTabBar(users);
-        window.TableData = new TableData({table_name:'inventory'});
+        window.TableData = new TableData({table_name:'inventory', hasFormulaInput:true});
         this.left_view.append(window.TableData);
         this.right_view.append(window.UserControls)
         document.getElementById('maincontent').append(window.UserTabBar, this.left_view, this.middle_view, this.right_view);   
