@@ -113,7 +113,7 @@ export default class CustomInput extends HTMLElement{
             this.append(this.item_container)
             this.item_container.style.width ='100%'
             this.item_container.style.height = 'auto'
-            this.item_container.style.background = 'var(--window-color-1)'
+            this.item_container.style.background = '#1D2631'
             this.item_container.style.display = 'block'
             this.item_container.style.position = 'absolute'
             this.item_container.style.zIndex = '99'
@@ -121,7 +121,7 @@ export default class CustomInput extends HTMLElement{
             this.item_container.style.top = '30px'
             for(var item of this.items){
 
-                var dropdown_item = new CustomInput({type:'button', icon: item.icon, text: item.text, width:'100%', height:'30px', margin:'5px'})
+                var dropdown_item = new CustomInput({type:'button', background_color:'var(--window-color-3)', icon: item.icon, text: item.text, width:'100%', height:'30px', margin:'5px'})
                 dropdown_item.onclick = (ev) => {
                     console.log(ev)
                     this.value = event.target.textContent
@@ -194,6 +194,10 @@ export default class CustomInput extends HTMLElement{
             this.textarea.style.padding = '5px';
             this.textarea.style.resize = 'none';
             this.textarea.style.outline = 'none';
+        }
+
+        if(this.type == 'dropdown'){
+            this.style.background = '#1D2631'
         }
     }
 
