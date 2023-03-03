@@ -1,27 +1,21 @@
+import Datastore from 'nedb';
+
 export default class Table{
-    constructor(){
-        this.datastore = [];
+    constructor(name){
+        this.datastore = new Datastore({filename: `db/${name}.db`, autoload: true});
         return this;
     }
 
 
-    GetRowById(id){
-        return new Promise(resolve => {
-            this.datastore.findOne({_id: id}, (err, row) => {
-                if(!err){
-                    resolve(row)
-                }
-            })
-        })
+    SetItem(data){
+        
     }
 
-    GetRowByValue(col, value){
-        return new Promise(resolve => {
-            this.datastore.find({col: value}, (err, rows) => {
-                if(!err){
-                    resolve(rows)
-                }
-            })
-        })
+    GetItem(_id){
+
+    }
+
+    RemoveItem(_id){
+
     }
 }

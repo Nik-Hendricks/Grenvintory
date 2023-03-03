@@ -1,11 +1,24 @@
 // Created 6:30 PM 10/28/2021 Nik Hendricks
 // reused 8:19 PM 1/25/23 Nik Hendricks
 // routes/api.js
-var fs = require('fs')
-const xl = require('excel4node');
-var datastores = require('../db/datastores.js')
-var uniqid = require('uniqid'); 
-var stream = require('stream');
+//var fs = require('fs')
+//const xl = require('excel4node');
+//var Database = require('../db/Database.js');
+
+import fs from 'fs'
+import * as xl from 'excel4node'
+import Database from '../db/Database.js'
+import uniqid from 'uniqid'
+import stream from 'stream'
+import express from 'express'
+
+var GrenventoryDB = new Database();
+
+GrenventoryDB.AddTable('inventory');
+GrenventoryDB.AddTable('users');
+GrenventoryDB.AddTable('parts_needed_list');
+
+
 var db_schema = {
     
     pick_tickets:[
@@ -21,7 +34,7 @@ var db_schema = {
 
 function _query(table_name, field, value){
     return new Promise(resolve => {
-        if(table_exists(table_name)){
+        if(GrenventoryDB.TableExists(table_name)){
             if(field == 'date' || field == 'posted_date'){
                 const startDate = new Date(value[0]);
                 const endDate = new Date(value[1]);
@@ -53,8 +66,8 @@ function _get_row(table_uuid, row_uuid){
 
 function _get_rows(table_name){
     return new Promise(resolve => {
-        if(table_exists(table_name)){
-            datastores[table_name].find({}, (err, rows) => {
+        if(GrenventoryDB.TableExists(table_name)){
+            GrenventoryDB.tables[table_name].datastore.find({}, (err, rows) => {
                 if(!err){
                     resolve(rows);
                 }
@@ -67,7 +80,7 @@ function _get_rows(table_name){
 
 function _set_row(table_name, data){
     return new Promise(resolve => {
-        if(table_exists(table_name)){
+        if(GrenventoryDB.TableExists(table_name)){
             datastores[table_name].insert(data, (err, res) => {
                 console.log(res)
                 resolve(res)
@@ -80,7 +93,7 @@ function _set_row(table_name, data){
 
 function _update_row(table_name, data){
     return new Promise(resolve => {
-        datastores[table_name].update({ _id: data._id }, { $set: data }, {}, function (err, numReplaced) {
+        GrenventoryDB.tables[table_name].datastore.update({ _id: data._id }, { $set: data }, {}, function (err, numReplaced) {
             if (err) {
               resolve({error: err})
             } else if (numReplaced === 0) {
@@ -92,14 +105,12 @@ function _update_row(table_name, data){
     })
 }
 
-function table_exists(table_name){
-    return (typeof datastores[table_name] !== 'undefined') ? true : false;
-}
 
 
-module.exports = (() => {
+
+export default function API() {
     'use strict';
-    var API = require('express').Router();
+    var API = express.Router();
 
     API.use( ( req, res, next ) => {
         next()
@@ -227,10 +238,6 @@ module.exports = (() => {
         })
     })
 
-    API.get('/download', function(req, res){
-        res.sendFile(__dirname.split('routes')[0] + 'data.xlsx');
-    })
-
     API.post('/check_auth', (req, res) => {
         var user = req.body.user;
         if(user != null){
@@ -292,7 +299,7 @@ module.exports = (() => {
     })
 
     API.post('/get_parts_needed', (req, res) => {
-        datastores['parts_needed_list'].find({ list: 'main' }, (err, docs) => {
+        GrenventoryDB.tables['parts_needed_list'].datastore.find({ list: 'main' }, (err, docs) => {
           console.log(docs)  
           res.json(docs)
         })
@@ -300,4 +307,4 @@ module.exports = (() => {
 
     return API;
     
-})();
+};
