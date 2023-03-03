@@ -41,8 +41,13 @@ function _query(props){
     return new Promise(resolve => {
         if(GrenventoryDB.TableExists(table_name)){
             if(query_mode == 'advanced'){
-                var queryStr = `(${props.query})`; // wrap the query in parentheses to make it a valid expression
-                var p = eval(queryStr);
+                if(typeof props.query == 'object'){
+                    var p = props.query;
+                }else if(typeof props.query == 'string'){
+                    console.log('str')
+                    var queryStr = `(${props.query})`; // wrap the query in parentheses to make it a valid expression
+                    var p = eval(queryStr)
+                }
                 GrenventoryDB.tables[table_name].datastore.find(p, (err, docs) => {
                     console.log(docs)
                     resolve(docs)

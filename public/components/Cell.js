@@ -46,22 +46,17 @@ export default class Cell extends HTMLElement{
             if(this.locked){
                 focus_ev.preventDefault();
                 this.Focus();
-            }else if (this.serialized && this.row.table.current_quantity > 1){
-                //if(this.input.value.toLowerCase() !== 'n/a'){
-                //    this.row.table.detailed_cell.focus();
-                //}
             }
         });
 
-        this.input.addEventListener('keypress', (key_ev) => {
+        this.input.addEventListener('keydown', (key_ev) => {
             //set tables current row quantity if the current cell is the quantity cell
             if (this.col == 'quantity') {
                 this.row.current_quantity = this.input.value;
             }
             if (this.serialized && this.row.current_quantity > 1){
                 if (key_ev.keyCode == 9 || key_ev.keyCode == 13){
-                    console.log(this.input.value.split(',').length)
-                    if(this.input.value.split(',').length < this.row.current_quantity){
+                    if(this.input.value.split(',').length < this.row.current_quantity && this.input.value.toLowerCase() !== 'n/a'){
                         key_ev.preventDefault();
                         this.input.value = this.input.value + ", "
                     }else{

@@ -65,7 +65,7 @@ export default class QueryControls extends HTMLElement{
         ]
 
         var input = new CustomInput({type: 'dropdown', text:`Field ${i}`, icon:'expand_more', width:`calc(200% / ${count})`, height:'30px', margin:'5px', items: field_items})
-
+        input.classList.add('field')
         input.onchange = (ev) => {
             if(inputs.length > 0){
                 for(var j = 0; j < inputs.length; j++){
@@ -77,7 +77,8 @@ export default class QueryControls extends HTMLElement{
             console.log(ev.target.value)
             console.log(_c)
             for(var j = 0; j < _c; j++){
-                var e = new CustomInput({type: 'input', text:`Value ${j}`, width:`calc(100% / ${_c})`, height:'30px', margin:'5px'})
+                var e = new CustomInput({type: 'text', text:`Value ${j}`, width:`calc(100% / ${_c})`, height:'30px', margin:'5px'})
+                e.classList.add('field-data')
                 this.field_columns[i].append(e)
                 inputs.push(e)
             }
@@ -108,13 +109,51 @@ export default class QueryControls extends HTMLElement{
 
         this.submit_query_button.onclick = (ev) => {
             if(this.mode == 'easy'){
+                var query_string = {};
+                var query_fields = [];
+                var query_data = [];
+                //populate query fields
+                for(var e of this.getElementsByClassName('field')){
+                    if(e.value.toLowerCase().includes('field') == false){
+                        query_fields.push(e.value)
+                    }
+                }
+                for(var e of this.getElementsByClassName('field-data')){
+                    if(e.value != '' || e.value != undefined){
+                        query_data.push(e.value)
+                    }
+                }
 
+                
+                query_fields.forEach(_e => {
+                    //$and: [{ name: 'John' }, { age: 25 }]
+                    if(query_fields.length > 1){
+                        query_string = {$and: []}
+                        var qfc = 0;
+                        query_data.forEach(e => {
+                            console.log(query_string)
+                            console.log(qfc)
+                            query_string.$and.push({[query_fields[qfc]]:e})
+                            qfc++;
+                        })
+                    }else{
+                        query_string[_e] = query_data[query_fields.indexOf(_e)]
+                    }
+                    
+                })
+
+                console.log(query_fields)
+                console.log(query_data)
+                console.log(query_string)
+                window.app.current_query = {table_name:'inventory', query:query_string};
             }
             else if(this.mode == 'advanced'){
-                window.API.Query({table_name:'inventory', query:this.textarea.value}).then(res => {
-
-                })
+                window.app.current_query = {table_name:'inventory', query:this.textarea.value};
             }
+
+            window.API.Query(window.app.current_query).then(res => {
+                window.TableData.append_rows(res)
+            })
         }
     }
 
