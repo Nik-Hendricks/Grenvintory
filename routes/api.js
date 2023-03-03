@@ -32,22 +32,23 @@ var db_schema = {
 }
 //private functions
 
-function _query(table_name, field, value){
+
+
+function _query(props){
+    console.log(props)
+    var query_mode = (typeof props.query !== 'undefined') ? 'advanced' : 'easy';
+    var table_name = props.table_name;
     return new Promise(resolve => {
         if(GrenventoryDB.TableExists(table_name)){
-            if(field == 'date' || field == 'posted_date'){
-                const startDate = new Date(value[0]);
-                const endDate = new Date(value[1]);
-
-                datastores[table_name].find({[field]: {$gte: startDate, $lte: endDate}}, (err, docs) => {
+            if(query_mode == 'advanced'){
+                var queryStr = `(${props.query})`; // wrap the query in parentheses to make it a valid expression
+                var p = eval(queryStr);
+                GrenventoryDB.tables[table_name].datastore.find(p, (err, docs) => {
                     console.log(docs)
                     resolve(docs)
                 })
             }else{
-                datastores[table_name].find({[field]: value}, (err, docs) => {
-                    console.log(docs)
-                    resolve(docs)
-                })
+                resolve({error:'not implemented'})
             }
         }else{
             resolve({error:'table does not exists'})
@@ -264,13 +265,19 @@ export default function API() {
     })
 
 
-    API.post('/query', (req, res) => {
+    API.post('/_query', (req, res) => {
         var field = req.body.field;
         var value = req.body.value;
         var table_name = req.body.table_name;
         console.log(value)
         console.log(field)
         _query(table_name, field, value).then(rows => {
+            res.json(rows);
+        })
+    })
+
+    API.post('/Query', (req, res) => {
+        _query(req.body).then(rows => {
             res.json(rows);
         })
     })

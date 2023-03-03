@@ -6,7 +6,6 @@ export default class QueryControls extends HTMLElement{
         this.field_columns = [];
     }
 
-
     PreStyle(){
         this.title_el.style.margin = '0px';
         this.title_el.style.textAlign = 'center';
@@ -30,12 +29,13 @@ export default class QueryControls extends HTMLElement{
     }
 
     EasyView(){
+        this.mode = 'easy';
         this.control_type_container.innerHTML = '';
         this.CreateFieldControls();
-        
     }
 
     AdvancedView(){
+        this.mode = 'advanced';
         this.control_type_container.innerHTML = '';
         this.textarea = new CustomInput({type: 'textarea', placeholder: 'Enter query here', width:'100%', height:'100px', margin:'5px'})
         this.control_type_container.append(this.textarea)
@@ -44,31 +44,46 @@ export default class QueryControls extends HTMLElement{
     CreateFieldControls(){
         var count = 2;
         for(var i = 0; i < count; i++){
-            var field_items = [
-                {text:'from', icon: 'person'},
-                {text:'to', icon: 'person'},
-                {text:'quantity', icon: 'info'},
-                {text:'item_name', icon: 'category'},
-                {text:'serial_number', icon: '123'},
-                {text:'by', icon: 'person'},
-                {text:'reason', icon: 'info'},
-                {text:'date', icon: 'calendar_month'}
-            ]
             var group_container = this.GroupContainer(count);
-            var input = new CustomInput({type: 'dropdown', text:`Field ${i}`, width:`calc(200% / ${count})`, height:'30px', margin:'5px', items: field_items})
             this.control_type_container.append(group_container);
-            group_container.append(input);
+            group_container.append(this.FieldSelector(i, count));
             this.field_columns[i] = group_container;
-            input.onchange = (ev) => {
-                var _c = ev.target == 'data' ? 2 : 1;
-                for(var j = 0; j < count; j++){
-                    var e = new CustomInput({type: 'input', text:`Value ${j}`, width:`calc(100% / ${count})`, height:'30px', margin:'5px'})
-                    console.log(this.field_columns)
-                    console.log(i)
-                    this.field_columns[i].append(e);
+        }
+    }
+
+    FieldSelector(i, count){
+        var inputs = []
+        var field_items = [
+            {text:'from', icon: 'person'},
+            {text:'to', icon: 'person'},
+            {text:'quantity', icon: 'info'},
+            {text:'item_name', icon: 'category'},
+            {text:'serial_number', icon: '123'},
+            {text:'by', icon: 'person'},
+            {text:'reason', icon: 'info'},
+            {text:'date', icon: 'calendar_month'}
+        ]
+
+        var input = new CustomInput({type: 'dropdown', text:`Field ${i}`, icon:'expand_more', width:`calc(200% / ${count})`, height:'30px', margin:'5px', items: field_items})
+
+        input.onchange = (ev) => {
+            if(inputs.length > 0){
+                for(var j = 0; j < inputs.length; j++){
+                    inputs[j].remove();
                 }
             }
+
+            var _c = (ev.target.value == 'date') ? 2 : 1;
+            console.log(ev.target.value)
+            console.log(_c)
+            for(var j = 0; j < _c; j++){
+                var e = new CustomInput({type: 'input', text:`Value ${j}`, width:`calc(100% / ${_c})`, height:'30px', margin:'5px'})
+                this.field_columns[i].append(e)
+                inputs.push(e)
+            }
         }
+
+        return input
     }
 
     GroupContainer(count){
@@ -76,7 +91,7 @@ export default class QueryControls extends HTMLElement{
         el.style.display = 'inline-block';
         el.style.width = `calc(100% / ${count})`;
         el.style.height = 'auto';
-        el.style.background = 'blue'
+        el.style.float = 'left';
         return el;
     }
 
@@ -85,7 +100,6 @@ export default class QueryControls extends HTMLElement{
         this.PreStyle()
         this.easy_mode.onclick = () => {
             this.EasyView();
-
         }
 
         this.script_mode.onclick = () => {
@@ -93,7 +107,14 @@ export default class QueryControls extends HTMLElement{
         }
 
         this.submit_query_button.onclick = (ev) => {
-            
+            if(this.mode == 'easy'){
+
+            }
+            else if(this.mode == 'advanced'){
+                window.API.Query({table_name:'inventory', query:this.textarea.value}).then(res => {
+
+                })
+            }
         }
     }
 
