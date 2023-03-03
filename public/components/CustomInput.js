@@ -73,7 +73,7 @@ export default class CustomInput extends HTMLElement{
         this.append(this.textarea)
         this.onkeydown = () => {
             setTimeout(() => {
-                this.value = this.textContent;
+                this.value = this.textarea.value;
             }, 200)
         }
     }
