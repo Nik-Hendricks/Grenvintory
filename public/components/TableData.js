@@ -1,4 +1,3 @@
-import DataCell from '/components/DataCell.js'
 import CustomInput from '/components/CustomInput.js'
 import TableRow from '/components/TableRow.js'
 
@@ -13,7 +12,6 @@ class TableData extends HTMLElement{
         this.row = 0;
         this.col = 0;
         this.current_cell = null;
-        this.current_quantity = 0;
         this.mode = 'data';
     }
 
@@ -24,24 +22,6 @@ class TableData extends HTMLElement{
             this.th = document.createElement('div');
             this.tb = document.createElement('div');
             this.detailed_cell = new CustomInput({width: '100%', height: '35px', type: 'text', text: 'Detailed View', icon:'info', margin:'5px'})
-
-            this.detailed_cell.addEventListener('keydown', (ev) => {
-                this.current_cell.input.value = ev.target.value;
-                if (ev.keyCode == 9 || ev.keyCode == 13){
-                    if(this.detailed_cell.value.toLowerCase() == 'n/a'){
-                        ev.preventDefault();
-                        this.current_cell.nextElementSibling.input.focus();
-                    }else if(this.detailed_cell.value.split(',').length < this.current_quantity){
-                        ev.preventDefault();
-                        this.detailed_cell.value = this.detailed_cell.value + ", "
-                        this.detailed_cell.putCursorAtEnd()
-                    }else{
-                        ev.preventDefault();
-                        this.current_cell.nextElementSibling.input.focus();
-                    }
-                } 
-                
-            })
 
             this.style.width = '100%'
             this.style.height = '100%'

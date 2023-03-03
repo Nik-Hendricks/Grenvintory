@@ -192,18 +192,11 @@ export default function API() {
     API.post('/set_inventory', (req, res) => {
         var user = req.body.user;
         var data = req.body.data;
-        data.by = `${user.first_name.charAt(0)}${user.last_name.charAt(0)}`
         data.date = new Date(data.date);
 
-        if(req.body.data._id != null){
-            _update_row('inventory', data).then(ret => {
-                res.json(ret);
-            })
-        }else{
-            _set_row('inventory', data).then(ret => {
-              res.json(ret);
-            })
-        }
+        GrenventoryDB.tables.inventory.SetItem(data).then(ret => {
+            res.json(ret)
+        })
     })
 
 
