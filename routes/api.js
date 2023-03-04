@@ -52,6 +52,17 @@ function _query(props){
                     var queryStr = `(${props.query})`; // wrap the query in parentheses to make it a valid expression
                     var p = eval(queryStr)
                 }
+                Object.entries(p).forEach(([key, value]) => {
+                    if(key == '$and'){
+                        p[key].forEach((e, i) => {
+                            Object.entries(e).forEach(([k, v]) => {
+                                p[key][i][k] = new RegExp(v, 'i')
+                            })
+                        })
+                    }else{
+                        p[key] = new RegExp(value, 'i')
+                    }
+                })
                 GrenventoryDB.tables[table_name].datastore.find(p, (err, docs) => {
                     console.log(docs)
                     resolve(docs)

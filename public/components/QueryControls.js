@@ -140,6 +140,7 @@ export default class QueryControls extends HTMLElement{
                         query_string[_e] = query_data[query_fields.indexOf(_e)]
                     }
 
+                    
                     console.log(query_string)
                 })
                 window.app.current_query = {table_name:'inventory', query:query_string};
