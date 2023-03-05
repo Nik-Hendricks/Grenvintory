@@ -62,15 +62,17 @@ class TableData extends HTMLElement{
     }
 
     refresh(){
-        console.log(this.mode)
-        if(this.mode == 'view'){
-            this.create_structure()
-        }else{
-            this.create_structure()
-            window.API.get_rows(this.table_name).then(res => {
-                this.append_rows(window.API.sort(res, 'date', true));
-            })
-        }
+        window.API.get_schema(this.table_name, window.app.admin_mode).then(schema => {
+            this.schema = schema;
+            if(this.mode == 'view'){
+                this.create_structure()
+            }else{
+                this.create_structure()
+                window.API.get_rows(this.table_name).then(res => {
+                    this.append_rows(window.API.sort(res, 'date', true));
+                })
+            }
+        })
     }
 
     create_structure(){

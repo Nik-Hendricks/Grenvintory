@@ -71,15 +71,22 @@ export default class Cell extends HTMLElement{
             }, 30);
         });
 
+        this.input.addEventListener('blur', (blur_ev) => {
+            var d = this.row.GetRowValue()
+            if (!d.error) {
+                d._id = this.row._id;
+                console.log(this.row.table.table_name)
+                window.API.SetTableData({table_name: this.row.table.table_name, data: d}).then(res => {
+                    if(res._id !== undefined){
+                        this.row._id = res._id;
+                    }
+                })
+            }
+        })
         this.input.addEventListener('change', (change_ev) => {
             var d = this.row.GetRowValue()
             if (!d.error) {
                 d._id = this.row._id;
-                //window.API.set_inventory(d).then(res => {
-                //    if(res._id !== undefined){
-                //        this.row._id = res._id;
-                //    }
-                //});
                 console.log(this.row.table.table_name)
                 window.API.SetTableData({table_name: this.row.table.table_name, data: d}).then(res => {
                     if(res._id !== undefined){

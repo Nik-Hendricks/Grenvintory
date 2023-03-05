@@ -36,15 +36,7 @@ export default class UserControls extends HTMLElement{
                         window.app.admin_mode = true;
                     }
 
-                    window.API.get_schema('inventory', window.app.admin_mode).then(schema => {
-                        window.TableData.schema = schema;
-                        window.TableData.create_structure();
-                        if(window.app.view_mode == 'view'){
-                            window.API.get_inventory().then(res => {
-                                window.TableData.append_rows(res);
-                            })
-                        }
-                    })
+                    window.TableData.refresh()
 
                 }
             },
