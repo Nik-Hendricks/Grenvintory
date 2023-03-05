@@ -141,9 +141,7 @@ export default function API() {
         var user = req.body.user;
         var isAdminSchema = req.body.isAdminSchema;
         var table_name = req.body.table_name;
-
         var index = isAdminSchema ? 1 : 0;
-
         res.json(db_schema[table_name][index])
     })
     
@@ -235,34 +233,46 @@ export default function API() {
 
     API.post('/export_xlsx', (req, res) => {
         var current_query = req.body.current_query;
-        console.log(current_query)
-        _query(current_query).then(data => {
-            const wb = new xl.Workbook();
-            const ws = wb.addWorksheet('Worksheet Name');
-
-            //Write Column Title in Excel file
-            let headingColumnIndex = 1;
-            Object.entries(db_schema['inventory'][1]).forEach(heading => {
-                ws.cell(1, headingColumnIndex++)
-                    .string(heading[0])
-            });
-
-            //Write Data in Excel file
-            let rowIndex = 2;
-            data.forEach( record => {
-                let columnIndex = 1;
-                Object.keys(record).forEach(columnName =>{
-                    ws.cell(rowIndex,columnIndex++)
-                        .string(record [columnName])
+        var filename = req.body.filename.includes('.xlsx') ? req.body.filename : req.body.filename + '.xlsx';
+        console.log(typeof current_query)
+        if(typeof current_query == 'object'){
+            _query(current_query).then(data => {
+                const wb = new xl.Workbook();
+                const ws = wb.addWorksheet('Inventory');
+    
+                //Write Column Title in Excel file
+                let headingColumnIndex = 1;
+                Object.entries(db_schema['inventory'][1]).forEach(heading => {
+                    ws.cell(1, headingColumnIndex++)
+                        .string(heading[0])
                 });
-                rowIndex++;
-            }); 
-            wb.writeToBuffer().then(buffer => {
-                res.set('Content-disposition', 'attachment; filename=' + 'file.xlsx');
-                res.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                res.send(buffer);
+    
+                //Write Data in Excel file
+                let rowIndex = 2;
+                data.forEach( record => {
+                    let columnIndex = 1;
+                    Object.keys(record).forEach(columnName =>{
+                        ws.cell(rowIndex,columnIndex++)
+                            .string(record [columnName])
+                    });
+                    rowIndex++;
+                }); 
+                wb.writeToBuffer().then(buffer => {
+                    console.log(filename)
+                    res.set({
+                      'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                      'Content-Disposition': 'attachment; filename=' + filename,
+                      'Content-Length': buffer.length
+                    });
+                    res.send(buffer);
+                  }).catch(err => {
+                    console.error('Error sending file:', err);
+                    res.status(500).send('Error sending file');
+                  });
             })
-        })
+        }else{
+            res.json({error: 'current_query is not a string'})
+        }
     })
 
     API.post('/check_auth', (req, res) => {

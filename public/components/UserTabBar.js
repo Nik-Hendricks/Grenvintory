@@ -1,7 +1,7 @@
 export default class UserTabBar extends HTMLElement{
-    constructor(users){
+    constructor(){
         super()
-        this.users = users
+        this.users = window.UserManager.users;
         this.tabs = [];
         this.populate_tabs();
         this.switchTab(window.UserManager.current_user.username);

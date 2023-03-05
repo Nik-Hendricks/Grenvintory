@@ -40,7 +40,7 @@ export default class AuthenticationPrompt extends HTMLElement{
             this.obsfucator.addEventListener('click', () => {
                 this.remove();
             })        
-
+            document.body.append(this)
             return this;
 
     }
@@ -79,8 +79,8 @@ export default class AuthenticationPrompt extends HTMLElement{
             })
 
             this.content_container.append(input);
-            this.getElementsByTagName('input')[0].focus();
         }
+        this.getElementsByTagName('input')[0].focus();
     }
 
     check_inputs(){

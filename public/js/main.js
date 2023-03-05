@@ -11,7 +11,6 @@ class Grenvintory{
     constructor(props){
             window.UserManager.load().then(users => {
                 this.admin_mode = false;
-                this.view_mode = 'edit';
                 this.left_view = document.createElement('div');
                 this.middle_view = document.createElement('div');
                 this.right_view = document.createElement('div');
@@ -40,7 +39,7 @@ class Grenvintory{
 
     createMainView(users){
         window.UserControls = new UserControls();
-        window.UserTabBar = new UserTabBar(users);
+        window.UserTabBar = new UserTabBar();
         window.TableData = new TableData({table_name:'inventory', hasFormulaInput:true});
         this.left_view.append(window.TableData);
         this.right_view.append(window.UserControls)

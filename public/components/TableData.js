@@ -13,14 +13,11 @@ class TableData extends HTMLElement{
         this.col = 0;
         this.current_cell = null;
         this.hasFormulaInput = (typeof props.hasFormulaInput !== 'undefined') ? props.hasFormulaInput: false;
-        this.mode = (typeof props.mode !== 'undefined') ? props.mode: 'view';
-        console.log(this.mode)
-        
+        this.mode = (typeof props.mode !== 'undefined') ? props.mode: 'add';        
     }
 
     connectedCallback(){
         window.API.get_schema(this.table_name).then(schema => {
-            console.log(schema)
             this.schema = schema;
             this.t = document.createElement('div');
             this.th = document.createElement('div');
@@ -64,10 +61,8 @@ class TableData extends HTMLElement{
     refresh(){
         window.API.get_schema(this.table_name, window.app.admin_mode).then(schema => {
             this.schema = schema;
+            this.create_structure()
             if(this.mode == 'view'){
-                this.create_structure()
-            }else{
-                this.create_structure()
                 window.API.get_rows(this.table_name).then(res => {
                     this.append_rows(window.API.sort(res, 'date', true));
                 })

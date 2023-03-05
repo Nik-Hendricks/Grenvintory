@@ -24,7 +24,6 @@ const UserManager = {
                     resolve(true);
                 }else if(res.auth == 'prompt'){
                     var ap = new AuthenticationPrompt();
-                    document.body.append(ap)
                     ap.init(password => {
                         window.API.login(user.username, password).then(res => {
                             if(res.auth == true){

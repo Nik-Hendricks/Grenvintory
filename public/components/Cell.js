@@ -50,6 +50,7 @@ export default class Cell extends HTMLElement{
             }
         });
 
+
         this.input.addEventListener('keydown', (key_ev) => {
             //set tables current row quantity if the current cell is the quantity cell
             if (this.col == 'quantity') {
@@ -71,31 +72,41 @@ export default class Cell extends HTMLElement{
             }, 30);
         });
 
-        this.input.addEventListener('blur', (blur_ev) => {
-            var d = this.row.GetRowValue()
-            if (!d.error) {
-                d._id = this.row._id;
-                console.log(this.row.table.table_name)
-                window.API.SetTableData({table_name: this.row.table.table_name, data: d}).then(res => {
-                    if(res._id !== undefined){
-                        this.row._id = res._id;
-                    }
-                })
-            }
-        })
+
+        //this.input.addEventListener('blur', (blur_ev) => {
+        //    setTimeout(() => {
+        //        console.log('a')
+        //        var d = this.row.GetRowValue()
+        //        if (!d.error) {
+        //            d._id = this.row._id;
+        //            console.log(this.row.table.table_name)
+        //            window.API.SetTableData({table_name: this.row.table.table_name, data: d}).then(res => {
+        //                if(res._id !== undefined){
+        //                    this.row._id = res._id;
+        //                }
+        //            })
+        //        }
+        //    }, 50);
+        //})
+
         this.input.addEventListener('change', (change_ev) => {
-            var d = this.row.GetRowValue()
-            if (!d.error) {
-                d._id = this.row._id;
-                console.log(this.row.table.table_name)
-                window.API.SetTableData({table_name: this.row.table.table_name, data: d}).then(res => {
-                    if(res._id !== undefined){
-                        this.row._id = res._id;
-                    }
-                })
-            }
+            setTimeout(() => {
+                console.log('b')
+                var d = this.row.GetRowValue()
+                if (!d.error) {
+                    d._id = this.row._id;
+                    console.log(this.row.table.table_name)
+                    window.API.SetTableData({table_name: this.row.table.table_name, data: d}).then(res => {
+                        if(res._id !== undefined){
+                            this.sub
+                            this.row._id = res._id;
+                        }
+                    })
+                }
+            }, 100);
         })
     }
+
 
     Focus(){
         if(this.nextElementSibling){

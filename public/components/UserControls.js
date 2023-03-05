@@ -1,6 +1,7 @@
 import CustomInput from '/components/CustomInput.js'
 import QueryControls from '/components/QueryControls.js'
 import PartsNeededList from '/components/PartsNeededList.js'
+import DataManager from '/components/DataManager.js'
 
 
 export default class UserControls extends HTMLElement{
@@ -14,10 +15,10 @@ export default class UserControls extends HTMLElement{
                 width: '50%',
                 toggle: true,
                 onclick: () => {
-                    if(window.TableData.mode == 'view'){
-                        window.TableData.mode = 'edit';
-                    }else{
+                    if(window.TableData.mode == 'add'){
                         window.TableData.mode = 'view';
+                    }else{
+                        window.TableData.mode = 'add';
                     }
                     window.TableData.refresh()
                 }
@@ -35,21 +36,8 @@ export default class UserControls extends HTMLElement{
                     }else{
                         window.app.admin_mode = true;
                     }
-
                     window.TableData.refresh()
 
-                }
-            },
-            {   
-                type:'button',
-                name: 'Export .Xlsx',
-                width: '100%',
-                auth_required: true,
-                onclick: () => {
-                    window.API.export_xlsx().then(res => {
-                        
-                        //window.open(res, '_blank');
-                    })
                 }
             },
             {
@@ -62,6 +50,11 @@ export default class UserControls extends HTMLElement{
                 width: '100%',
                 type:'parts_needed_list',
                 name: 'Parts Needed List',
+            },
+            {
+                width: '100%',
+                type:'data_manager',
+                name: 'Data Manager',
             }
         ];
         return this;
@@ -84,6 +77,9 @@ export default class UserControls extends HTMLElement{
                 }
                 if(item.type == 'parts_needed_list'){
                     var e = new PartsNeededList();
+                }
+                if(item.type == 'data_manager'){
+                    var e = new DataManager();
                 }
 
                 e.style.margin = '5px';

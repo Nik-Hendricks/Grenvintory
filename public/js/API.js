@@ -15,14 +15,24 @@ const API = {
                 return response.json();
               } else {
                 return response.blob().then(blob => {
-                  const url = window.URL.createObjectURL(new Blob([blob]));
-                  const link = document.createElement('a');
-                  link.href = url;
-                  link.setAttribute('download', 'file.xlsx');
-                  document.body.appendChild(link);
-                  link.click();
-                  return null;
-                });
+                    const url = window.URL.createObjectURL(new Blob([blob]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                  
+                    // Try to extract the filename from the Content-Disposition header
+                    const contentDisposition = response.headers.get('content-disposition');
+                    if (contentDisposition) {
+                      const filenameMatch = contentDisposition.match(/filename="?(.+)"?/);
+                      if (filenameMatch) {
+                        const filename = filenameMatch[1];
+                        link.setAttribute('download', filename);
+                      }
+                    }
+                  
+                    document.body.appendChild(link);
+                    link.click();
+                    return null;
+                  });
               }
             })
             .then(data => {
@@ -115,9 +125,9 @@ const API = {
         })
     },
 
-    export_xlsx(){
+    export_xlsx(props){
         return new Promise(resolve => {
-            this.http_fetch('/API/export_xlsx', {current_query: window.app.current_query}, "POST").then(res => {
+            this.http_fetch('/API/export_xlsx', {current_query: window.app.current_query, filename: props.filename}, "POST").then(res => {
                 resolve(res)
             })
         })

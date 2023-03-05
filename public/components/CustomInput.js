@@ -17,10 +17,15 @@ export default class CustomInput extends HTMLElement{
         this.margin = (typeof this.props.margin !== 'undefined') ? this.props.margin : this.getAttribute('margin');
         this.fontSize = (typeof this.props.fontSize !== 'undefined') ? this.props.fontSize : '12px';
         this.toggle = (typeof this.props.toggle !== 'undefined') ? this.props.toggle : this.hasAttribute('toggle') ? this.getAttribute('toggle') : false;
-        this.toggled = (typeof this.props.toggled !== 'undefined') ? this.props.toggled : this.hasAttribute('toggled') ? this.getAttribute('toggled') : false;
+        this.toggled = (typeof this.props.toggled !== 'undefined') ? this.props.toggled : this.hasAttribute('toggled') ? this.getAttribute('toggled') : (this.type == 'switch') ? true : false;
         this.backround_color = (typeof this.props.background_color !== 'undefined') ? this.props.background_color : this.hasAttribute('background_color') ? this.getAttribute('background_color') : 'var(--window-color-3)';
         this.placeholder = (typeof this.props.placeholder !== 'undefined') ? this.props.placeholder : this.hasAttribute('placeholder') ? this.getAttribute('placeholder') : '';
         this.onfocus = this.style.webkitTransform = 'translate3d(0px,-10000px,0)'; requestAnimationFrame(function() { this.style.webkitTransform = ''; }.bind(this))
+        this.text1 = (typeof this.props.text1 !== 'undefined') ? this.props.text1 : this.hasAttribute('text1') ? this.getAttribute('text1') : '';
+        this.text2 = (typeof this.props.text2 !== 'undefined') ? this.props.text2 : this.hasAttribute('text2') ? this.getAttribute('text2') : '';
+        this.icon1 = (typeof this.props.icon1 !== 'undefined') ? this.props.icon1 : this.hasAttribute('icon1') ? this.getAttribute('icon1') : '';
+        this.icon2 = (typeof this.props.icon2 !== 'undefined') ? this.props.icon2 : this.hasAttribute('icon2') ? this.getAttribute('icon2') : '';
+
         this.init();
         return this;
     };
@@ -28,6 +33,18 @@ export default class CustomInput extends HTMLElement{
     set value(x){
         if(this.type == 'dropdown'){
             this.getElementsByTagName('p')[0].textContent = x;
+            var event = document.createEvent("HTMLEvents");
+            event.initEvent("change", true, true);
+            event.eventName = "change";
+            this.dispatchEvent(event)
+        }else if (this.type == 'switch'){
+            this.toggled = x;
+            var event = document.createEvent("HTMLEvents");
+            event.initEvent("change", true, true);
+            event.eventName = "change";
+            this.dispatchEvent(event)
+        }else if(this.type == 'upload'){
+            this.files = x;
             var event = document.createEvent("HTMLEvents");
             event.initEvent("change", true, true);
             event.eventName = "change";
@@ -42,8 +59,12 @@ export default class CustomInput extends HTMLElement{
     get value(){
         if(this.type == 'dropdown'){
             return this.getElementsByTagName('p')[0].textContent;
+        }else if(this.type == "switch"){
+            return this.toggled;
         }else if(this.type == 'textarea'){        
             return this.textarea.value;
+        }else if(this.type == 'upload'){
+            return this.files;
         }else{
             return this.textContent;
         }
@@ -51,7 +72,6 @@ export default class CustomInput extends HTMLElement{
 
     connectedCallback(){
         this.preStyle()
-
     }
 
     init(){
@@ -63,9 +83,60 @@ export default class CustomInput extends HTMLElement{
             this._is_dropdown();
         }else if(this.type == 'textarea'){
             this._is_textarea();
+        }else if(this.type == 'switch'){
+            this._is_switch();
+        }else if(this.type == 'upload'){
+            this._is_upload();
         }
     }
 
+    _is_upload(){
+        this.innerHTML = `<i class="material-icons solid">${this.icon}</i><p>${this.text}</p>`;
+        this.file_container = document.createElement('div');
+        this.dummy_input = document.createElement('input');
+        this.dummy_input.type = 'file';
+
+        this.dummy_input.onchange = (ev) => {
+            this.value = ev.target.files;
+        }
+
+        this.onclick = (ev) => {
+            this.dummy_input.click();
+        }
+
+        this.append(this.file_container)
+    }
+
+    _is_switch(){
+        this.on = new CustomInput({type:'button', background_color:'var(--green)', icon: this.icon1, text: this.text1, width:'50%', height:this.height, margin:'0px'})
+        this.off = new CustomInput({type:'button', background_color:'var(--window-color-3)', icon: this.icon2, text: this.text2, width:'50%', height:this.height, margin:'0px'})
+
+        this.on.onclick = () => {
+            if(!this.value){
+                this.value = true;
+            }
+            this._update_switch_state()
+        }
+
+        this.off.onclick = () => {
+            if(this.value){
+                this.value = false;
+            }
+            this._update_switch_state()
+        }
+
+        this.append(this.on, this.off)
+    }
+
+    _update_switch_state(){
+        if(!this.toggled){
+            this.on.style.background = 'var(--window-color-3)';
+            this.off.style.background = 'var(--green)';
+        }else{
+            this.on.style.background = 'var(--green)';
+            this.off.style.background = 'var(--window-color-3)';
+        }
+    }
 
     _is_textarea(){
         this.textarea = document.createElement('textarea');
@@ -79,18 +150,54 @@ export default class CustomInput extends HTMLElement{
     }
 
     _is_text(){
+        // Set the element to be editable
         this.setAttribute('contenteditable', true);
-        this.onkeydown = () => {
-            setTimeout(() => {
-                this.value = this.textContent;
-            }, 200)
+    
+        // Create the placeholder element
+        var placeholder = document.createElement('p');
+        placeholder.textContent = this.placeholder;
+        placeholder.style.position = 'absolute';
+        placeholder.style.left = '0px';
+        placeholder.style.top = '0px';
+        placeholder.style.color = 'grey';
+        placeholder.style.pointerEvents = 'none';
+    
+        // Add the placeholder element as a child of the editable element
+        this.appendChild(placeholder);
+        this.style.color = 'grey';
+    
+        // When the element is focused, remove the placeholder text if it's currently being displayed
+        this.addEventListener('focus', () => {
+            if (this.textContent === this.placeholder) {
+                this.textContent = '';
+                this.style.color = 'white';
+            }
+        });
+    
+        // When the element is blurred, show the placeholder text if the element is empty
+        this.addEventListener('blur', () => {
+            if (this.textContent === '') {
+                this.textContent = this.placeholder;
+                this.style.color = 'grey';
+            }
+        });
+    }
+    
+    _update_text_state(){
+        if(this.placeholder_mode){
+            this.style.color = 'grey';
+        } else {
+            this.style.color = 'white';
         }
     }
+
 
     _is_button(){
         this.innerHTML = `<i class="material-icons solid">${this.icon}</i><p>${this.text}</p>`;
         this.onclick = () => {
-            this.props.onclick();
+            if(typeof this.props.onclick == 'function'){
+                this.props.onclick();
+            }
             if(this.toggle){
                 if(this.toggled){
                     this.toggled = false;
@@ -146,7 +253,7 @@ export default class CustomInput extends HTMLElement{
         this.style.display = 'block';
         this.style.width = `calc(${this.width} - ${this.margin} * 2)`;
         this.style.height = this.height;
-        this.style.background = this.backround_color;
+        this.style.background = (this.type == 'switch') ? 'transparent' : (this.type == 'dropdown') ? '#1D2631' : this.backround_color;
         this.style.borderRadius = '5px';
         this.style.margin = this.margin;
         this.style.color = 'white';
@@ -158,7 +265,6 @@ export default class CustomInput extends HTMLElement{
         this.style.textAlign = 'center';
         this.style.userSelect = 'none';
         this.style.display = 'inline-block'
-        console.log(this.fontSize)
         this.style.fontSize = this.fontSize
 
         if(this.getElementsByTagName('p').length > 0){
@@ -196,9 +302,12 @@ export default class CustomInput extends HTMLElement{
             this.textarea.style.outline = 'none';
         }
 
-        if(this.type == 'dropdown'){
-            this.style.background = '#1D2631'
-        }
+        setTimeout(() => {
+            if(this.type == 'switch'){
+                this.off.style.marginLeft = this.margin;
+                this.off.style.width = `calc(50% - ${this.margin})`;
+            }
+        }, 10)
     }
 
     putCursorAtEnd(){
