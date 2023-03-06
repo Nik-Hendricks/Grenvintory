@@ -143,16 +143,24 @@ export default class QueryControls extends HTMLElement{
                     if(query_fields.length > 1){
                         query_string = {$and: []}
                         var qfc = 0;
-                        query_data.forEach(e => {
-                            if(e.length > 0){
-                                query_string.$and.push({[query_fields[qfc]]:e})
-                            }else{
-                                query_fields[qfc] = undefined;
-                            }
-                            qfc++;
-                        })
+                        if(_e == 'date'){
+
+                        }else{
+                            query_data.forEach(e => {
+                                if(e.length > 0){
+                                    query_string.$and.push({[query_fields[qfc]]:e})
+                                }else{
+                                    query_fields[qfc] = undefined;
+                                }
+                                qfc++;
+                            })
+                        }
                     }else{
-                        query_string[_e] = query_data[query_fields.indexOf(_e)]
+                        if(_e == 'date'){
+
+                        }else{
+                            query_string[_e] = query_data[query_fields.indexOf(_e)]
+                        }
                     }
 
                     

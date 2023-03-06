@@ -40,7 +40,11 @@ export default class TableRow extends Component{
         var ret = {}
         for(var cell of cells){
             if(cell.value == '' || cell.value == null || cell.value == undefined || typeof cell.value == 'undefined'){
-                return {error: 'empty cell'};
+                if(this._id !== 'undefined' && this._id !== null){
+                    ret[cell.getAttribute('id').split(',')[1]] = cell.value;
+                }else{
+                    return {error: 'empty cell'};
+                }
             }
             ret[cell.getAttribute('id').split(',')[1]] = cell.value;
         }
