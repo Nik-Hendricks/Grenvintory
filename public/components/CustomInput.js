@@ -201,13 +201,20 @@ export default class CustomInput extends HTMLElement{
             if(this.toggle){
                 if(this.toggled){
                     this.toggled = false;
-                    this.style.background = 'var(--window-color-3)';
                 }else{
                     this.toggled = true;
-                    this.style.background = '#7289da';
                 }
-            }else{
+            }
+            this._update_button_state();
+        }
+    }
 
+    _update_button_state(){
+        if(this.toggle){
+            if(this.toggled == true){
+                this.style.background = '#7289da';
+            }else{
+                this.style.background = 'var(--window-color-3)';
             }
         }
     }
@@ -307,7 +314,7 @@ export default class CustomInput extends HTMLElement{
                 this.off.style.marginLeft = this.margin;
                 this.off.style.width = `calc(50% - ${this.margin})`;
             }
-        }, 10)
+        }, 50)
     }
 
     putCursorAtEnd(){
@@ -323,7 +330,7 @@ export default class CustomInput extends HTMLElement{
               selection.removeAllRanges();
               selection.addRange(range);
             }
-          ,1);
+          ,10);
         }
     }
 

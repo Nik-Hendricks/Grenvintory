@@ -1,4 +1,5 @@
 import AuthenticationPrompt from '/components/AuthenticationPrompt.js';
+import Prompt from '/components/Prompt.js'
 
 const UserManager = {
     
@@ -23,14 +24,15 @@ const UserManager = {
                     this.switchUser(res.user)
                     resolve(true);
                 }else if(res.auth == 'prompt'){
-                    var ap = new AuthenticationPrompt();
+                    var ap = new Prompt({type:'login'});
                     ap.init(password => {
                         window.API.login(user.username, password).then(res => {
                             if(res.auth == true){
                                 this.switchUser(res.user)
                                 resolve(true);
                             }else{
-                                alert('Incorrect Password')
+                                var p = new Prompt({error:true, title:'Login Error', text: 'Incorrect password'});
+                                p.init();
                                 resolve(false);
                             }
                         })
@@ -46,7 +48,8 @@ const UserManager = {
         window.localStorage.setItem('user', JSON.stringify(user))
         window.UserTabBar.switchTab(user.username);
         window.UserControls.create_structure();
-        window.TableData.create_structure();
+        window.TableData.mode = 'add';
+        window.TableData.refresh();
     },
 
     getInitials(){

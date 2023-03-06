@@ -37,6 +37,7 @@ export default class Cell extends HTMLElement{
         this.input.style.boxSizing = 'border-box';
         this.input.style.borderRadius = '5px'
         this.input.style.height = '25px'
+        this.input.style.textAlign = 'center';
     }
 
     SetupEvents(){

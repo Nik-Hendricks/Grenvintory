@@ -14,6 +14,7 @@ export default class UserControls extends HTMLElement{
                 icons:'info',
                 width: '50%',
                 toggle: true,
+                toggled: false,
                 onclick: () => {
                     if(window.TableData.mode == 'add'){
                         window.TableData.mode = 'view';
@@ -53,6 +54,7 @@ export default class UserControls extends HTMLElement{
             },
             {
                 width: '100%',
+                auth_required: true,
                 type:'data_manager',
                 name: 'Data Manager',
             }

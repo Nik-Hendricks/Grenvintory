@@ -49,3 +49,117 @@ input[type=text]:focus{
     background:var(--input-active-color);
     color:white;
 }
+
+
+json-editor{
+  --je-item-height: 15px;
+  --je-font-size: 12px;
+  position:absolute;
+  width:500px;
+  height:auto;
+  background:var(--grey-1);
+  border-radius:5px;
+  font-size:var(--je-font-size);
+}
+
+.json-editor-header{
+  width:250px;
+  height:30px;
+}
+
+.json-editor-container{
+  position:relative;
+  width:auto;
+  height:440px;
+  background:#323641;
+  color:var(--blue-1);
+  border-radius:5px;
+  overflow:scroll;
+  margin:5px;
+  padding:5px;
+  white-space:nowrap;
+}
+
+.json-editor-footer{
+  width:auto;
+  height:30px;
+}
+
+.json-editor-footer i{
+  float:right;
+  color:grey;
+  line-height:30px;
+  font-size:15px;
+  vertical-align:middle;
+  margin-right:10px;
+  margin-bottom:3px;
+}
+
+
+.json-editor-input-container-2{
+  width:auto;
+  height: auto;
+  display:inline;
+
+}
+
+.json-editor-input{
+  display:inline;
+  font-size:var(--je-font-size);
+  height:var(--je-item-height);
+  line-height: var(--je-item-height);
+  vertical-align: middle;
+  border:none;
+  border-radius:2px;
+  background:transparent;
+  color:white;
+}
+
+.json-editor-row{
+  position:relative;
+  margin:0;
+  padding:0;
+  right:0;
+  left:0;
+}
+
+.-je-key{
+  display:inline;
+  color:#bdc3c7;
+}
+
+.json-editor-row:hover{
+  background:#3c404d;
+}
+json-tab{
+  display:inline;
+  height:var(--item-height);
+  width:auto;
+}
+
+json-tab span{
+  position:relative;
+  width:20px !important;
+  height:var(--item-height);
+  line-height: var(--item-height);
+  vertical-align: middle;
+  display:inline-block;
+  padding:0;
+  margin:0;
+}
+
+.-je-string{
+  color:#2980b9;
+}
+
+.-je-function{
+  color:#2980b9;
+}
+
+.-je-number{
+  color: #ecf0f1;
+}
+
+.-je-boolean{
+  color:#d35400;
+}

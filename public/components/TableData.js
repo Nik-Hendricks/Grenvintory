@@ -63,9 +63,21 @@ class TableData extends HTMLElement{
             this.schema = schema;
             this.create_structure()
             if(this.mode == 'view'){
-                window.API.get_rows(this.table_name).then(res => {
-                    this.append_rows(window.API.sort(res, 'date', true));
-                })
+                if(window.UserManager.current_user.permission_level == 1){
+                    window.API.get_rows(this.table_name, window.app.admin_mode).then(res => {
+                        this.append_rows(window.API.sort(res, 'date', true));
+                    })
+                }else{
+                    if(this.table_name == 'inventory'){
+                        window.API.Query({table_name:'inventory', query:{by:window.UserManager.getInitials()}}).then(res => {
+                            this.append_rows(window.API.sort(res, 'date', true));
+                        })
+                    }else{
+                        window.API.get_rows(this.table_name, window.app.admin_mode).then(res => {
+                            this.append_rows(window.API.sort(res, 'date', true));
+                        })
+                    }
+                }
             }
         })
     }

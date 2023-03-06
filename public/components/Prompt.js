@@ -3,7 +3,8 @@ import CustomInput from '/components/CustomInput.js';
 export default class Prompt extends HTMLElement{
     constructor(props){
             super();
-            this.title = (typeof props.title !== 'undefined') ? props.title : 'Prompt';
+            this.type = (typeof props.type !== 'undefined') ? props.type : 'prompt';
+            this.title = (typeof props.title !== 'undefined') ? props.title : (this.type == 'login') ? 'Login' :'Prompt';
             this.text = (typeof props.text !== 'undefined') ? props.text : 'This is a prompt';
             this.width = (typeof props.width !== 'undefined') ? props.width : '300px';
             this.height = (typeof props.height !== 'undefined') ? props.height : '150px';
@@ -19,30 +20,37 @@ export default class Prompt extends HTMLElement{
         this.obsfucator = document.createElement('div');
         this.content_container = document.createElement('div');
         this.title_el = document.createElement('p');
+        this.title_el.innerHTML = this.title;
         this.icon_el = document.createElement('i');
-        this.text_el = document.createElement('p');
-        this.button_container = document.createElement('div');
 
+        if(this.type == 'prompt'){
 
-        this.text_el.innerHTML = this.text;
+            this.text_el = document.createElement('p');
+            this.button_container = document.createElement('div');
+    
+    
+            this.text_el.innerHTML = this.text;
+    
+
+            this.content_container.append(this.text_el, this.button_container);
+    
+            this.buttons.forEach((button) => {
+                var bc = (this.error && this.buttons.length == 1) ? '#e74c3c' : button.color;
+                var button_el = new CustomInput({type: 'button', text: button.text, background_color: bc, width: '25%', height: '30px', margin: '5px'});
+                button_el.addEventListener('click', () => {
+                    this.remove();
+                })
+                this.button_container.append(button_el);
+                button_el.style.float = 'right';
+            });
+        }
 
         this.icon_el.className = 'material-icons';
         this.icon_el.innerHTML = this.icon;
 
-        this.title_el.innerHTML = this.title;
+        
         this.title_el.append(this.icon_el);
-        this.content_container.append(this.title_el, this.text_el, this.button_container);
-
-        this.buttons.forEach((button) => {
-            var bc = (this.error && this.buttons.length == 1) ? '#e74c3c' : button.color;
-            var button_el = new CustomInput({type: 'button', text: button.text, background_color: bc, width: '25%', height: '30px', margin: '5px'});
-            button_el.addEventListener('click', () => {
-                this.remove();
-            })
-            this.button_container.append(button_el);
-            button_el.style.float = 'right';
-        });
-
+        this.content_container.prepend(this.title_el);
         this.append(this.obsfucator, this.content_container);   
     }
 
@@ -60,8 +68,8 @@ export default class Prompt extends HTMLElement{
         this.content_container.style.top = '50%';
         this.content_container.style.left = '50%';
         this.content_container.style.transform = 'translate(-50%, -50%)';
-        this.content_container.style.width = this.width;
-        this.content_container.style.height = this.height;
+        this.content_container.style.width = (this.type == 'login') ? '170px' : this.width;
+        this.content_container.style.height = (this.type == 'login') ? '80px' : this.height;
         this.content_container.style.background = 'var(--window-color-1)';
         this.content_container.style.borderRadius = '5px';
         this.content_container.style.zIndex = '1001';
@@ -83,22 +91,25 @@ export default class Prompt extends HTMLElement{
         this.icon_el.style.color = (this.error) ? '#e74c3c' : '#1abc9c' ;
         this.icon_el.style.float = 'left';
 
-        this.text_el.style.position = 'absolute';
-        this.text_el.style.width = 'calc(100% - 10px)';
-        this.text_el.style.height = 'auto';
-        this.text_el.style.margin = '5px';
-        this.text_el.style.top = '50%';
-        this.text_el.style.marginTop = '-10px';
-        this.text_el.style.fontSize = '15px';
-        this.text_el.style.textAlign = 'center';
 
-        this.text_el.style.color = 'white' ;
-
-        this.button_container.style.width = '100%';
-        this.button_container.style.height = 'auto';
-        this.button_container.style.position = 'absolute';
-        this.button_container.style.bottom = '0px';
-
+        if(this.type == 'prompt'){
+    
+            this.text_el.style.position = 'absolute';
+            this.text_el.style.width = 'calc(100% - 10px)';
+            this.text_el.style.height = 'auto';
+            this.text_el.style.margin = '5px';
+            this.text_el.style.top = '50%';
+            this.text_el.style.marginTop = '-10px';
+            this.text_el.style.fontSize = '15px';
+            this.text_el.style.textAlign = 'center';
+    
+            this.text_el.style.color = 'white' ;
+    
+            this.button_container.style.width = '100%';
+            this.button_container.style.height = 'auto';
+            this.button_container.style.position = 'absolute';
+            this.button_container.style.bottom = '0px';
+        }
     }
 
     connectedCallback(){
@@ -110,8 +121,52 @@ export default class Prompt extends HTMLElement{
         }) 
     }
 
-    init(callback){
+    check_inputs(){
+        var inputs = this.getElementsByTagName('input');
+        var ret = '';
+        for(var i = 0; i < inputs.length; i++){
+            if(inputs[i].getAttribute('char') == ''){
+                return false;
+            }
+            ret += inputs[i].getAttribute('char');
+        }
+        return ret;
+    }
 
+    init(callback){
+        if(this.type == 'login'){
+            for(var i = 0; i < 4; i++){
+                var input = document.createElement('input');
+                input.style.width = '30px'
+                input.style.height = '30px'
+                input.style.marginLeft = '10px';
+                input.style.marginTop = '10px';
+                input.style.background = 'transparent';
+                input.style.border = 'none';
+                input.style.borderBottom = '1px solid white';
+                input.style.outline = 'none';
+                input.style.color = 'white'
+                input.style.textAlign = 'center';
+                input.setAttribute('char', '');
+    
+                input.addEventListener('input', (ev) => {
+                    ev.preventDefault();
+                    ev.target.setAttribute('char', ev.target.value);
+                    ev.target.value = "*"
+                    var p = this.check_inputs();
+                    if(p!=false){
+                        this.remove();
+                        callback(p);           
+                    }
+                    if(ev.target.nextElementSibling !== null){
+                        ev.target.nextElementSibling.focus();
+                    }
+                })
+    
+                this.content_container.append(input);
+            }
+            this.getElementsByTagName('input')[0].focus();
+        }
     }
 
 }
