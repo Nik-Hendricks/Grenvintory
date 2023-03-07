@@ -124,49 +124,53 @@ export default class QueryControls extends HTMLElement{
 
         this.submit_query_button.onclick = (ev) => {
             if(this.mode == 'easy'){
-                var query_string = {};
-                var query_fields = [];
-                var query_data = [];
-                //populate query fields
-                for(var e of this.getElementsByClassName('field')){
-                    if(e.value.toLowerCase().includes('field') == false){
-                        query_fields.push(e.value)
-                    }
-                }
-                for(var e of this.getElementsByClassName('field-data')){
-                    if(e.value != '' || e.value != undefined){
-                        query_data.push(e.value)
-                    }
-                }
+            ;
+                //var query_string = {};
+                //var query_fields = [];
+                //var query_data = [];
+                ////populate query fields
+                //for(var e of this.getElementsByClassName('field')){
+                //    if(e.value.toLowerCase().includes('field') == false){
+                //        query_fields.push(e.value)
+                //    }
+                //}
+                //for(var e of this.getElementsByClassName('field-data')){
+                //    if(e.value != '' || e.value != undefined){
+                //        query_data.push(e.value)
+                //    }
+                //}
+//
+                //for(var i = 0; i <= query_fields.length; i++){
+                //    var query_field = query_fields[i];
+                //    if(query_fields.length > 1){
+                //        query_string = {$and: []}
+                //        var qfc = 0; //query field coun
+                //        if(query_field == 'date'){
+                //            alert('date')
+                //            console.log(query_fields[i])
+                //            query_string.$and.push({[query_field]:query_data[i]})
+                //            qfc+=2;
+                //        }else{
+                //            query_data.forEach(e => {
+                //                console.log(`e: ${e}`)
+                //                if(e.length > 0){
+                //                    query_string.$and.push({[query_fields[i]]:e})
+                //                }else{
+                //                    //query_fields[i] = undefined;
+                //                }
+                //                qfc++;
+                //            })
+                //        }
+                //    }else{
+                //        if(query_field == 'date'){
+//
+                //        }else{
+                //            query_string[query_field] = query_data[query_fields.indexOf(query_field)]
+                //        }
+                //    }
+                //}
 
-                query_fields.forEach(_e => {
-                    if(query_fields.length > 1){
-                        query_string = {$and: []}
-                        var qfc = 0;
-                        if(_e == 'date'){
-
-                        }else{
-                            query_data.forEach(e => {
-                                if(e.length > 0){
-                                    query_string.$and.push({[query_fields[qfc]]:e})
-                                }else{
-                                    query_fields[qfc] = undefined;
-                                }
-                                qfc++;
-                            })
-                        }
-                    }else{
-                        if(_e == 'date'){
-
-                        }else{
-                            query_string[_e] = query_data[query_fields.indexOf(_e)]
-                        }
-                    }
-
-                    
-                    console.log(query_string)
-                })
-                window.app.current_query = {table_name:'inventory', query:query_string};
+                window.app.current_query = {table_name:'inventory', query:this.ParseJSON()};
             }
             else if(this.mode == 'advanced'){
                 window.app.current_query = {table_name:'inventory', query:this.textarea.value};
@@ -176,6 +180,69 @@ export default class QueryControls extends HTMLElement{
                 window.TableData.append_rows(res)
             })
         }
+    }
+
+
+    ParseJSON(){
+        var fields = Array.from(document.querySelectorAll('.field')).map(input => input.value);
+        var datas = Array.from(document.querySelectorAll('.field-data')).map(input => input.value);
+        var query = {}
+
+        for(var i = 0; i < fields.length; i++){
+            var field = fields[i];
+            var data = datas[i];
+            console.log(field)
+            var query = {};
+            if (fields.length > 1) {
+                query = {$and: []};
+                for (var i = 0; i < fields.length; i++) {
+                  var field = fields[i];
+                  var data = datas[i];
+                  console.log(field);
+                  var subquery = {};
+                  if (field == 'date') {
+                    subquery[field] = { $gte: datas[i], $lte: datas[i+1] };
+                    i++;
+                  } else {
+                    subquery[field] = data;
+                  }
+                  query.$and.push(subquery);
+                }
+              } else {
+                console.log(field);
+                query[field] = data;
+              }
+        }
+
+
+        //for(var i = 0; i <= fields.length; i++){
+        //    var field = fields[i];
+        //    var data = datas[i];
+        //    if(fields.length > 1){              
+        //        query = {$and: []};
+//
+        //        for(var j = 0; j < fields.length; j++){
+        //            console.log(j)
+        //            if(field == 'date'){
+        //                console.log('dateee')
+        //                query.$and.push({[fields[j]]:{ $gte: 'startDate', $lte: 'endDate' }})
+        //                j++;
+        //            }else{
+        //                console.log(field)
+        //                query.$and.push({[field]:data})
+        //            }
+        //        }
+        //    }else{
+        //        if(field == 'date'){
+//
+        //        }else{
+        //            query[field] = data
+        //        }
+        //    }
+        //}
+
+        console.log(query)
+        return query;
     }
 
 }
