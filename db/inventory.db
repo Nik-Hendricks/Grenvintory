@@ -1,142 +1,30 @@
-{"from":"MAIN","to":"TO5","quantity":"1","item_name":"AT8X","serial_number":"N/A","by":"RF","reason":"STOCK","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"2kmy87EqaXoI8oQB"}
+{"from":"MAIN","to":"TO5","quantity":"1","item_name":"AT8X","serial_number":"N/A","by":"RF","reason":"STOCK","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"2kmy87EqaXoI8oQB","posted_date":"asdf","posted_by":"asdf"}
 {"from":"MAIN","to":"TO3","quantity":"1","item_name":"CHENS GIRL","serial_number":"N/A","by":"BC","reason":"????????","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"354PlwH4ikO1exHK"}
 {"from":"1","to":"1","quantity":"1","item_name":"1","serial_number":"1","by":"CS","reason":"1","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"83V6KNUDG8QkoZpR"}
 {"from":"2","to":"2","quantity":"2","item_name":"2","serial_number":"2, 2","by":"CS","reason":"2","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"GSUluisdxmWghpHJ"}
 {"from":"MAIN","to":"TO4","quantity":"1","item_name":"OTasdfHER TEST","serial_number":"125","by":"NC","reason":"STOCK","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"GidKk1S4dVnTAGf8"}
 {"from":"MAIN","to":"TO5","quantity":"3","item_name":"BATT4s","serial_number":"123, 123, 123","by":"RF","reason":"STOCK","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"HJhDrTeSrV5zv1tE"}
-{"from":"v","to":"b","quantity":"v","item_name":"b","serial_number":"v","by":"CS","reason":"b","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"Hx3HJsmQ6J5SMxf6"}
-{"from":"test","to":"date","quantity":"test","item_name":"date","serial_number":"test","by":"CS","reason":"date","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"JsgVUVBulHMv60AO"}
-{"from":"v","to":"b","quantity":"v","item_name":"b","serial_number":"v","by":"CS","reason":"b","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"L2ww5Aj4FBecvYRc"}
-{"from":"ok","to":"ok","quantity":"ok","item_name":"ok","serial_number":"ok","by":"KR","reason":"ok","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"NLdyfK1XXwGBzVBR"}
-{"from":"test","to":"test","quantity":"2","item_name":"test","serial_number":"test, test","by":"NC","reason":"test","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"Nm8HTpzNRNfRzr9p"}
-{"from":"test","to":"date","quantity":"test","item_name":"date","serial_number":"test","by":"CS","reason":"date","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"OGuCG6MQjTwYz2j4"}
-{"from":"MAIN","to":"TO4","quantity":"2","item_name":"TEST","serial_number":"123, 345","by":"NC","reason":"STOCK","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"P7XKdpzurMR4dfzg"}
-{"from":"b","to":"a","quantity":"b","item_name":"a","serial_number":"b","by":"CS","reason":"a","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"UJLB874Oh08xNhrt"}
-{"from":"test","to":"date","quantity":"test","item_name":"date","serial_number":"test","by":"CS","reason":"date","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"cQgX5NzdF5RwuGwy"}
-{"from":"x","to":"x","quantity":"x","item_name":"x","serial_number":"x","by":"CS","reason":"x","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"g9vqcMgxRUcggox4"}
-{"from":"test","to":"test","quantity":"test","item_name":"test","serial_number":"test","by":"KR","reason":"test","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"gTLs39fYOPj9DYT4"}
-{"from":"4sf","to":"4ad","quantity":"4","item_name":"4","serial_number":"4, 4, 4, 4","by":"CS","reason":"4","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"hATtO64Btt28gRBH"}
-{"from":"5","to":"5","quantity":"5","item_name":"5","serial_number":"5, 5, 5, 5, 5","by":"CS","reason":"5c","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"hKFYxJILQBZSjBtg"}
-{"from":"2","to":"2","quantity":"2","item_name":"2","serial_number":"2, 2","by":"CS","reason":"2","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"lYfQqs2GTqFIfaLd"}
-{"from":"main","to":"main","quantity":"main","item_name":"main","serial_number":"main","by":"KR","reason":"main","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"nKYAvB0vZsI4G40U"}
-{"from":"MAIN","to":"TO5","quantity":"1","item_name":"NAP GEM P16","serial_number":"NAPGEM1","by":"RF","reason":"STOCK","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"niGzSwngjYex0UaR"}
-{"from":"1","to":"1","quantity":"1","item_name":"1","serial_number":"1","by":"CS","reason":"1","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"oCWfvGU8hysKMmG4"}
-{"from":"b","to":"a","quantity":"b","item_name":"a","serial_number":"b","by":"CS","reason":"a","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"p1J8127eDCpNeOWv"}
-{"from":"x","to":"x","quantity":"x","item_name":"x","serial_number":"x","by":"CS","reason":"x","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"qIQs9P6DZaQJqIGh"}
-{"from":"b","to":"a","quantity":"b","item_name":"a","serial_number":"b","by":"CS","reason":"a","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"qoSCWmtEQJHaIBiz"}
-{"from":"v","to":"b","quantity":"v","item_name":"b","serial_number":"v","by":"CS","reason":"b","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"veQV7omvqobOBvQs"}
 {"from":"v","to":"a","quantity":"v","item_name":"b","serial_number":"v","by":"CS","reason":"b","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"Hx3HJsmQ6J5SMxf6"}
+{"from":"test","to":"date","quantity":"test","item_name":"date","serial_number":"test","by":"CS","reason":"date","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"JsgVUVBulHMv60AO"}
 {"from":"v","to":"b","quantity":"v","item_name":"b","serial_number":"v","by":"CS","reason":"bff","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"L2ww5Aj4FBecvYRc"}
-{"from":"okf","to":"f","quantity":"ok","item_name":"ok","serial_number":"ok","by":"KR","reason":"ok","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"NLdyfK1XXwGBzVBR"}
-{"from":"okf","to":"ff","quantity":"f","item_name":"ok","serial_number":"ok","by":"KR","reason":"ok","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"NLdyfK1XXwGBzVBR"}
-{"from":"okf","to":"ff","quantity":"f","item_name":"f","serial_number":"ok","by":"KR","reason":"ok","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"NLdyfK1XXwGBzVBR"}
-{"from":"okf","to":"ff","quantity":"f","item_name":"f","serial_number":"f","by":"KR","reason":"ok","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"NLdyfK1XXwGBzVBR"}
 {"from":"okf","to":"ff","quantity":"f","item_name":"f","serial_number":"f","by":"KR","reason":"okf","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"NLdyfK1XXwGBzVBR"}
-{"from":"okf","to":"ff","quantity":"f","item_name":"f","serial_number":"f","by":"KR","reason":"okf","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"NLdyfK1XXwGBzVBR"}
-{"from":"testf","to":"f","quantity":"2","item_name":"test","serial_number":"test, test","by":"NC","reason":"test","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"Nm8HTpzNRNfRzr9p"}
-{"from":"testf","to":"f","quantity":"f","item_name":"test","serial_number":"test, test","by":"NC","reason":"test","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"Nm8HTpzNRNfRzr9p"}
-{"from":"testf","to":"f","quantity":"f","item_name":"f","serial_number":"test, test","by":"NC","reason":"test","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"Nm8HTpzNRNfRzr9p"}
-{"from":"testf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"NC","reason":"test","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"Nm8HTpzNRNfRzr9p"}
 {"from":"testf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"NC","reason":"testf","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"Nm8HTpzNRNfRzr9p"}
-{"from":"testf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"NC","reason":"testf","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"Nm8HTpzNRNfRzr9p"}
-{"from":"testf","to":"f","quantity":"test","item_name":"date","serial_number":"test","by":"CS","reason":"date","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"OGuCG6MQjTwYz2j4"}
-{"from":"testf","to":"f","quantity":"f","item_name":"date","serial_number":"test","by":"CS","reason":"date","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"OGuCG6MQjTwYz2j4"}
-{"from":"testf","to":"f","quantity":"f","item_name":"f","serial_number":"test","by":"CS","reason":"date","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"OGuCG6MQjTwYz2j4"}
-{"from":"testf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"date","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"OGuCG6MQjTwYz2j4"}
 {"from":"testf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"datef","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"OGuCG6MQjTwYz2j4"}
-{"from":"testf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"datef","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"OGuCG6MQjTwYz2j4"}
-{"from":"MAINf","to":"f","quantity":"2","item_name":"TEST","serial_number":"123, 345","by":"NC","reason":"STOCK","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"P7XKdpzurMR4dfzg"}
-{"from":"MAINf","to":"f","quantity":"f","item_name":"TEST","serial_number":"123, 345","by":"NC","reason":"STOCK","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"P7XKdpzurMR4dfzg"}
-{"from":"MAINf","to":"f","quantity":"f","item_name":"f","serial_number":"123, 345","by":"NC","reason":"STOCK","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"P7XKdpzurMR4dfzg"}
-{"from":"MAINf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"NC","reason":"STOCK","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"P7XKdpzurMR4dfzg"}
 {"from":"MAINf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"NC","reason":"STOCKf","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"P7XKdpzurMR4dfzg"}
-{"from":"MAINf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"NC","reason":"STOCKf","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"P7XKdpzurMR4dfzg"}
-{"from":"bf","to":"f","quantity":"b","item_name":"a","serial_number":"b","by":"CS","reason":"a","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"UJLB874Oh08xNhrt"}
-{"from":"bf","to":"ff","quantity":"f","item_name":"a","serial_number":"b","by":"CS","reason":"a","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"UJLB874Oh08xNhrt"}
-{"from":"bf","to":"ff","quantity":"f","item_name":"f","serial_number":"b","by":"CS","reason":"a","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"UJLB874Oh08xNhrt"}
-{"from":"bf","to":"ff","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"a","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"UJLB874Oh08xNhrt"}
 {"from":"bf","to":"ff","quantity":"f","item_name":"f","serial_number":"fff","by":"CS","reason":"af","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"UJLB874Oh08xNhrt"}
-{"from":"bf","to":"ff","quantity":"f","item_name":"f","serial_number":"fff","by":"CS","reason":"af","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"UJLB874Oh08xNhrt"}
-{"from":"testf","to":"f","quantity":"test","item_name":"date","serial_number":"test","by":"CS","reason":"date","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"cQgX5NzdF5RwuGwy"}
-{"from":"testf","to":"f","quantity":"f","item_name":"date","serial_number":"test","by":"CS","reason":"date","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"cQgX5NzdF5RwuGwy"}
-{"from":"testf","to":"f","quantity":"f","item_name":"f","serial_number":"test","by":"CS","reason":"date","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"cQgX5NzdF5RwuGwy"}
-{"from":"testf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"date","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"cQgX5NzdF5RwuGwy"}
-{"from":"testf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"datef","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"cQgX5NzdF5RwuGwy"}
-{"from":"testf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"datef","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"cQgX5NzdF5RwuGwy"}
-{"from":"xf","to":"f","quantity":"x","item_name":"x","serial_number":"x","by":"CS","reason":"x","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"g9vqcMgxRUcggox4"}
-{"from":"xf","to":"f","quantity":"f","item_name":"x","serial_number":"x","by":"CS","reason":"x","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"g9vqcMgxRUcggox4"}
-{"from":"xf","to":"f","quantity":"f","item_name":"f","serial_number":"x","by":"CS","reason":"x","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"g9vqcMgxRUcggox4"}
-{"from":"xf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"x","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"g9vqcMgxRUcggox4"}
-{"from":"xf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"xf","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"g9vqcMgxRUcggox4"}
-{"from":"xf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"xf","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"g9vqcMgxRUcggox4"}
-{"from":"testf","to":"test","quantity":"test","item_name":"test","serial_number":"test","by":"KR","reason":"test","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"gTLs39fYOPj9DYT4"}
-{"from":"testf","to":"ff","quantity":"f","item_name":"test","serial_number":"test","by":"KR","reason":"test","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"gTLs39fYOPj9DYT4"}
-{"from":"testf","to":"ff","quantity":"f","item_name":"f","serial_number":"test","by":"KR","reason":"test","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"gTLs39fYOPj9DYT4"}
-{"from":"testf","to":"ff","quantity":"f","item_name":"f","serial_number":"f","by":"KR","reason":"test","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"gTLs39fYOPj9DYT4"}
-{"from":"testf","to":"ff","quantity":"f","item_name":"f","serial_number":"f","by":"KR","reason":"testf","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"gTLs39fYOPj9DYT4"}
-{"from":"testf","to":"ff","quantity":"f","item_name":"f","serial_number":"f","by":"KR","reason":"testf","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"gTLs39fYOPj9DYT4"}
-{"from":"4sff","to":"f","quantity":"4","item_name":"4","serial_number":"4, 4, 4, 4","by":"CS","reason":"4","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"hATtO64Btt28gRBH"}
-{"from":"4sff","to":"f","quantity":"f","item_name":"4","serial_number":"4, 4, 4, 4","by":"CS","reason":"4","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"hATtO64Btt28gRBH"}
-{"from":"4sff","to":"f","quantity":"f","item_name":"f","serial_number":"4, 4, 4, 4","by":"CS","reason":"4","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"hATtO64Btt28gRBH"}
-{"from":"4sff","to":"f","quantity":"f","item_name":"ff","serial_number":"f","by":"CS","reason":"4","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"hATtO64Btt28gRBH"}
-{"from":"4sff","to":"f","quantity":"f","item_name":"ff","serial_number":"f","by":"CS","reason":"4f","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"hATtO64Btt28gRBH"}
-{"from":"4sff","to":"f","quantity":"f","item_name":"ff","serial_number":"f","by":"CS","reason":"4f","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"hATtO64Btt28gRBH"}
-{"from":"5f","to":"f","quantity":"5","item_name":"5","serial_number":"5, 5, 5, 5, 5","by":"CS","reason":"5c","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"hKFYxJILQBZSjBtg"}
-{"from":"5f","to":"f","quantity":"f","item_name":"5","serial_number":"5, 5, 5, 5, 5","by":"CS","reason":"5c","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"hKFYxJILQBZSjBtg"}
-{"from":"5f","to":"f","quantity":"f","item_name":"f","serial_number":"5, 5, 5, 5, 5","by":"CS","reason":"5c","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"hKFYxJILQBZSjBtg"}
-{"from":"5f","to":"f","quantity":"f","item_name":"f","serial_number":"5, 5, 5, 5, 5","by":"CS","reason":"5c","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"hKFYxJILQBZSjBtg"}
-{"from":"5f","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"5cf","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"hKFYxJILQBZSjBtg"}
-{"from":"5f","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"5cf","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"hKFYxJILQBZSjBtg"}
-{"from":"2f","to":"f","quantity":"2","item_name":"2","serial_number":"2, 2","by":"CS","reason":"2","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"lYfQqs2GTqFIfaLd"}
-{"from":"2f","to":"f","quantity":"f","item_name":"2","serial_number":"2, 2","by":"CS","reason":"2","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"lYfQqs2GTqFIfaLd"}
-{"from":"2f","to":"f","quantity":"f","item_name":"f","serial_number":"2, 2","by":"CS","reason":"2","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"lYfQqs2GTqFIfaLd"}
-{"from":"2f","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"2","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"lYfQqs2GTqFIfaLd"}
-{"from":"2f","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"2f","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"lYfQqs2GTqFIfaLd"}
-{"from":"2f","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"2f","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"lYfQqs2GTqFIfaLd"}
-{"from":"mainf","to":"f","quantity":"main","item_name":"main","serial_number":"main","by":"KR","reason":"main","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"nKYAvB0vZsI4G40U"}
-{"from":"mainf","to":"f","quantity":"f","item_name":"main","serial_number":"main","by":"KR","reason":"main","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"nKYAvB0vZsI4G40U"}
-{"from":"mainf","to":"f","quantity":"f","item_name":"f","serial_number":"main","by":"KR","reason":"main","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"nKYAvB0vZsI4G40U"}
-{"from":"mainf","to":"f","quantity":"f","item_name":"f","serial_number":"main","by":"KR","reason":"main","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"nKYAvB0vZsI4G40U"}
-{"from":"mainf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"KR","reason":"mainf","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"nKYAvB0vZsI4G40U"}
-{"from":"mainf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"KR","reason":"mainf","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"nKYAvB0vZsI4G40U"}
-{"from":"MAINf","to":"TO5","quantity":"1","item_name":"NAP GEM P16","serial_number":"NAPGEM1","by":"RF","reason":"STOCK","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"niGzSwngjYex0UaR"}
-{"from":"MAINf","to":"f","quantity":"f","item_name":"NAP GEM P16","serial_number":"NAPGEM1","by":"RF","reason":"STOCK","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"niGzSwngjYex0UaR"}
-{"from":"MAINf","to":"f","quantity":"f","item_name":"NAP GEM P16","serial_number":"NAPGEM1","by":"RF","reason":"STOCK","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"niGzSwngjYex0UaR"}
-{"from":"MAINf","to":"f","quantity":"f","item_name":"f","serial_number":"NAPGEM1","by":"RF","reason":"STOCK","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"niGzSwngjYex0UaR"}
-{"from":"MAINf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"RF","reason":"STOCKf","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"niGzSwngjYex0UaR"}
-{"from":"MAINf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"RF","reason":"STOCKf","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"niGzSwngjYex0UaR"}
-{"from":"1f","to":"f","quantity":"1","item_name":"1","serial_number":"1","by":"CS","reason":"1","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"oCWfvGU8hysKMmG4"}
-{"from":"1f","to":"f","quantity":"f","item_name":"1","serial_number":"1","by":"CS","reason":"1","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"oCWfvGU8hysKMmG4"}
-{"from":"1f","to":"f","quantity":"f","item_name":"f","serial_number":"1","by":"CS","reason":"1","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"oCWfvGU8hysKMmG4"}
-{"from":"1f","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"1","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"oCWfvGU8hysKMmG4"}
-{"from":"1f","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"1f","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"oCWfvGU8hysKMmG4"}
-{"from":"1f","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"1f","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"oCWfvGU8hysKMmG4"}
-{"from":"bf","to":"a","quantity":"b","item_name":"a","serial_number":"b","by":"CS","reason":"a","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"p1J8127eDCpNeOWv"}
-{"from":"bf","to":"f","quantity":"b","item_name":"a","serial_number":"b","by":"CS","reason":"a","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"p1J8127eDCpNeOWv"}
-{"from":"bf","to":"f","quantity":"f","item_name":"f","serial_number":"b","by":"CS","reason":"a","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"p1J8127eDCpNeOWv"}
-{"from":"bf","to":"f","quantity":"f","item_name":"f","serial_number":"b","by":"CS","reason":"a","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"p1J8127eDCpNeOWv"}
-{"from":"bf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"af","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"p1J8127eDCpNeOWv"}
-{"from":"bf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"af","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"p1J8127eDCpNeOWv"}
-{"from":"xf","to":"x","quantity":"x","item_name":"x","serial_number":"x","by":"CS","reason":"x","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"qIQs9P6DZaQJqIGh"}
-{"from":"xf","to":"f","quantity":"f","item_name":"x","serial_number":"x","by":"CS","reason":"x","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"qIQs9P6DZaQJqIGh"}
-{"from":"xf","to":"f","quantity":"f","item_name":"f","serial_number":"x","by":"CS","reason":"x","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"qIQs9P6DZaQJqIGh"}
-{"from":"xf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"x","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"qIQs9P6DZaQJqIGh"}
-{"from":"xf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"x","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"qIQs9P6DZaQJqIGh"}
-{"from":"xf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"xf","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"qIQs9P6DZaQJqIGh"}
-{"from":"bf","to":"f","quantity":"b","item_name":"a","serial_number":"b","by":"CS","reason":"a","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"qoSCWmtEQJHaIBiz"}
-{"from":"bf","to":"f","quantity":"f","item_name":"a","serial_number":"b","by":"CS","reason":"a","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"qoSCWmtEQJHaIBiz"}
-{"from":"bf","to":"f","quantity":"f","item_name":"f","serial_number":"b","by":"CS","reason":"a","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"qoSCWmtEQJHaIBiz"}
-{"from":"bf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"a","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"qoSCWmtEQJHaIBiz"}
-{"from":"bf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"af","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"qoSCWmtEQJHaIBiz"}
-{"from":"bf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"af","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"qoSCWmtEQJHaIBiz"}
-{"from":"vf","to":"b","quantity":"v","item_name":"b","serial_number":"v","by":"CS","reason":"b","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"veQV7omvqobOBvQs"}
-{"from":"vf","to":"f","quantity":"f","item_name":"b","serial_number":"v","by":"CS","reason":"b","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"veQV7omvqobOBvQs"}
-{"from":"vf","to":"f","quantity":"f","item_name":"f","serial_number":"v","by":"CS","reason":"b","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"veQV7omvqobOBvQs"}
-{"from":"vf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"b","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"veQV7omvqobOBvQs"}
-{"from":"vf","to":"f","quantity":"f","item_name":"f","serial_number":"fff","by":"CS","reason":"b","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"veQV7omvqobOBvQs"}
-{"from":"vf","to":"f","quantity":"f","item_name":"f","serial_number":"fff","by":"CS","reason":"bf","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"veQV7omvqobOBvQs"}
-{"from":"vf","to":"f","quantity":"f","item_name":"f","serial_number":"fff","by":"CS","reason":"bf","date":"f","date_posted":null,"_id":"veQV7omvqobOBvQs"}
-{"from":"test","to":"item","quantity":"test","item_name":"item","serial_number":"test","by":"BC","reason":"item","date":"3/6/2023","date_posted":{"$$date":1678082400000},"_id":"kD2U1cmLUDWgSDD3"}
-{"from":"MAIN","to":"TO5","quantity":"1","item_name":"AT8X","serial_number":"N/A","by":"RF","reason":"STOCK","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"2kmy87EqaXoI8oQB","posted_date":"asdf","posted_by":""}
-{"from":"MAIN","to":"TO5","quantity":"1","item_name":"AT8X","serial_number":"N/A","by":"RF","reason":"STOCK","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"2kmy87EqaXoI8oQB","posted_date":"asdf","posted_by":"asdf"}
 {"from":"v","to":"bb","quantity":"v","item_name":"b","serial_number":"v","by":"NC","reason":"b","date":"3/6/2023","posted_date":"v","posted_by":"b","date_posted":{"$$date":1678082400000},"_id":"VEBcddUqdch6oJRR"}
+{"from":"testf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"datef","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"cQgX5NzdF5RwuGwy"}
+{"from":"xf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"xf","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"g9vqcMgxRUcggox4"}
+{"from":"testf","to":"ff","quantity":"f","item_name":"f","serial_number":"f","by":"KR","reason":"testf","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"gTLs39fYOPj9DYT4"}
+{"from":"4sff","to":"f","quantity":"f","item_name":"ff","serial_number":"f","by":"CS","reason":"4f","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"hATtO64Btt28gRBH"}
+{"from":"5f","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"5cf","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"hKFYxJILQBZSjBtg"}
+{"from":"test","to":"item","quantity":"test","item_name":"item","serial_number":"test","by":"BC","reason":"item","date":"3/6/2023","date_posted":{"$$date":1678082400000},"_id":"kD2U1cmLUDWgSDD3"}
+{"from":"2f","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"2f","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"lYfQqs2GTqFIfaLd"}
+{"from":"mainf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"KR","reason":"mainf","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"nKYAvB0vZsI4G40U"}
+{"from":"MAINf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"RF","reason":"STOCKf","date":"3/3/2023","date_posted":{"$$date":1677823200000},"_id":"niGzSwngjYex0UaR"}
+{"from":"1f","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"1f","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"oCWfvGU8hysKMmG4"}
+{"from":"bf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"af","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"p1J8127eDCpNeOWv"}
+{"from":"xf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"xf","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"qIQs9P6DZaQJqIGh"}
+{"from":"bf","to":"f","quantity":"f","item_name":"f","serial_number":"f","by":"CS","reason":"af","date":"3/5/2023","date_posted":{"$$date":1677996000000},"_id":"qoSCWmtEQJHaIBiz"}
+{"from":"vf","to":"f","quantity":"f","item_name":"f","serial_number":"fff","by":"CS","reason":"bf","date":"f","date_posted":null,"_id":"veQV7omvqobOBvQs"}
+{"$$deleted":true,"_id":"354PlwH4ikO1exHK"}

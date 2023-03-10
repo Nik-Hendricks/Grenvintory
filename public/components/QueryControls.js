@@ -21,7 +21,7 @@ export default class QueryControls extends HTMLElement{
     CreateStructure(){
         this.title_el = document.createElement('p')
         this.title_el.innerHTML += 'Query Controls';
-        this.script_mode = new CustomInput({type: 'button', text: 'Script Mode', icon:'code', background_color:'#e74c3c', width:'50%', height:'30px', margin:'5px', toggle:true, toggled:false})
+        this.script_mode = new CustomInput({type: 'button', text: 'Script Mode', icon:'code', background_color:'var(--red)', width:'50%', height:'30px', margin:'5px', toggle:true, toggled:false})
         this.easy_mode = new CustomInput({type: 'button', text: 'Easy Mode', icon:'cake', background_color:'#16a085', width:'50%', height:'30px', margin:'5px', toggle:true, toggled:true})
         this.control_type_container = document.createElement('div');
         this.submit_query_button = new CustomInput({type: 'button', text: 'Submit Query', icon:'send', width:'100%', height:'30px', margin:'5px'})
@@ -124,52 +124,6 @@ export default class QueryControls extends HTMLElement{
 
         this.submit_query_button.onclick = (ev) => {
             if(this.mode == 'easy'){
-            ;
-                //var query_string = {};
-                //var query_fields = [];
-                //var query_data = [];
-                ////populate query fields
-                //for(var e of this.getElementsByClassName('field')){
-                //    if(e.value.toLowerCase().includes('field') == false){
-                //        query_fields.push(e.value)
-                //    }
-                //}
-                //for(var e of this.getElementsByClassName('field-data')){
-                //    if(e.value != '' || e.value != undefined){
-                //        query_data.push(e.value)
-                //    }
-                //}
-//
-                //for(var i = 0; i <= query_fields.length; i++){
-                //    var query_field = query_fields[i];
-                //    if(query_fields.length > 1){
-                //        query_string = {$and: []}
-                //        var qfc = 0; //query field coun
-                //        if(query_field == 'date'){
-                //            alert('date')
-                //            console.log(query_fields[i])
-                //            query_string.$and.push({[query_field]:query_data[i]})
-                //            qfc+=2;
-                //        }else{
-                //            query_data.forEach(e => {
-                //                console.log(`e: ${e}`)
-                //                if(e.length > 0){
-                //                    query_string.$and.push({[query_fields[i]]:e})
-                //                }else{
-                //                    //query_fields[i] = undefined;
-                //                }
-                //                qfc++;
-                //            })
-                //        }
-                //    }else{
-                //        if(query_field == 'date'){
-//
-                //        }else{
-                //            query_string[query_field] = query_data[query_fields.indexOf(query_field)]
-                //        }
-                //    }
-                //}
-
                 window.app.current_query = {table_name:'inventory', query:this.ParseJSON()};
             }
             else if(this.mode == 'advanced'){
@@ -209,38 +163,21 @@ export default class QueryControls extends HTMLElement{
                   query.$and.push(subquery);
                 }
               } else {
-                console.log(field);
-                query[field] = data;
+                if(field == 'date'){
+                    var p1 = datas[i].split('/');
+                    var p2 = datas[i+1].split('/');
+                    var mydate = new Date(p1[2], p1[1] - 1, p1[0]); 
+                    var mydate2 = new Date(p2[2], p2[1] - 1, p2[0]);
+
+
+                    console.log(mydate.toDateString());
+
+                   query[field] = { $gte: mydate, $lte: mydate2 }
+                }else{
+                    query[field] = data;
+                }
               }
         }
-
-
-        //for(var i = 0; i <= fields.length; i++){
-        //    var field = fields[i];
-        //    var data = datas[i];
-        //    if(fields.length > 1){              
-        //        query = {$and: []};
-//
-        //        for(var j = 0; j < fields.length; j++){
-        //            console.log(j)
-        //            if(field == 'date'){
-        //                console.log('dateee')
-        //                query.$and.push({[fields[j]]:{ $gte: 'startDate', $lte: 'endDate' }})
-        //                j++;
-        //            }else{
-        //                console.log(field)
-        //                query.$and.push({[field]:data})
-        //            }
-        //        }
-        //    }else{
-        //        if(field == 'date'){
-//
-        //        }else{
-        //            query[field] = data
-        //        }
-        //    }
-        //}
-
         console.log(query)
         return query;
     }

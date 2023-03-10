@@ -223,6 +223,13 @@ const API = {
         })
     },
     
+    DeleteRow(props){
+        return new Promise(resolve => {
+            this.http_fetch('/API/delete_row', {table_name: props.table_name, user: window.UserManager.current_user, _id: props._id}, "POST").then(res => {
+                resolve(res);
+            })
+        })
+    }
 }
 
 

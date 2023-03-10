@@ -348,6 +348,15 @@ export default function API() {
         })
     })
 
+    API.post('/delete_row', (req, res) => {
+        var table_name = req.body.table_name;
+        var id = req.body._id;
+        console.log(table_name)
+        GrenventoryDB.tables[table_name].RemoveItem(id).then(ret => {
+            res.json(ret)
+        })
+    })
+
     return API;
     
 };

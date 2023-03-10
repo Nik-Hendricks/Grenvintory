@@ -24,6 +24,21 @@ export default class UserControls extends HTMLElement{
                     window.TableData.refresh()
                 }
             },
+            {
+                type:'button',
+                name: 'Delete',
+                icons:'trash',
+                width: '50%',
+                toggle: true,
+                toggled: false,
+                onclick: () => {
+                    if(window.TableData.mode == 'delete'){
+                        window.TableData.mode = 'view';
+                    }else{
+                        window.TableData.mode = 'delete';
+                    }
+                }
+            },
             {   
                 type:'button',
                 name: 'ADMIN MODE',

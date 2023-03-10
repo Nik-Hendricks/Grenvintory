@@ -17,6 +17,29 @@ export default class TableRow extends Component{
     connectedCallback(){
         this.preStyle();
         this.create_structure();
+        this.addEventListener("mouseover", (event) => {
+            if(this.table.mode == 'delete'){
+                this.hightlight_cells('var(--red)');
+            }
+        })
+
+        this.addEventListener("mouseout", (event) => {
+            if(this.table.mode == 'delete'){
+                this.hightlight_cells('white');
+            }
+        })
+
+        this.onclick = () => {
+            if(this.table.mode == 'delete'){
+                this.DeleteRow();
+            }
+        }
+    }
+
+    hightlight_cells(color){
+        for(var el of this.getElementsByTagName('input')){
+            el.style.background = color;
+        }
     }
 
     create_structure(){
@@ -49,6 +72,17 @@ export default class TableRow extends Component{
             ret[cell.getAttribute('id').split(',')[1]] = cell.value;
         }
         return ret;
+    }
+
+    DeleteRow(){
+        if(this._id !== null){
+            window.API.DeleteRow({table_name: this.table.table_name, _id: this._id}).then(res => {
+                console.log(res)
+                return {success: true};
+            })
+        }else{
+            return {error: 'no id'};
+        }
     }
 }
 

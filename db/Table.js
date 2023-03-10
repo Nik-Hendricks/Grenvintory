@@ -53,7 +53,18 @@ export default class Table{
     }
 
     RemoveItem(_id){
-
+        console.log(_id)
+        return new Promise(resolve => {
+            this.datastore.remove({ _id: _id }, {}, (err, numRemoved) => {
+                if(err){
+                    resolve({error: err})
+                }else if(numRemoved === 0){
+                    resolve({error: 'Record not found'})
+                }else{
+                    resolve({success: 'Record deleted'})
+                }
+            })
+        })
     }
 
     RowExist(row){
