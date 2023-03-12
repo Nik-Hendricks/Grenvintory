@@ -77,8 +77,12 @@ export default class TableRow extends Component{
     DeleteRow(){
         if(this._id !== null){
             window.API.DeleteRow({table_name: this.table.table_name, _id: this._id}).then(res => {
-                console.log(res)
-                return {success: true};
+                if(res.success){
+                    this.remove();
+                    return {success: true};
+                }else{
+                    return {error: 'failed to delete'};
+                }
             })
         }else{
             return {error: 'no id'};

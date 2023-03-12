@@ -229,6 +229,30 @@ const API = {
                 resolve(res);
             })
         })
+    },
+
+    ImportXLSX(props) {
+        console.log(props)
+        return new Promise(resolve => {
+            const file = new File([props.data], "data.xlsx", { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const formData = new FormData();
+            formData.append('data', file);
+            formData.append('user', window.UserManager.current_user);
+            formData.append('table_name', props.table_name);
+            
+            // Send the form data to the server
+            fetch('/API/import_xlsx', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                resolve(data);
+            })
+            .catch(error => {
+                resolve(error)
+            });
+        });
     }
 }
 

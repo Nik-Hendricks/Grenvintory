@@ -42,29 +42,44 @@ export default class DataManager extends HTMLElement{
         this.select_file_button = new CustomInput({type: 'upload', text: 'Select File', background_color:'#5352ed', icon:'description', width:'100%', height:'30px', margin:'5px'})
         this.import_button = new CustomInput({type: 'button', text: 'Import', background_color:'#6c5ce7', icon:'upload', width:'100%', height:'30px', margin:'5px'})
         this.file_container = document.createElement('div');
+        var files_to_import = [];
 
         this.select_file_button.onchange = (ev) => {
-            var files_to_import = [];
             for(var i = 0; i < ev.target.files.length; i++){
                 var file = ev.target.files[i];
                 var filetype = file.name.split('.')[1];
                 if(filetype == 'xlsx'){
                     var reader = new FileReader();
-                    reader.readAsText(file);
+                    reader.readAsArrayBuffer(file);
                     reader.onload = (ev) => {
+                        console.log(ev)
                         this.file_container.append(this.FileItem(file))
                         console.log(ev.target.result)
+                        files_to_import.push(ev.target.result);
                     }
                 }
             }
         }
 
         this.import_button.onclick = (ev) => {
-            console.log(ev)
+            window.API.ImportXLSX({table_name:'inventory', data: files_to_import[0]}).then(res => {
+                if(res.success){
+                    var p = new Prompt({title: 'Success', text: res.success, icon: 'check_circle'})
+                    this.file_container.innerHTML = '';
+
+                }else{
+                    var p = new Prompt({title: 'Error', error:true, text: res.error, icon: 'check_circle'})
+                }
+                p.init();
+
+            })
         }
+
         this.content_container.append(this.select_file_button ,this.file_container, this.import_button);
     }
 
+
+    
     FileItem(f){
         var el = document.createElement('div')
         var i = document.createElement('i')

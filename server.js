@@ -6,6 +6,7 @@ import path from 'path'
 import http from 'http';
 import fs from 'fs'     
 import uniqid from 'uniqid'
+import fileUpload from 'express-fileupload';
 import bodyParser from 'body-parser'
 
 import API from './routes/api.js'
@@ -16,8 +17,9 @@ var httpServer = http.createServer(app);
 
 
 app.use(express.urlencoded({extended: true}))
-app.use(express.json());
-  
+app.use(express.json())
+app.use(fileUpload());
+app.use('/API', API())
   
 httpServer.listen(80, () => {
   console.log("listening on 80")
@@ -50,7 +52,6 @@ app.get("/css/:file",(req, res) => {
     res.sendFile('./public/css/' + file, {root: './'})
 })
 
-app.use('/API', API())
 
 app.get('/', (req, res) => {
     res.sendFile('./public/index.html', {root: './'})

@@ -11,6 +11,9 @@ import Database from '../db/Database.js'
 import uniqid from 'uniqid'
 import stream from 'stream'
 import express from 'express'
+import XLSX from 'xlsx';
+import multer from 'multer'
+const upload = multer();
 
 var GrenventoryDB = new Database();
 
@@ -37,6 +40,56 @@ var db_schema = {
 //private functions
 
 
+function parseExcelFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, {type: 'array'});
+
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+
+      // remove the header row
+      rows.shift();
+
+      // resolve with the parsed rows
+      resolve(rows);
+    };
+
+    reader.onerror = (e) => {
+      reject(e);
+    };
+
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+function importXLSX(props) {
+    return new Promise(resolve => {
+        console.log(props.files);
+        const fileBuffer = new Buffer(props.files.data.data, 'ArrayBuffer');
+
+        // Parse Excel file buffer into workbook object
+        const workbook = XLSX.read(fileBuffer, { type: 'buffer' });
+
+        // Loop through each sheet in the workbook
+        workbook.SheetNames.forEach(sheetName => {
+            const sheet = workbook.Sheets[sheetName];
+            const rows = XLSX.utils.sheet_to_json(sheet);
+            console.log(rows);
+            rows.forEach(row => {
+                console.log(row)
+                GrenventoryDB.tables[props.table_name].datastore.insert(row, (err, res) => {
+                    console.log(res)
+                })
+            })
+        });
+
+        resolve();
+    });
+}
 
 function _query(props){
     console.log(props)
@@ -356,6 +409,38 @@ export default function API() {
             res.json(ret)
         })
     })
+
+
+
+    API.post('/import_xlsx', (req, res) => {
+        console.log(req.files);
+        const fileBuffer = new Buffer(req.files.data.data, 'ArrayBuffer');
+
+        // Parse Excel file buffer into workbook object
+        const workbook = XLSX.read(fileBuffer, { type: 'buffer' });
+
+        // Loop through each sheet in the workbook
+        var count = 0;
+        workbook.SheetNames.forEach(sheetName => {
+            const sheet = workbook.Sheets[sheetName];
+            const rows = XLSX.utils.sheet_to_json(sheet);
+            console.log(rows);
+            if(rows.length == 0){
+                res.json({error: 'No rows found'})
+            }else{
+                rows.forEach(row => {
+                    console.log(row)
+                    GrenventoryDB.tables[req.body.table_name].datastore.insert(row, (err, ret) => {
+                        count++
+                        if(count == rows.length){
+                            res.json({success: 'Inserted ' + count + ' rows'})
+                        }
+                    })
+                })
+            }
+        });
+    })
+
 
     return API;
     
