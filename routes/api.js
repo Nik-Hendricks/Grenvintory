@@ -93,6 +93,7 @@ function importXLSX(props) {
 }
 
 function _query(props){
+    console.log('query')
     console.log(props)
     var query_mode = (typeof props.query !== 'undefined') ? 'advanced' : 'easy';
     var table_name = props.table_name;

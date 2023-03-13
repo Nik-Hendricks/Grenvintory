@@ -177,6 +177,7 @@ class Table extends HTMLElement{
     }
 
     append_rows(data){
+        console.log(data)
         for(var d of data){
             var c = this.rows.length + 1
             var new_row = this.new_row(c, d)
@@ -186,6 +187,12 @@ class Table extends HTMLElement{
             }
             this.tb.getElementsByTagName('div')[0].append(new_row)
         }
+    }
+
+    CreateStructure(){
+        //header needs to update dynamically as col shema changes
+        //full table rebuild
+        //need to add hybrid view;
     }
 
     header_row(cols){
