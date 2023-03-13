@@ -26,18 +26,16 @@ export default class Cell extends HTMLElement{
         this.style.margin = '0';
         this.style.padding = '0';
         this.style.width = `calc(100% / ${Object.entries(this.row.table.schema).length})`
-        //this.style.width = `calc(100% / ${window.app.admin_mode ? 10 : 8})`
-
         this.input.style.width = 'calc(100% - 5px)';
-        this.input.style.height = '100%';
         this.input.style.border = 'none';
         this.input.style.padding = '0';
         this.input.style.margin = '2.5px';
         this.input.style.display = 'block';
         this.input.style.boxSizing = 'border-box';
         this.input.style.borderRadius = '5px'
-        this.input.style.height = '25px'
+        this.input.style.height = `30px`
         this.input.style.textAlign = 'center';
+        this.input.style.color = 'black'
     }
 
     SetupEvents(){

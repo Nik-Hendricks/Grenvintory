@@ -1,7 +1,7 @@
 //1-4-23 Nik Hendricks 
 import API from '/js/API.js'
 import Window from '/components/Window.js'
-import TableData from '/components/TableData.js'
+import Table from '/components/Table.js'
 import UserTabBar from '/components/UserTabBar.js'
 import UserControls from '/components/UserControls.js'
 import UserManager from '/js/UserManager.js'
@@ -10,7 +10,7 @@ import CustomInput from '/components/CustomInput.js'
 class Grenvintory{
     constructor(props){
             window.UserManager.load().then(users => {
-                this.admin_mode = false;
+                this.admin_mode = 'false';
                 this.left_view = document.createElement('div');
                 this.middle_view = document.createElement('div');
                 this.right_view = document.createElement('div');
@@ -38,10 +38,10 @@ class Grenvintory{
     }
 
     createMainView(users){
-        window.TableData = new TableData({table_name:'inventory', hasFormulaInput:true});
+        window.Table = new Table({table_name:'inventory', hasFormulaInput:true});
         window.UserControls = new UserControls();
         window.UserTabBar = new UserTabBar();
-        this.left_view.append(window.TableData);
+        this.left_view.append(window.Table);
         this.right_view.append(window.UserControls)
         document.getElementById('maincontent').append(window.UserTabBar, this.left_view, this.middle_view, this.right_view);   
     }

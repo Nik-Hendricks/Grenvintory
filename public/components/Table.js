@@ -1,7 +1,7 @@
 import CustomInput from '/components/CustomInput.js'
 import TableRow from '/components/TableRow.js'
 
-class TableData extends HTMLElement{
+class Table extends HTMLElement{
     constructor(props){
         super();
         this.props = props
@@ -13,7 +13,16 @@ class TableData extends HTMLElement{
         this.col = 0;
         this.current_cell = null;
         this.hasFormulaInput = (typeof props.hasFormulaInput !== 'undefined') ? props.hasFormulaInput: false;
-        this.mode = (typeof props.mode !== 'undefined') ? props.mode: 'add';        
+        this.mode = (typeof props.mode !== 'undefined') ? props.mode: 'add';
+        this.delete_mode = 'false';
+        this.cached_rows = [];
+        this.skip = 0;
+        this.limit = 40;
+    }
+
+
+    CacheRows(){
+        this.cached_rows = this.rows;
     }
 
     connectedCallback(){
@@ -37,6 +46,7 @@ class TableData extends HTMLElement{
             this.tb.style.overflow = 'scroll';
             this.tb.style.position = 'relative';
             this.tb.style.top = '0px'
+            this.tb.style.bottom = '0px'
             if(this.hasFormulaInput){
                 this.tb.style.height = 'calc(100% - 85px)';
             }else{
@@ -54,41 +64,97 @@ class TableData extends HTMLElement{
             }
 
             this.refresh()
+
+            this.tb.onscroll = (ev) => {
+                console.log(this.tb.scrollTop)
+                console.log(this.tb.getElementsByTagName('div')[0].offsetHeight)
+                if (this.tb.scrollTop + this.tb.clientHeight >= this.tb.scrollHeight) {
+                    this.Count().then(c => {
+                        var count = c.count;
+                        if(this.skip + this.limit == count){
+
+                        }else{
+                            if(this.skip + this.limit >= count){
+                                this.skip = count - this.limit;
+                            }else{
+                                this.skip += this.limit;
+                            }
+                            this.refresh();
+                        }
+
+                    })
+                }
+            }
+
+            this.create_structure();
             return this;
         })
     }
 
+    Count(){
+        return new Promise(resolve => {
+            window.API.Count(this.table_name).then(count => {
+                resolve(count)
+            })
+        })
+    }
+
+    AppendRow(){
+
+    }
+
+
+    HybridView(){
+
+    }
+
+    EditView(){
+
+    }
+
+    ViewView(){
+        if(this.tb.getElementsByTagName('div')[0] == undefined){
+            this.tb.append(document.createElement('div'))
+        }
+        if(window.UserManager.current_user.permission_level == 1){
+            window.API.Query({skip: this.skip, limit: this.limit, table_name:'inventory', query:{}}).then(res => {
+                this.append_rows(window.API.sort(res, 'date', true));
+            })
+        }else{
+            if(this.table_name == 'inventory'){
+                window.API.Query({skip: this.skip, limit: this.limit, table_name:'inventory', query:{by:window.UserManager.getInitials()}}).then(res => {
+                    this.append_rows(window.API.sort(res, 'date', true));
+                })
+            }else{
+                window.API.Query({skip: this.skip, limit: this.limit, table_name:'inventory', query:{}}).then(res => {
+                    this.append_rows(window.API.sort(res, 'date', true));
+                })
+            }
+        }
+    }
+
+
     refresh(){
         window.API.get_schema(this.table_name, window.app.admin_mode).then(schema => {
             this.schema = schema;
-            this.create_structure()
             if(this.mode == 'view'){
-                if(window.UserManager.current_user.permission_level == 1){
-                    window.API.get_rows(this.table_name, window.app.admin_mode).then(res => {
-                        this.append_rows(window.API.sort(res, 'date', true));
-                    })
-                }else{
-                    if(this.table_name == 'inventory'){
-                        window.API.Query({table_name:'inventory', query:{by:window.UserManager.getInitials()}}).then(res => {
-                            this.append_rows(window.API.sort(res, 'date', true));
-                        })
-                    }else{
-                        window.API.get_rows(this.table_name, window.app.admin_mode).then(res => {
-                            this.append_rows(window.API.sort(res, 'date', true));
-                        })
-                    }
-                }
+                this.ViewView();
+            }else{
+                this.create_structure();
             }
         })
     }
 
     create_structure(){
         this.full_clear();
+        this.tb.append(document.createElement('div'))
         this.t.append(this.th, this.tb)
         this.th.append(this.header_row(Object.entries(this.schema)))
-        for(var i = 0; i < this.row_count; i++){
-            var r = this.new_row(i, {});
-            this.tb.append(r)
+        if(this.mode == 'add'){
+            for(var i = 0; i < this.row_count; i++){
+                var r = this.new_row(i, {});
+                this.tb.getElementsByTagName('div')[0].append(r)
+            }
         }
         return this;
     }
@@ -111,13 +177,14 @@ class TableData extends HTMLElement{
     }
 
     append_rows(data){
-        this.clear();
-        var row_count = 0;
         for(var d of data){
-            var new_row = this.new_row(row_count, d)
-            this.rows[row_count] = new_row
-            this.tb.append(new_row)
-            row_count++;
+            var c = this.rows.length + 1
+            var new_row = this.new_row(c, d)
+            this.rows[c] = new_row
+            if(document.getElementById(d._id) != undefined){
+                document.getElementById(d._id).remove();
+            }
+            this.tb.getElementsByTagName('div')[0].append(new_row)
         }
     }
 
@@ -147,5 +214,5 @@ class TableData extends HTMLElement{
 
 }
 
-window.customElements.define('table-data', TableData)
-export default TableData;
+window.customElements.define('table-data', Table)
+export default Table;

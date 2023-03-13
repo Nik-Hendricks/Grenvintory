@@ -3,9 +3,11 @@ import Datastore from 'nedb';
 export default class Table{
     constructor(name){
         this.datastore = new Datastore({filename: `db/${name}.db`, autoload: true});
-        return this;
+        this.getMaxId().then(maxId => {
+            this.MaxId = maxId;
+            return this;
+        })
     }
-
 
     SetItem(data){
         return new Promise(resolve => {
@@ -13,9 +15,10 @@ export default class Table{
                 console.log(exists)
                 if(!exists){
                     console.log(`Creating row...`)
-                    delete data._id;
+                    this.MaxId += 1;
+                    data.posted_id = this.MaxId;
                     this.datastore.insert(data, (err, res) => {
-                        console.log(`Id is ${res._id}`)
+                        console.log(`Id is ${res.posted_id}`)
                         resolve(res)
                     })
                 }else{
@@ -33,18 +36,35 @@ export default class Table{
             })
         })
     }
+      
+    getMaxId() {
+        return new Promise(resolve => {
+            this.datastore.find({}).sort({ posted_id: -1 }).limit(1).exec((err, docs) => {
+                let maxId = 0;
+                if (docs.length > 0) {
+                    maxId = docs[0].posted_id;
+                }
+                resolve(maxId);
+            });
+        });
+    }
+
+    Count(){
+        return new Promise(resolve => {
+            this.datastore.count({}, (err, count) => {
+                resolve(count)
+            })
+        })
+    }
 
     Query(props){
         return new Promise(resolve => {
-            if(props.fields){
-
-            }else{
-                this.datastore.find(props.query, (err, rows) => {
-                    if(!err){
-                        resolve(rows);
-                    }
-                })
-            }
+            console.log(props)
+            this.datastore.find(props.query).skip(props.skip).limit(props.limit).sort({posted_id: -1}).exec((err, rows) => {
+                if(!err){
+                    resolve(rows);
+                }
+            })
         })
     }
 

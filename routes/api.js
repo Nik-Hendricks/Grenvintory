@@ -81,7 +81,8 @@ function importXLSX(props) {
             console.log(rows);
             rows.forEach(row => {
                 console.log(row)
-                GrenventoryDB.tables[props.table_name].datastore.insert(row, (err, res) => {
+                GrenventoryDB.tables[props.table_name].SetItem(row).then(res => {
+                //datastore.insert(row, (err, res) => {
                     console.log(res)
                 })
             })
@@ -98,12 +99,12 @@ function _query(props){
     return new Promise(resolve => {
         if(GrenventoryDB.TableExists(table_name)){
             if(query_mode == 'advanced'){
+                var p;
                 if(typeof props.query == 'object'){
-                    var p = props.query;
+                    p = props.query;
                 }else if(typeof props.query == 'string'){
-                    console.log('str')
                     var queryStr = `(${props.query})`; // wrap the query in parentheses to make it a valid expression
-                    var p = eval(queryStr)
+                    p = eval(queryStr)
                 }
                 Object.entries(p).forEach(([key, value]) => {
                     if(key == '$and'){
@@ -116,8 +117,7 @@ function _query(props){
                         p[key] = new RegExp(value, 'i')
                     }
                 })
-                GrenventoryDB.tables[table_name].datastore.find(p, (err, docs) => {
-                    console.log(docs)
+                GrenventoryDB.tables[table_name].Query({query:p, skip:props.skip, limit: props.limit}).then(docs => {
                     resolve(docs)
                 })
             }else{
@@ -194,7 +194,7 @@ export default function API() {
         var user = req.body.user;
         var isAdminSchema = req.body.isAdminSchema;
         var table_name = req.body.table_name;
-        var index = isAdminSchema ? 1 : 0;
+        var index = isAdminSchema == 'true' ? 1 : 0;
         res.json(db_schema[table_name][index])
     })
     
@@ -430,15 +430,25 @@ export default function API() {
             }else{
                 rows.forEach(row => {
                     console.log(row)
-                    GrenventoryDB.tables[req.body.table_name].datastore.insert(row, (err, ret) => {
+                    setTimeout(() => {
+                    GrenventoryDB.tables[req.body.table_name].SetItem(row).then(ret => {
+                    //.datastore.insert(row, (err, ret) => {
                         count++
                         if(count == rows.length){
                             res.json({success: 'Inserted ' + count + ' rows'})
                         }
                     })
+                    }, 50)
                 })
             }
         });
+    })
+
+    API.post('/Count', (req, res) => {
+        var table_name = req.body.table_name;
+        GrenventoryDB.tables[table_name].Count().then(count => {
+            res.json({count: count})
+        })
     })
 
 

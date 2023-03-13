@@ -214,6 +214,14 @@ const API = {
         })
     },
 
+    Count(table_name){
+        return new Promise(resolve => {
+            this.http_fetch('/API/Count', {table_name:table_name}, "POST").then(res => {
+                resolve(res)
+            })
+        })
+    },
+
     SetTableData(props){
         return new Promise(resolve => {
             console.log(props.table_name)

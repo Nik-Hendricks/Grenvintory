@@ -131,7 +131,8 @@ export default class QueryControls extends HTMLElement{
             }
 
             window.API.Query(window.app.current_query).then(res => {
-                window.TableData.append_rows(res)
+                window.Table.clear();
+                window.Table.append_rows(res)
             })
         }
     }

@@ -10,6 +10,7 @@ export default class TableRow extends Component{
         this.data = typeof props.data !== 'undefined' ? props.data : null;
         this.current_quantity = 0;
         this._id = typeof this.data._id !== 'undefined' ? this.data._id : null;
+        this.setAttribute('id', this._id);
         this.cells = [];
         return this;
     }
@@ -18,19 +19,17 @@ export default class TableRow extends Component{
         this.preStyle();
         this.create_structure();
         this.addEventListener("mouseover", (event) => {
-            if(this.table.mode == 'delete'){
+            if(this.table.delete_mode !== 'false' && this.table.mode == 'view' && window.UserManager.current_user.permission_level > 0){
                 this.hightlight_cells('var(--red)');
             }
         })
 
         this.addEventListener("mouseout", (event) => {
-            if(this.table.mode == 'delete'){
-                this.hightlight_cells('white');
-            }
+            this.hightlight_cells('white');
         })
 
         this.onclick = () => {
-            if(this.table.mode == 'delete'){
+            if(this.table.delete_mode !== 'false' && this.table.mode == 'view' && window.UserManager.current_user.permission_level > 0){
                 this.DeleteRow();
             }
         }
