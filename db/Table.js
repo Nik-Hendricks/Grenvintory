@@ -4,6 +4,7 @@ export default class Table{
     constructor(name){
         this.datastore = new Datastore({filename: `db/${name}.db`, autoload: true});
         this.getMaxId().then(maxId => {
+            console.log(`Max id for ${this.datastore.filename} is ${maxId}`)
             this.MaxId = maxId;
             return this;
         })
@@ -14,12 +15,19 @@ export default class Table{
             this.RowExist(data).then(exists => {
                 console.log(exists)
                 if(!exists){
+                    delete data._id
                     console.log(`Creating row...`)
                     this.MaxId += 1;
                     data.posted_id = this.MaxId;
+                    console.log(data)
                     this.datastore.insert(data, (err, res) => {
-                        console.log(`Id is ${res.posted_id}`)
-                        resolve(res)
+                        if(err){
+                            console.error(err)
+                            resolve({error: err})
+                        }else{
+                            console.log(`Id is ${res.posted_id}`)
+                            resolve(res)
+                        }
                     })
                 }else{
                     console.log(`Updating row... ${data._id}}`)

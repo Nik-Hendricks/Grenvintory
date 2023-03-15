@@ -25,70 +25,40 @@ class Table extends HTMLElement{
         this.cached_rows = this.rows;
     }
 
-    connectedCallback(){
-        window.API.get_schema(this.table_name).then(schema => {
-            this.schema = schema;
-            this.t = document.createElement('div');
-            this.th = document.createElement('div');
-            this.tb = document.createElement('div');
-            this.detailed_cell = new CustomInput({width: '100%', height: '35px', type: 'text', text: 'Detailed View', icon:'info', margin:'5px'})
+    PreStyle(){
+        this.style.width = '100%'
+        this.style.height = '100%'
+        this.style.overflow = 'none';
+        console.log(this)
+        this.t.style.overflow = 'scroll'
+        this.t.style.width = 'calc(100% - 10px)';
+        this.t.style.margin = '5px';
 
-            this.style.width = '100%'
-            this.style.height = '100%'
-            this.style.overflow = 'none';
+        this.tb.style.borderRadius = '5px';
+        this.tb.style.overflow = 'scroll';
+        this.tb.style.position = 'relative';
+        this.tb.style.top = '0px'
+        this.tb.style.bottom = '0px'
 
-            this.t.style.overflow = 'scroll'
-            this.t.style.width = 'calc(100% - 10px)';
-            this.t.style.margin = '5px';
+        if(this.hasFormulaInput){
+            this.tb.style.height = 'calc(100% - 85px)';
+        }else{
+            this.tb.style.height = '100%'
+        }
 
-            
-            this.tb.style.borderRadius = '5px';
-            this.tb.style.overflow = 'scroll';
-            this.tb.style.position = 'relative';
-            this.tb.style.top = '0px'
-            this.tb.style.bottom = '0px'
-            if(this.hasFormulaInput){
-                this.tb.style.height = 'calc(100% - 85px)';
-            }else{
-                this.tb.style.height = '100%'
-            }
+    }
 
-
-
-            this.detailed_cell.setAttribute('type', 'text')
-    
-            this.t.append(this.th, this.tb)
-            this.append(this.t)
-            if(this.hasFormulaInput){
-                this.append(this.detailed_cell)
-            }
-
-            this.refresh()
-
-            this.tb.onscroll = (ev) => {
-                console.log(this.tb.scrollTop)
-                console.log(this.tb.getElementsByTagName('div')[0].offsetHeight)
-                if (this.tb.scrollTop + this.tb.clientHeight >= this.tb.scrollHeight) {
-                    this.Count().then(c => {
-                        var count = c.count;
-                        if(this.skip + this.limit == count){
-
-                        }else{
-                            if(this.skip + this.limit >= count){
-                                this.skip = count - this.limit;
-                            }else{
-                                this.skip += this.limit;
-                            }
-                            this.refresh();
-                        }
-
-                    })
-                }
-            }
-
-            this.create_structure();
-            return this;
-        })
+    CreateStructure(){
+        this.t = document.createElement('div');
+        this.th = document.createElement('div');
+        this.tb = document.createElement('div');
+        this.detailed_cell = new CustomInput({width: '100%', height: '35px', type: 'text', text: 'Detailed View', icon:'info', margin:'5px'})
+        this.detailed_cell.setAttribute('type', 'text')
+        this.t.append(this.th, this.tb)
+        this.append(this.t)
+        if(this.hasFormulaInput){
+            this.append(this.detailed_cell)
+        }
     }
 
     Count(){
@@ -135,6 +105,7 @@ class Table extends HTMLElement{
 
 
     refresh(){
+        console.log(`refreshing ${window.app.admin_mode}`)
         window.API.get_schema(this.table_name, window.app.admin_mode).then(schema => {
             this.schema = schema;
             if(this.mode == 'view'){
@@ -189,12 +160,6 @@ class Table extends HTMLElement{
         }
     }
 
-    CreateStructure(){
-        //header needs to update dynamically as col shema changes
-        //full table rebuild
-        //need to add hybrid view;
-    }
-
     header_row(cols){
         var row = document.createElement('div');
         cols.forEach(col => {
@@ -217,6 +182,39 @@ class Table extends HTMLElement{
             row.append(td)
         })
         return row;
+    }
+
+    SetupEvents(){
+        this.tb.onscroll = (ev) => {
+            if (this.tb.scrollTop + this.tb.clientHeight >= this.tb.scrollHeight) {
+                this.Count().then(c => {
+                    var count = c.count;
+                    if(this.skip + this.limit == count){
+
+                    }else{
+                        if(this.skip + this.limit >= count){
+                            this.skip = count - this.limit;
+                        }else{
+                            this.skip += this.limit;
+                        }
+                        this.refresh();
+                    }
+
+                })
+            }
+        }
+    }
+
+    connectedCallback(){
+        window.API.get_schema(this.table_name).then(schema => {
+            this.schema = schema;
+            this.CreateStructure()
+            this.PreStyle();
+            this.refresh()
+            this.SetupEvents();
+            this.create_structure();
+            return this;
+        })
     }
 
 }

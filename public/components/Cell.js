@@ -93,11 +93,13 @@ export default class Cell extends HTMLElement{
                 console.log('b')
                 var d = this.row.GetRowValue()
                 if (!d.error) {
-                    d._id = this.row._id;
-                    console.log(this.row.table.table_name)
+                    console.log(this.row._id)
+                    if(typeof this.row._id !== 'undefined'){
+                        d._id = this.row._id;
+                    }
+                    console.log(d)
                     window.API.SetTableData({table_name: this.row.table.table_name, data: d}).then(res => {
                         if(res._id !== undefined){
-                            this.sub
                             this.row._id = res._id;
                         }
                     })
