@@ -47,7 +47,6 @@ const UserManager = {
         this.current_user = user;
         window.localStorage.setItem('user', JSON.stringify(user))
         window.UserTabBar.switchTab(user.username);
-        window.Table.clear();
         window.Table.refresh()
     },
 

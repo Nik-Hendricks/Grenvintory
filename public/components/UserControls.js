@@ -82,7 +82,6 @@ class TopControls extends HTMLElement{
                 colors: ['var(--window-color-3)', 'var(--blue)'],
                 onclick: (ev) => {
                     window.Table.mode = ev.target.getAttribute('toggled');
-                    window.Table.clear();
                     window.Table.refresh()
                 }
             },
@@ -93,7 +92,6 @@ class TopControls extends HTMLElement{
                 onclick: (ev) => {
                     console.log(ev.target.getAttribute('toggled'))
                     window.app.admin_mode = ev.target.getAttribute('toggled');
-                    window.Table.clear();
                     window.Table.refresh()
                 }
             },
@@ -104,7 +102,6 @@ class TopControls extends HTMLElement{
                 onclick: (ev) => {
                     console.log(ev.target.getAttribute('toggled'))
                     window.Table.delete_mode = ev.target.getAttribute('toggled');
-                    window.Table.clear();
                     window.Table.refresh()
                 }
             },

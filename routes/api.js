@@ -237,7 +237,7 @@ export default function API() {
     })
     
     API.post('/get_users', (req, res) => {
-        _get_rows('users').then(rows => {
+        GrenventoryDB.tables.users.datastore.find({}, (err, rows) => {
             rows.forEach(row => {
                 delete row.password;
                 delete row._id;
@@ -246,28 +246,13 @@ export default function API() {
         })
     })
 
-    API.post('/get_inventory', (req, res) => {
-        _get_rows('inventory').then(rows => {
-            res.json(rows);
-        })
-    })
-
-    API.post('/get_inventory_by_user', (req, res) => {
-        var user = req.body.user;
-        _get_rows('inventory').then(rows => {
-            var user_rows = rows.filter(row => {
-                return row.by == `${user.first_name.charAt(0)}${user.last_name.charAt(0)}`
-            })
-            res.json(user_rows);
-        })
-    })
-
     API.post('/set_table_data', (req, res) => {
         var user = req.body.user;
         var data = req.body.data;
         var table_name = req.body.table_name;
         console.log(`table name is ${table_name}`)
-        data.date_posted = new Date(data.date);
+        data.date = new Date(data.date);
+        data.date_posted = data.date;
 
         GrenventoryDB.tables[table_name].SetItem(data).then(ret => {
             res.json(ret)
@@ -358,18 +343,6 @@ export default function API() {
             }else{
                 res.json({auth: false})
             }
-        })
-    })
-
-
-    API.post('/_query', (req, res) => {
-        var field = req.body.field;
-        var value = req.body.value;
-        var table_name = req.body.table_name;
-        console.log(value)
-        console.log(field)
-        _query(table_name, field, value).then(rows => {
-            res.json(rows);
         })
     })
 

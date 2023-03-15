@@ -43,7 +43,8 @@ export default class TableRow extends Component{
 
     create_structure(){
         Object.entries(this.table.schema).forEach(el => {
-            var text = (Object.entries(this.data).length == 0) ? (el[0] == 'by') ? window.UserManager.getInitials() : (el[0] == 'date') ? new Date().toLocaleDateString() : '' : this.data[el[0]];
+            //LONG ternary operater
+            var text = (Object.entries(this.data).length == 0) ? (el[0] == 'by') ? window.UserManager.getInitials() : (el[0] == 'date') ? new Date().toLocaleDateString() : '' : (el[0] == 'date' || el[0] == 'posted_date') ? new Date(this.data[el[0]]):this.data[el[0]];
             var dc = new Cell({row: this, text: text, type: el[1], col: el[0]})
             this.append(dc)
             this.cells.push(dc);

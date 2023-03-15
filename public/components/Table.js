@@ -79,10 +79,21 @@ class Table extends HTMLElement{
     }
 
     EditView(){
-
+        this.full_clear();
+        this.tb.append(document.createElement('div'))
+        this.t.append(this.th, this.tb)
+        this.th.append(this.header_row(Object.entries(this.schema)))
+        for(var i = 0; i < this.row_count; i++){
+            var r = this.new_row(i, {});
+            console.log(this.tb.getElementsByTagName('div'))
+            this.tb.getElementsByTagName('div')[0].append(r)
+        }
     }
 
     ViewView(){
+        this.full_clear();
+        this.t.append(this.th, this.tb)
+        this.th.append(this.header_row(Object.entries(this.schema)))
         if(this.tb.getElementsByTagName('div')[0] == undefined){
             this.tb.append(document.createElement('div'))
         }
@@ -104,39 +115,21 @@ class Table extends HTMLElement{
     }
 
 
-    refresh(){
-        console.log(`refreshing ${window.app.admin_mode}`)
+    refresh(a){
+        console.log(`parent ${a}`)
+        console.log(`refreshing... admin mode: ${window.app.admin_mode}`)
         window.API.get_schema(this.table_name, window.app.admin_mode).then(schema => {
             this.schema = schema;
             if(this.mode == 'view'){
                 this.ViewView();
             }else{
-                this.create_structure();
+                this.EditView();
             }
         })
     }
 
-    create_structure(){
-        this.full_clear();
-        this.tb.append(document.createElement('div'))
-        this.t.append(this.th, this.tb)
-        this.th.append(this.header_row(Object.entries(this.schema)))
-        if(this.mode == 'add'){
-            for(var i = 0; i < this.row_count; i++){
-                var r = this.new_row(i, {});
-                this.tb.getElementsByTagName('div')[0].append(r)
-            }
-        }
-        return this;
-    }
-
     full_clear(){
         this.th.innerHTML = '';
-        this.tb.innerHTML = '';
-        this.rows = [];
-    }
-
-    clear(){
         this.tb.innerHTML = '';
         this.rows = [];
     }
@@ -210,11 +203,11 @@ class Table extends HTMLElement{
             this.schema = schema;
             this.CreateStructure()
             this.PreStyle();
-            this.refresh()
             this.SetupEvents();
-            this.create_structure();
+            this.refresh(`a${this.table_name}`)
             return this;
         })
+        
     }
 
 }
