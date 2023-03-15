@@ -10,7 +10,11 @@ const UserManager = {
                 users.forEach(user => {
                     this.users.push(user)
                 })
-                this.current_user = (window.localStorage.getItem('user') == null) ? this.users[1] : JSON.parse(window.localStorage.getItem('user')),
+                //this.current_user = (window.localStorage.getItem('user') == null) ? this.users[1] : JSON.parse(window.localStorage.getItem('user')),
+
+                window.Dispatcher.on('LOAD', () => {
+                    this.switchUser(users[0])
+                })
                 resolve(this.users)
             })
         })
@@ -46,8 +50,9 @@ const UserManager = {
     switchUser(user){
         this.current_user = user;
         window.localStorage.setItem('user', JSON.stringify(user))
-        window.UserTabBar.switchTab(user.username);
-        window.Table.refresh()
+        window.Dispatcher.dispatch('SWITCH_USER', user)
+        window.Dispatcher.dispatch('UPDATE')
+        window.Dispatcher.dispatch('CONTROL_UPDATE')
     },
 
     getInitials(){

@@ -33,7 +33,7 @@ var db_schema = {
     ],
 
     inventory:[
-        {from:'string', to:'string', quantity:'number', item_name: 'string', serial_number:'serial_number', by:'string', reason:'string', date:'string'},
+        {from:'string', to:'string', quantity:'number', item_name: 'string', serial_number:'serial_number', reason:'string'},
         {from:'string', to:'string', quantity:'number', item_name: 'string', serial_number:'serial_number', by:'string', reason:'string', date:'string', posted_date:'string', posted_by:'string'},
     ]
 }
@@ -92,9 +92,7 @@ function importXLSX(props) {
     });
 }
 
-function _query(props){
-    console.log('query')
-    console.log(props)
+function Query(props){
     var query_mode = (typeof props.query !== 'undefined') ? 'advanced' : 'easy';
     var table_name = props.table_name;
     return new Promise(resolve => {
@@ -198,30 +196,6 @@ export default function API() {
         var index = isAdminSchema == 'true' ? 1 : 0;
         res.json(db_schema[table_name][index])
     })
-    
-    API.post('/set_row', (req, res) => {
-        var user = req.body.user;
-        var data = req.body.data;
-        var table_name = req.body.table_name;
-        _set_row(table_name, data).then(ret => {
-          res.json(ret);
-        })
-    })
-    
-    API.post('/get_row', (req, res) => {
-        var table_name = req.body.table_name;
-        var row_uuid = req.body.row_uuid;
-        _get_row(table_name, row_uuid).then(row => {
-            res.json(row);
-        })
-    })
-
-    API.post('/get_rows', (req, res) => {
-        var table_name = req.body.table_name;
-        _get_rows(table_name).then(rows => {
-            res.json(rows);
-        })
-    })
 
     API.post('/create_user', (req, res) => {
         var first_name = req.body.first_name;
@@ -251,6 +225,7 @@ export default function API() {
         var data = req.body.data;
         var table_name = req.body.table_name;
         console.log(`table name is ${table_name}`)
+        data.by = req.body.user.first_name.charAt(0) + req.body.user.last_name.charAt(0);
         data.date = new Date(data.date);
         data.date_posted = data.date;
 
@@ -258,17 +233,6 @@ export default function API() {
             res.json(ret)
         })
     })
-
-    API.post('/set_inventory', (req, res) => {
-        var user = req.body.user;
-        var data = req.body.data;
-        data.date = new Date(data.date);
-        console.log('WEIRD')
-        GrenventoryDB.tables.inventory.SetItem(data).then(ret => {
-            res.json(ret)
-        })
-    })
-
 
     API.post('/export_xlsx', (req, res) => {
         var current_query = req.body.current_query;
@@ -332,7 +296,7 @@ export default function API() {
     API.post('/login', (req, res) => {
         var username = req.body.username;
         var password = req.body.password;
-        _get_rows('users').then(rows => {
+        GrenventoryDB.tables.users.datastore.find({}, (err, rows) => {
             var user = rows.find(row => row.username == username);
             if(user != null){
                 if(user.password == password){
@@ -347,7 +311,7 @@ export default function API() {
     })
 
     API.post('/Query', (req, res) => {
-        _query(req.body).then(rows => {
+        Query(req.body).then(rows => {
             res.json(rows);
         })
     })
@@ -383,8 +347,6 @@ export default function API() {
             res.json(ret)
         })
     })
-
-
 
     API.post('/import_xlsx', (req, res) => {
         console.log(req.files);
@@ -425,7 +387,5 @@ export default function API() {
         })
     })
 
-
-    return API;
-    
+    return API;    
 };

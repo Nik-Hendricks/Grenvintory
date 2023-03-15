@@ -3,8 +3,6 @@ export default class UserTabBar extends HTMLElement{
         super()
         this.users = window.UserManager.users;
         this.tabs = [];
-        this.populate_tabs();
-        this.switchTab(window.UserManager.current_user.username);
     }
 
     connectedCallback(){
@@ -13,6 +11,15 @@ export default class UserTabBar extends HTMLElement{
         this.style.background = "#38B289"
         this.style.display = 'block'
         this.style.overflow = 'hidden'
+
+        window.Dispatcher.on('LOAD', () => {
+            this.populate_tabs();
+            this.switchTab(window.UserManager.current_user.username);
+        })
+
+        window.Dispatcher.on('SWITCH_USER', (u) => {
+            this.switchTab(u.username);
+        })
     }
 
     populate_tabs(){

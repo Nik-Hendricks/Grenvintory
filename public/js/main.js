@@ -6,6 +6,7 @@ import UserTabBar from '/components/UserTabBar.js'
 import UserControls from '/components/UserControls.js'
 import UserManager from '/js/UserManager.js'
 import CustomInput from '/components/CustomInput.js'
+import Dispatcher from '/js/Dispatcher.js'
 
 class Grenvintory{
     constructor(props){
@@ -34,6 +35,7 @@ class Grenvintory{
                 this.createMainView(users); 
                 //window.API.create_user('Kathy', 'cockrum', 'kathy', 'pass', 1)
                 //window.API.create_user('Ron',  'Grennan',  'Ron', '6588', 1)
+                window.Dispatcher.dispatch('LOAD')
             });        
     }
 

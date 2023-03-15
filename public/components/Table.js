@@ -15,21 +15,15 @@ class Table extends HTMLElement{
         this.hasFormulaInput = (typeof props.hasFormulaInput !== 'undefined') ? props.hasFormulaInput: false;
         this.mode = (typeof props.mode !== 'undefined') ? props.mode: 'add';
         this.delete_mode = 'false';
-        this.cached_rows = [];
         this.skip = 0;
         this.limit = 40;
-    }
-
-
-    CacheRows(){
-        this.cached_rows = this.rows;
+        this.RowManager = new RowManager(this);
     }
 
     PreStyle(){
         this.style.width = '100%'
         this.style.height = '100%'
         this.style.overflow = 'none';
-        console.log(this)
         this.t.style.overflow = 'scroll'
         this.t.style.width = 'calc(100% - 10px)';
         this.t.style.margin = '5px';
@@ -69,23 +63,14 @@ class Table extends HTMLElement{
         })
     }
 
-    AppendRow(){
-
-    }
-
-
-    HybridView(){
-
-    }
-
     EditView(){
         this.full_clear();
         this.tb.append(document.createElement('div'))
         this.t.append(this.th, this.tb)
         this.th.append(this.header_row(Object.entries(this.schema)))
+        //this.append_rows(this.)
         for(var i = 0; i < this.row_count; i++){
-            var r = this.new_row(i, {});
-            console.log(this.tb.getElementsByTagName('div'))
+            var r = this.RowManager.new_row(i, {});
             this.tb.getElementsByTagName('div')[0].append(r)
         }
     }
@@ -102,22 +87,16 @@ class Table extends HTMLElement{
                 this.append_rows(window.API.sort(res, 'date', true));
             })
         }else{
-            if(this.table_name == 'inventory'){
-                window.API.Query({skip: this.skip, limit: this.limit, table_name:'inventory', query:{by:window.UserManager.getInitials()}}).then(res => {
-                    this.append_rows(window.API.sort(res, 'date', true));
-                })
-            }else{
-                window.API.Query({skip: this.skip, limit: this.limit, table_name:'inventory', query:{}}).then(res => {
-                    this.append_rows(window.API.sort(res, 'date', true));
-                })
-            }
+            window.API.Query({skip: this.skip, limit: this.limit, table_name:'inventory', query:{by:window.UserManager.getInitials()}}).then(res => {
+                this.append_rows(window.API.sort(res, 'date', true));
+            })
         }
     }
 
 
     refresh(a){
-        console.log(`parent ${a}`)
-        console.log(`refreshing... admin mode: ${window.app.admin_mode}`)
+        //console.log(`parent ${a}`)
+        //console.log(`refreshing... admin mode: ${window.app.admin_mode}`)
         window.API.get_schema(this.table_name, window.app.admin_mode).then(schema => {
             this.schema = schema;
             if(this.mode == 'view'){
@@ -134,21 +113,11 @@ class Table extends HTMLElement{
         this.rows = [];
     }
 
-    new_row(row_num, data){
-        var row = new TableRow({table: this, row_num: row_num, data: data});
-        this.rows[row_num] = row;
-        return row
-    }
 
     append_rows(data){
-        console.log(data)
         for(var d of data){
             var c = this.rows.length + 1
-            var new_row = this.new_row(c, d)
-            this.rows[c] = new_row
-            if(document.getElementById(d._id) != undefined){
-                document.getElementById(d._id).remove();
-            }
+            var new_row = this.RowManager.new_row(c, d)
             this.tb.getElementsByTagName('div')[0].append(new_row)
         }
     }
@@ -204,12 +173,48 @@ class Table extends HTMLElement{
             this.CreateStructure()
             this.PreStyle();
             this.SetupEvents();
-            this.refresh(`a${this.table_name}`)
             return this;
+        })
+
+        window.Dispatcher.on('UPDATE', () => {
+            this.refresh()
         })
         
     }
 
+}
+
+class RowManager{
+    constructor(Table){
+        this.rows = []; //loaded rows
+        this.row_count = 0; //number of rows
+        this.table = Table;
+    }
+
+    UpdateLayout(){
+        this.rows.forEach(row => {
+
+        })
+    }
+
+    Rows(){
+        return this.rows;
+    }
+
+    SetRows(rows){
+        this.rows = rows;
+    }
+
+    AppendRows(rows){
+        this.rows = [...this.rows, ...rows]
+    }
+
+    new_row(row_num, data){
+        var row = new TableRow({table: this.table, row_num: row_num, data: data});
+        this.rows.push(row);
+        this.row_count += 1;
+        return row;
+    }
 }
 
 window.customElements.define('table-data', Table)

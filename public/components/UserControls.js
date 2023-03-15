@@ -31,15 +31,15 @@ export default class UserControls extends HTMLElement{
     }
 
     connectedCallback(){
-        this.create_structure();
+        window.Dispatcher.on('SWITCH_USER', () => {
+            this.refresh();
+        })
     }
 
-    create_structure(){
+    refresh(){
         this.innerHTML = '';
         this.append(new TopControls())
         this.controls.forEach(item => {
-
-
             if(item.type == 'button'){
                 var e = new CustomInput({type:'button', text: item.name, icon: item.icon, width: item.width, height: '30px', margin:'5px', onclick: item.onclick, toggle: item.toggle, toggled: item.toggled})
             }else{
@@ -77,32 +77,35 @@ class TopControls extends HTMLElement{
         super()
         this.items = [
             {
+                value_mapping: window.Table.mode,
                 icons: ['visibility_off', 'visibility'],
                 modes: ['add', 'view'],
                 colors: ['var(--window-color-3)', 'var(--blue)'],
                 onclick: (ev) => {
                     window.Table.mode = ev.target.getAttribute('toggled');
-                    window.Table.refresh()
+
                 }
             },
             {
+                value_mapping: window.app.admin_mode,
                 icons: ['admin_panel_settings', 'admin_panel_settings'],
                 modes: ['false', 'true'],
                 colors: ['var(--window-color-3)', 'var(--blue)'],
                 onclick: (ev) => {
                     console.log(ev.target.getAttribute('toggled'))
                     window.app.admin_mode = ev.target.getAttribute('toggled');
-                    window.Table.refresh()
+            
                 }
             },
             {
+                value_mapping: window.Table.delete_mode,
                 icons: ['delete', 'table_rows', 'crop_free'],
                 modes: ['false', 'row', 'cell'],
-                colors: ['var(--window-color-3)', 'var(--blue)', 'var(--red)'],
+                colors: ['var(--window-color-3)', 'var(--red-2)', 'var(--red)'],
                 onclick: (ev) => {
                     console.log(ev.target.getAttribute('toggled'))
                     window.Table.delete_mode = ev.target.getAttribute('toggled');
-                    window.Table.refresh()
+            
                 }
             },
             {
@@ -118,7 +121,7 @@ class TopControls extends HTMLElement{
 
     CreateStructure(){
         for(var button of this.items){
-            this.append(new IconButton(button.icons, button.onclick, button.toggled, button.modes, button.colors))
+            this.append(new IconButton(button.icons, button.onclick, button.value_mapping, button.modes, button.colors))
         }
     }
 

@@ -5,11 +5,37 @@ export default class IconButton extends HTMLElement{
         this.modes = modes;
         this.colors = colors;
         this._onclick = onclick;
+        this.toggled = toggled;
         this.button_size = '40px'
     }
 
+    connectedCallback(){
+        console.log(`toggled ${this.toggled}`)
+            this.CreateStructure();
+            this.PreStyle();
+    
+            window.Dispatcher.on('CONTROL_UPDATE', () => {
+                var index = this.modes.indexOf(this.getAttribute('toggled'))
+                this.innerHTML = this.icons[index]
+                this.style.background = this.colors[index];
+            })
+    
+            this.onclick = (e) => {
+                var index = this.modes.indexOf(this.getAttribute('toggled'))
+                if(index == this.modes.length -1){
+                    this.setAttribute('toggled', this.modes[0])
+                }else{
+                    var new_index = index + 1;
+                    this.setAttribute('toggled', this.modes[new_index])
+                }
+                this._onclick(e);
+                window.Dispatcher.dispatch('CONTROL_UPDATE')
+                window.Dispatcher.dispatch('UPDATE')
+            };
+    }
+
     CreateStructure(){
-        this.setAttribute('toggled', this.modes[0])
+        this.setAttribute('toggled', this.toggled)
         this.classList.add('material-icons', 'solid');
         this.innerHTML = this.icons[0];
     }
@@ -29,26 +55,6 @@ export default class IconButton extends HTMLElement{
         this.style.transition = 'all ease-in 0.3s';
         this.style.marginTop = '10px';
         this.style.userSelect = 'none';
-    }
-
-    connectedCallback(){
-        this.CreateStructure();
-        this.PreStyle();
-
-        this.onclick = (e) => {
-            var index = e.target.modes.indexOf(e.target.getAttribute('toggled'))
-            if(index == e.target.modes.length -1){
-                e.target.setAttribute('toggled', e.target.modes[0])
-                e.target.innerHTML = e.target.icons[0]
-                e.target.style.background = e.target.colors[0];
-            }else{
-                var new_index = index + 1;
-                e.target.setAttribute('toggled', this.modes[new_index])
-                e.target.innerHTML = e.target.icons[new_index]
-                e.target.style.background = e.target.colors[new_index];
-            }
-            this._onclick(e);
-        };
     }
 }
 
