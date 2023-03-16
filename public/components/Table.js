@@ -64,10 +64,6 @@ class Table extends HTMLElement{
 
     EditView(){
         this.full_clear();
-        this.tb.append(document.createElement('div'))
-        this.t.append(this.th, this.tb)
-        this.th.append(this.header_row(Object.entries(this.schema)))
-        //this.append_rows(this.)
         for(var i = 0; i < this.row_count; i++){
             var r = this.RowManager.new_row(i, {});
             this.tb.getElementsByTagName('div')[0].append(r)
@@ -76,11 +72,6 @@ class Table extends HTMLElement{
 
     ViewView(){
         this.full_clear();
-        this.t.append(this.th, this.tb)
-        this.th.append(this.header_row(Object.entries(this.schema)))
-        if(this.tb.getElementsByTagName('div')[0] == undefined){
-            this.tb.append(document.createElement('div'))
-        }
         if(window.UserManager.current_user.permission_level == 1){
             this.current_query = {}
             this.Query(this.current_query).then(res => {
@@ -96,11 +87,18 @@ class Table extends HTMLElement{
         this.SetupEvents();
     }
 
+    HybridView(){
+        this.full_clear();
+        this.current_query = {}
+        this.Query(this.current_query).then(res => {
+            this.append_rows(res);
+        })
+        this.SetupEvents();
+    }
 
     refresh(a){
-        //console.log(`parent ${a}`)
-        //console.log(`refreshing... admin mode: ${window.app.admin_mode}`)
         this.skip = 0;
+        this.limit = 0;
         window.API.get_schema(this.table_name, window.app.admin_mode).then(schema => {
             this.schema = schema;
             if(this.mode == 'view'){
@@ -114,6 +112,9 @@ class Table extends HTMLElement{
     full_clear(){
         this.th.innerHTML = '';
         this.tb.innerHTML = '';
+        this.tb.append(document.createElement('div'))
+        this.t.append(this.th, this.tb)
+        this.th.append(this.header_row(Object.entries(this.schema)))
         this.RowManager.rows = [];
     }
 
@@ -193,12 +194,6 @@ class RowManager{
         this.rows = []; //loaded rows
         this.row_count = 0; //number of rows
         this.table = Table;
-    }
-
-    UpdateLayout(){
-        this.rows.forEach(row => {
-
-        })
     }
 
     Rows(){

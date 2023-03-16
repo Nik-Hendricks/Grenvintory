@@ -3,6 +3,7 @@ import QueryControls from '/components/QueryControls.js'
 import PartsNeededList from '/components/PartsNeededList.js'
 import DataManager from '/components/DataManager.js'
 import IconButton from '/components/IconButton.js';
+import Prompt from '/components/Prompt.js'
 
 
 export default class UserControls extends HTMLElement{
@@ -110,6 +111,22 @@ class TopControls extends HTMLElement{
             },
             {
                 value_mapping: 'false',
+                icons: ['receipt_long', 'receipt_long'],
+                admin_icons: ['info', 'info'],
+                modes: ['false', 'true'],
+                colors: ['var(--window-color-3)', 'var(--blue)'],
+                onclick: () => {
+                    if(window.UserManager.current_user.permission_level == 1){
+                        //add new pick ticket
+
+                    }else{
+                        //load pick ticket
+                        var p = new Prompt({})
+                    }
+                }
+            },
+            {
+                value_mapping: 'false',
                 icons: ['settings', 'settings'],
                 modes: ['false', 'true'],
                 colors: ['var(--window-color-3)', 'var(--blue)'],
@@ -122,6 +139,10 @@ class TopControls extends HTMLElement{
 
     CreateStructure(){
         for(var button of this.items){
+            if(button.admin_icons && window.UserManager.current_user.permission_level == 1){
+                button.icons = button.admin_icons;
+            }
+
             this.append(new IconButton(button.icons, button.onclick, button.value_mapping, button.modes, button.colors))
         }
     }

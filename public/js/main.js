@@ -13,10 +13,9 @@ class Grenvintory{
             window.UserManager.load().then(users => {
                 this.admin_mode = 'false';
                 this.left_view = document.createElement('div');
-                this.middle_view = document.createElement('div');
                 this.right_view = document.createElement('div');
 
-                this.left_view.style.width = '75%';
+                this.left_view.style.width = 'calc(100% - 250px)';
                 this.left_view.style.float = 'left';
                 this.left_view.style.display = 'block';
                 this.left_view.style.position = 'absolute'
@@ -24,7 +23,7 @@ class Grenvintory{
                 this.left_view.style.top = '35px'
                 this.left_view.style.bottom = '0px'
 
-                this.right_view.style.width = '25%';
+                this.right_view.style.width = '250px';
                 this.right_view.style.display = 'block';
                 this.right_view.style.height = 'calc(100% - 35px)';
                 this.right_view.style.position = 'absolute'
@@ -45,7 +44,7 @@ class Grenvintory{
         window.UserTabBar = new UserTabBar();
         this.left_view.append(window.Table);
         this.right_view.append(window.UserControls)
-        document.getElementById('maincontent').append(window.UserTabBar, this.left_view, this.middle_view, this.right_view);   
+        document.getElementById('maincontent').append(window.UserTabBar, this.left_view, this.right_view);   
     }
 
     window(data){

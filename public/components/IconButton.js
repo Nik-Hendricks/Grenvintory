@@ -7,6 +7,7 @@ export default class IconButton extends HTMLElement{
         this._onclick = onclick;
         this.toggled = toggled;
         this.button_size = '40px'
+        this.button_count = 5;
     }
 
     connectedCallback(){
@@ -42,8 +43,8 @@ export default class IconButton extends HTMLElement{
         this.style.textAlign = 'center';
         this.style.lineHeight = this.button_size;
         this.style.color = 'white';
-        this.style.marginLeft = `calc(calc(calc(100% - ${this.button_size} * 4)/ 4)/2)`
-        this.style.marginRight = `calc(calc(calc(100% - ${this.button_size} * 4)/ 4)/2)`
+        this.style.marginLeft = `calc(calc(calc(100% - ${this.button_size} * ${this.button_count})/ ${this.button_count})/2)`
+        this.style.marginRight = `calc(calc(calc(100% - ${this.button_size} * ${this.button_count})/ ${this.button_count})/2)`
         this.style.marginBottom = '10px';
         this.style.transition = 'all ease-in 0.3s';
         this.style.marginTop = '10px';
