@@ -91,12 +91,14 @@ class Table extends HTMLElement{
                 this.append_rows(window.API.sort(res, 'date', true));
             })
         }
+        this.SetupEvents();
     }
 
 
     refresh(a){
         //console.log(`parent ${a}`)
         //console.log(`refreshing... admin mode: ${window.app.admin_mode}`)
+        this.skip = 0;
         window.API.get_schema(this.table_name, window.app.admin_mode).then(schema => {
             this.schema = schema;
             if(this.mode == 'view'){
@@ -149,19 +151,9 @@ class Table extends HTMLElement{
     SetupEvents(){
         this.tb.onscroll = (ev) => {
             if (this.tb.scrollTop + this.tb.clientHeight >= this.tb.scrollHeight) {
-                this.Count().then(c => {
-                    var count = c.count;
-                    if(this.skip + this.limit == count){
-
-                    }else{
-                        if(this.skip + this.limit >= count){
-                            this.skip = count - this.limit;
-                        }else{
-                            this.skip += this.limit;
-                        }
-                        this.refresh();
-                    }
-
+                this.skip += this.limit;
+                window.API.Query({skip: this.skip, limit: this.limit, table_name:'inventory', query:{}}).then(res => {
+                    this.append_rows(window.API.sort(res, 'date', true));
                 })
             }
         }
@@ -172,11 +164,13 @@ class Table extends HTMLElement{
             this.schema = schema;
             this.CreateStructure()
             this.PreStyle();
-            this.SetupEvents();
             return this;
         })
 
+
+
         window.Dispatcher.on('UPDATE', () => {
+            console.log('UPDATE')
             this.refresh()
         })
         

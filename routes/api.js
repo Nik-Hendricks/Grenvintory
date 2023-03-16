@@ -190,11 +190,16 @@ export default function API() {
     })   
 
     API.post('/db_schema', (req, res) => {
+        console.log(req.body)
         var user = req.body.user;
         var isAdminSchema = req.body.isAdminSchema;
         var table_name = req.body.table_name;
         var index = isAdminSchema == 'true' ? 1 : 0;
-        res.json(db_schema[table_name][index])
+        if(db_schema[table_name][index] === undefined){
+            res.json(db_schema[table_name][0])
+        }else{
+            res.json(db_schema[table_name][index])
+        }
     })
 
     API.post('/create_user', (req, res) => {

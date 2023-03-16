@@ -13,13 +13,7 @@ export default class IconButton extends HTMLElement{
         console.log(`toggled ${this.toggled}`)
             this.CreateStructure();
             this.PreStyle();
-    
-            window.Dispatcher.on('CONTROL_UPDATE', () => {
-                var index = this.modes.indexOf(this.getAttribute('toggled'))
-                this.innerHTML = this.icons[index]
-                this.style.background = this.colors[index];
-            })
-    
+            this.SetupEvents();    
             this.onclick = (e) => {
                 var index = this.modes.indexOf(this.getAttribute('toggled'))
                 if(index == this.modes.length -1){
@@ -30,7 +24,6 @@ export default class IconButton extends HTMLElement{
                 }
                 this._onclick(e);
                 window.Dispatcher.dispatch('CONTROL_UPDATE')
-                window.Dispatcher.dispatch('UPDATE')
             };
     }
 
@@ -56,6 +49,16 @@ export default class IconButton extends HTMLElement{
         this.style.marginTop = '10px';
         this.style.userSelect = 'none';
     }
+
+    SetupEvents(){
+        window.Dispatcher.on('CONTROL_UPDATE', () => {
+            var index = this.modes.indexOf(this.getAttribute('toggled'))
+            this.innerHTML = this.icons[index]
+            this.style.background = this.colors[index];
+        })
+    }
 }
+
+
 
 window.customElements.define('icon-button', IconButton);
