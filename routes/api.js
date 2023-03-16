@@ -87,7 +87,6 @@ function importXLSX(props) {
                 })
             })
         });
-
         resolve();
     });
 }
@@ -128,57 +127,13 @@ function Query(props){
     })
 }
 
-function _get_row(table_uuid, row_uuid){
+function Count(table_name){
     return new Promise(resolve => {
-        var table_name = datastores.tables.findOne({table_uuid: table_uuid}, (err, row) => {
-            console.log(row)
-            resolve(row)
+        GrenventoryDB.tables[table_name].Count().then(count => {
+            resolve({count: count})
         })
     })
 }
-
-function _get_rows(table_name){
-    return new Promise(resolve => {
-        if(GrenventoryDB.TableExists(table_name)){
-            GrenventoryDB.tables[table_name].datastore.find({}, (err, rows) => {
-                if(!err){
-                    resolve(rows);
-                }
-            })
-        }else{
-            resolve({error: 'table does not exist'})
-        }
-    })
-}
-
-function _set_row(table_name, data){
-    return new Promise(resolve => {
-        if(GrenventoryDB.TableExists(table_name)){
-            datastores[table_name].insert(data, (err, res) => {
-                console.log(res)
-                resolve(res)
-            })
-        }else{
-            resolve({error:'table does not exists'})
-        }
-    })
-}
-
-function _update_row(table_name, data){
-    return new Promise(resolve => {
-        GrenventoryDB.tables[table_name].datastore.update({ _id: data._id }, { $set: data }, {}, function (err, numReplaced) {
-            if (err) {
-              resolve({error: err})
-            } else if (numReplaced === 0) {
-              resolve({error: 'Record not found'})
-            } else {
-              resolve({success: 'Record updated'})
-            }
-        });
-    })
-}
-
-
 
 
 export default function API() {
@@ -230,57 +185,15 @@ export default function API() {
         var data = req.body.data;
         var table_name = req.body.table_name;
         console.log(`table name is ${table_name}`)
-        data.by = req.body.user.first_name.charAt(0) + req.body.user.last_name.charAt(0);
-        data.date = new Date(data.date);
-        data.date_posted = data.date;
+        console.log(data)
+        data.date = new Date();
+        data.posted_date = data.date;
+        data.by = user.first_name.charAt(0) + user.last_name.charAt(0);
+        console.log(data)
 
         GrenventoryDB.tables[table_name].SetItem(data).then(ret => {
             res.json(ret)
         })
-    })
-
-    API.post('/export_xlsx', (req, res) => {
-        var current_query = req.body.current_query;
-        var filename = req.body.filename.includes('.xlsx') ? req.body.filename : req.body.filename + '.xlsx';
-        console.log(typeof current_query)
-        if(typeof current_query == 'object'){
-            _query(current_query).then(data => {
-                const wb = new xl.Workbook();
-                const ws = wb.addWorksheet('Inventory');
-    
-                //Write Column Title in Excel file
-                let headingColumnIndex = 1;
-                Object.entries(db_schema['inventory'][1]).forEach(heading => {
-                    ws.cell(1, headingColumnIndex++)
-                        .string(heading[0])
-                });
-    
-                //Write Data in Excel file
-                let rowIndex = 2;
-                data.forEach( record => {
-                    let columnIndex = 1;
-                    Object.keys(record).forEach(columnName =>{
-                        ws.cell(rowIndex,columnIndex++)
-                            .string(record [columnName])
-                    });
-                    rowIndex++;
-                }); 
-                wb.writeToBuffer().then(buffer => {
-                    console.log(filename)
-                    res.set({
-                      'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                      'Content-Disposition': 'attachment; filename=' + filename,
-                      'Content-Length': buffer.length
-                    });
-                    res.send(buffer);
-                  }).catch(err => {
-                    console.error('Error sending file:', err);
-                    res.status(500).send('Error sending file');
-                  });
-            })
-        }else{
-            res.json({error: 'current_query is not a string'})
-        }
     })
 
     API.post('/check_auth', (req, res) => {
@@ -355,6 +268,7 @@ export default function API() {
 
     API.post('/import_xlsx', (req, res) => {
         console.log(req.files);
+        console.log(req)
         const fileBuffer = new Buffer(req.files.data.data, 'ArrayBuffer');
 
         // Parse Excel file buffer into workbook object
@@ -365,7 +279,6 @@ export default function API() {
         workbook.SheetNames.forEach(sheetName => {
             const sheet = workbook.Sheets[sheetName];
             const rows = XLSX.utils.sheet_to_json(sheet);
-            console.log(rows);
             if(rows.length == 0){
                 res.json({error: 'No rows found'})
             }else{
@@ -385,10 +298,69 @@ export default function API() {
         });
     })
 
+    API.post('/export_xlsx', (req, res) => {
+        var current_query = req.body.current_query;
+        var filename = req.body.filename.includes('.xlsx') ? req.body.filename : req.body.filename + '.xlsx';
+        console.log(typeof current_query)
+        if(typeof current_query == 'object'){
+            Count('inventory').then(count => {
+                current_query.skip = 0;
+                Query({skip:0, limit: current_query.limit, table_name: 'inventory', query:current_query.query}).then(data => {
+                    const wb = new xl.Workbook();
+                    const ws = wb.addWorksheet('Inventory');
+        
+                    //Write Column Title in Excel file
+                    let headingColumnIndex = 1;
+                    Object.entries(db_schema['inventory'][1]).forEach(heading => {
+                        ws.cell(1, headingColumnIndex++)
+                            .string(heading[0])
+                    });
+        
+                    //Write Data in Excel file
+                    let rowIndex = 2;
+                    data.forEach( record => {
+                        Object.keys(record).forEach(columnName =>{
+                            if(columnName == '_id' || columnName == 'posted_id'){
+                                return
+                            }
+                            console.log(columnName)
+                            console.log(Object.keys(db_schema['inventory'][1]).indexOf(columnName))
+                            console.log(Object.keys(db_schema['inventory'][1]).indexOf(columnName) + 1)
+                            var col_index = Object.keys(db_schema['inventory'][1]).indexOf(columnName) + 1
+
+                            if(typeof record[columnName] == 'string'){
+                                ws.cell(rowIndex, col_index).string(record[columnName])
+                            }else if(typeof record[columnName] == 'number'){
+                                ws.cell(rowIndex,col_index).number(record[columnName])
+                            }else if(typeof record[columnName] == 'object'){
+                                ws.cell(rowIndex, col_index).string(JSON.stringify(record[columnName]))
+                            }
+                        })
+                        rowIndex++;
+                    }); 
+                    wb.writeToBuffer().then(buffer => {
+                        console.log(filename)
+                        res.set({
+                          'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                          'Content-Disposition': 'attachment; filename=' + filename,
+                          'Content-Length': buffer.length
+                        });
+                        res.send(buffer);
+                      }).catch(err => {
+                        console.error('Error sending file:', err);
+                        res.status(500).send('Error sending file');
+                      });
+                })
+            })
+        }else{
+            res.json({error: 'current_query is not a string'})
+        }
+    })
+
     API.post('/Count', (req, res) => {
         var table_name = req.body.table_name;
-        GrenventoryDB.tables[table_name].Count().then(count => {
-            res.json({count: count})
+        Count(table_name).then(count => {
+            res.json(count)
         })
     })
 

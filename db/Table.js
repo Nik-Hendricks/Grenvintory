@@ -13,24 +13,19 @@ export default class Table{
     SetItem(data){
         return new Promise(resolve => {
             this.RowExist(data).then(exists => {
-                console.log(exists)
                 if(!exists){
                     delete data._id
-                    console.log(`Creating row...`)
                     this.MaxId += 1;
                     data.posted_id = this.MaxId;
-                    console.log(data)
+
                     this.datastore.insert(data, (err, res) => {
                         if(err){
-                            console.error(err)
                             resolve({error: err})
                         }else{
-                            console.log(`Id is ${res.posted_id}`)
                             resolve(res)
                         }
                     })
                 }else{
-                    console.log(`Updating row... ${data._id}}`)
                     this.datastore.update({ _id: data._id }, { $set: data }, (err, numReplaced) => {
                         if(err){
                             resolve({error: err})
