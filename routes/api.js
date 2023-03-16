@@ -333,7 +333,9 @@ export default function API() {
                             }else if(typeof record[columnName] == 'number'){
                                 ws.cell(rowIndex,col_index).number(record[columnName])
                             }else if(typeof record[columnName] == 'object'){
-                                ws.cell(rowIndex, col_index).string(JSON.stringify(record[columnName]))
+                                var d = new Date(record[columnName])
+                                var f = ((d.getMonth() > 8) ? (d.getMonth() + 1) : ('0' + (d.getMonth() + 1))) + '/' + ((d.getDate() > 9) ? d.getDate() : ('0' + d.getDate())) + '/' + d.getFullYear()    
+                                ws.cell(rowIndex, col_index).string(f)
                             }
                         })
                         rowIndex++;
