@@ -35,6 +35,10 @@ var db_schema = {
     inventory:[
         {from:'string', to:'string', quantity:'number', item_name: 'string', serial_number:'serial_number', reason:'string'},
         {from:'string', to:'string', quantity:'number', item_name: 'string', serial_number:'serial_number', by:'string', reason:'string', date:'string', posted_date:'string', posted_by:'string'},
+    ],
+
+    pick_tickets:[
+        {}
     ]
 }
 //private functions

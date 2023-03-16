@@ -124,14 +124,14 @@ export default class QueryControls extends HTMLElement{
 
         this.submit_query_button.onclick = (ev) => {
             if(this.mode == 'easy'){
-                window.app.current_query = {skip: window.Table.skip , limit: window.Table.limit, table_name:'inventory', query:this.ParseJSON()};
+               var query = this.ParseJSON()
             }
             else if(this.mode == 'advanced'){
-                window.app.current_query = {skip: window.Table.skip , limit: window.Table.limit, table_name:'inventory', query:this.textarea.value};
+               var query = this.textarea.value;
             }
 
             window.Table.tb.getElementsByTagName('div')[0].innerHTML = '';
-            window.API.Query(window.app.current_query).then(res => {
+            window.Table.Query(query).then(res => {
                 window.Table.append_rows(res)
             })
         }

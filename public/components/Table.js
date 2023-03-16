@@ -82,12 +82,13 @@ class Table extends HTMLElement{
             this.tb.append(document.createElement('div'))
         }
         if(window.UserManager.current_user.permission_level == 1){
-            window.API.Query({skip: this.skip, limit: this.limit, table_name:'inventory', query:{}}).then(res => {
+            this.current_query = {}
+            this.Query(this.current_query).then(res => {
                 this.append_rows(res);
             })
         }else{
-            window.app.current_query = {skip: this.skip, limit: this.limit, table_name:'inventory', query:{by:window.UserManager.getInitials()}}
-            window.API.Query(window.app.current_query).then(res => {
+            this.current_query = {by:window.UserManager.getInitials()}
+            this.Query(this.current_query).then(res => {
 
                 this.append_rows(res);
             })
@@ -153,13 +154,19 @@ class Table extends HTMLElement{
         this.tb.onscroll = (ev) => {
             if (this.tb.scrollTop + this.tb.clientHeight >= this.tb.scrollHeight) {
                 this.skip += this.limit;
-                var q = (window.UserManager.current_user.permission_level > 0) ? {} : {by: window.UserManager.getInitials()}
-                window.app.current_query = {skip: this.skip, limit: this.limit, table_name:'inventory', query:q}
-                window.API.Query(window.app.current_query).then(res => {
+                this.Query(this.current_query).then(res => {
                     this.append_rows(res);
                 })
             }
         }
+    }
+
+    Query(query){
+        return new Promise(resolve => {
+            window.API.Query({skip: this.skip, limit: this.limit, table_name:this.table_name, query:query}).then(res => {
+                resolve(res);
+            })
+        })
     }
 
     connectedCallback(){
