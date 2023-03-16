@@ -8,7 +8,6 @@ class Table extends HTMLElement{
         this.table_name = props.table_name;
         this.row_count = 100;
         this.row_cells = Array(this.row_count).fill([]);
-        this.rows = []
         this.row = 0;
         this.col = 0;
         this.current_cell = null;
@@ -112,13 +111,13 @@ class Table extends HTMLElement{
     full_clear(){
         this.th.innerHTML = '';
         this.tb.innerHTML = '';
-        this.rows = [];
+        this.RowManager.rows = [];
     }
 
 
     append_rows(data){
         for(var d of data){
-            var c = this.rows.length + 1
+            var c = this.RowManager.rows.length + 1
             var new_row = this.RowManager.new_row(c, d)
             this.tb.getElementsByTagName('div')[0].append(new_row)
         }
