@@ -29,7 +29,7 @@ var db_schema = {
     ],
 
     parts_needed_list:[
-        {part_name:'string', date_posted:'string', ordered:'string'}
+        {part_name:'string', posted_date:'string', ordered:'string'}
     ],
 
     inventory:[
@@ -272,7 +272,7 @@ export default function API() {
         const fileBuffer = new Buffer(req.files.data.data, 'ArrayBuffer');
 
         // Parse Excel file buffer into workbook object
-        const workbook = XLSX.read(fileBuffer, { type: 'buffer' });
+        const workbook = XLSX.read(fileBuffer, { type: 'buffer', cellDates: true, });
 
         // Loop through each sheet in the workbook
         var count = 0;
@@ -283,7 +283,10 @@ export default function API() {
                 res.json({error: 'No rows found'})
             }else{
                 rows.forEach(row => {
-                    console.log(row)
+                    console.log('DATE')
+                    console.log(row.date)
+                    console.log(row.posted_date)
+                    
                     setTimeout(() => {
                     GrenventoryDB.tables[req.body.table_name].SetItem(row).then(ret => {
                     //.datastore.insert(row, (err, ret) => {

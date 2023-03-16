@@ -83,11 +83,13 @@ class Table extends HTMLElement{
         }
         if(window.UserManager.current_user.permission_level == 1){
             window.API.Query({skip: this.skip, limit: this.limit, table_name:'inventory', query:{}}).then(res => {
-                this.append_rows(window.API.sort(res, 'date', true));
+                this.append_rows(res);
             })
         }else{
-            window.API.Query({skip: this.skip, limit: this.limit, table_name:'inventory', query:{by:window.UserManager.getInitials()}}).then(res => {
-                this.append_rows(window.API.sort(res, 'date', true));
+            window.app.current_query = {skip: this.skip, limit: this.limit, table_name:'inventory', query:{by:window.UserManager.getInitials()}}
+            window.API.Query(window.app.current_query).then(res => {
+
+                this.append_rows(res);
             })
         }
         this.SetupEvents();
@@ -151,8 +153,10 @@ class Table extends HTMLElement{
         this.tb.onscroll = (ev) => {
             if (this.tb.scrollTop + this.tb.clientHeight >= this.tb.scrollHeight) {
                 this.skip += this.limit;
-                window.API.Query({skip: this.skip, limit: this.limit, table_name:'inventory', query:{}}).then(res => {
-                    this.append_rows(window.API.sort(res, 'date', true));
+                var q = (window.UserManager.current_user.permission_level > 0) ? {} : {by: window.UserManager.getInitials()}
+                window.app.current_query = {skip: this.skip, limit: this.limit, table_name:'inventory', query:q}
+                window.API.Query(window.app.current_query).then(res => {
+                    this.append_rows(res);
                 })
             }
         }
