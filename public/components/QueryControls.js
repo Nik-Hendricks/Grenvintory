@@ -131,8 +131,13 @@ export default class QueryControls extends HTMLElement{
             }
 
             window.Table.tb.getElementsByTagName('div')[0].innerHTML = '';
-            window.Table.Query(query).then(res => {
+            window.Table.ScrollManager.page = 0;
+            window.Table.current_query = query;
+            window.Table.Query(window.Table.current_query).then(res => {
                 window.Table.append_rows(res)
+                if(this.direction == 'up'){
+                    this.tb.scrollTop = this.tb.scrollHeight;
+                }
             })
         }
     }
