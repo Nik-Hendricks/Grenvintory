@@ -63,7 +63,11 @@ export default class Table{
     Query(props){
         return new Promise(resolve => {
             console.log(props)
-            this.datastore.find(props.query).skip(props.skip).limit(props.limit).sort({posted_id: -1}).exec((err, rows) => {
+            var limit = 40;
+            var skip = props.page * 40;
+
+
+            this.datastore.find(props.query).skip(skip).limit(limit).sort({date: -1}).exec((err, rows) => {
                 if(!err){
                     resolve(rows);
                 }

@@ -171,7 +171,7 @@ const API = {
         })
     },
 
-    sort(arr, type, ascending){
+    Sort(arr, type, ascending){
         if(type == 'date'){
             const sortedArray = arr.sort((a, b) => {
                 const dateA = new Date(a['date']);

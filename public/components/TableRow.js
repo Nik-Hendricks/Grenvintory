@@ -57,7 +57,6 @@ export default class TableRow extends Component{
             var dc = new Cell({row: this, text: text, type: el[1], col: el[0]})
             this.append(dc)
             this.cells.push(dc);
-            this.table.row_cells[this.row_num] = dc;
             this.cells.push[this.row_num] = dc;
         })
     }

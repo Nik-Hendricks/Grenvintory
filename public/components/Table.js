@@ -7,16 +7,19 @@ class Table extends HTMLElement{
         this.props = props
         this.table_name = props.table_name;
         this.row_count = 100;
-        this.row_cells = Array(this.row_count).fill([]);
         this.row = 0;
         this.col = 0;
         this.current_cell = null;
         this.hasFormulaInput = (typeof props.hasFormulaInput !== 'undefined') ? props.hasFormulaInput: false;
         this.mode = (typeof props.mode !== 'undefined') ? props.mode: 'add';
         this.delete_mode = 'false';
-        this.skip = 0;
-        this.limit = 40;
+        this.page = 0;
+        this.direction = (typeof props.direction !== 'undefined') ? props.direction: 'up';
         this.RowManager = new RowManager(this);
+        this.ScrollManager = new ScrollManager(this);
+        this.Count().then(count => {
+            this.count = count.count;
+        })
     }
 
     PreStyle(){
@@ -33,7 +36,7 @@ class Table extends HTMLElement{
         this.tb.style.top = '0px'
         this.tb.style.bottom = '0px'
 
-        if(this.hasFormulaInput){
+        if(this.hasFormulaInput || this.hasInputRow){
             this.tb.style.height = 'calc(100% - 85px)';
         }else{
             this.tb.style.height = '100%'
@@ -76,15 +79,19 @@ class Table extends HTMLElement{
             this.current_query = {}
             this.Query(this.current_query).then(res => {
                 this.append_rows(res);
+                if(this.direction == 'up'){
+                    this.tb.scrollTop = this.tb.scrollHeight;
+                }
             })
         }else{
             this.current_query = {by:window.UserManager.getInitials()}
             this.Query(this.current_query).then(res => {
-
                 this.append_rows(res);
+                if(this.direction == 'up'){
+                    this.tb.scrollTop = this.tb.scrollHeight;
+                }
             })
         }
-        this.SetupEvents();
     }
 
     HybridView(){
@@ -93,19 +100,20 @@ class Table extends HTMLElement{
         this.Query(this.current_query).then(res => {
             this.append_rows(res);
         })
-        this.SetupEvents();
     }
 
     refresh(a){
-        this.skip = 0;
-        this.limit = 0;
+        this.ScrollManager.page = 0;
         window.API.get_schema(this.table_name, window.app.admin_mode).then(schema => {
             this.schema = schema;
-            if(this.mode == 'view'){
-                this.ViewView();
-            }else{
-                this.EditView();
-            }
+            setTimeout(() => {
+                if(this.mode == 'view'){
+                    this.ViewView();
+                    this.ScrollManager.init();
+                }else{
+                    this.EditView();
+                }
+            }, 100)
         })
     }
 
@@ -124,6 +132,14 @@ class Table extends HTMLElement{
             var c = this.RowManager.rows.length + 1
             var new_row = this.RowManager.new_row(c, d)
             this.tb.getElementsByTagName('div')[0].append(new_row)
+        }
+    }
+
+    prepend_rows(data){
+        for(var d of data){
+            var c = this.RowManager.rows.length + 1
+            var new_row = this.RowManager.new_row(-1, d)
+            this.tb.getElementsByTagName('div')[0].prepend(new_row)
         }
     }
 
@@ -151,21 +167,13 @@ class Table extends HTMLElement{
         return row;
     }
 
-    SetupEvents(){
-        this.tb.onscroll = (ev) => {
-            if (this.tb.scrollTop + this.tb.clientHeight >= this.tb.scrollHeight) {
-                this.skip += this.limit;
-                this.Query(this.current_query).then(res => {
-                    this.append_rows(res);
-                })
-            }
-        }
-    }
+
 
     Query(query){
         return new Promise(resolve => {
-            window.API.Query({skip: this.skip, limit: this.limit, table_name:this.table_name, query:query}).then(res => {
-                resolve(res);
+            window.API.Query({page: this.ScrollManager.page, table_name:this.table_name, query:query}).then(res => {
+                //resolve(API.Sort(res, 'date', true));
+                resolve(res)
             })
         })
     }
@@ -177,16 +185,40 @@ class Table extends HTMLElement{
             this.PreStyle();
             return this;
         })
-
-
-
-        window.Dispatcher.on('UPDATE', () => {
-            console.log('UPDATE')
-            this.refresh()
-        })
-        
     }
 
+}
+
+class ScrollManager{
+    constructor(table){
+        this.table = table;
+        this.page = 0;
+    }
+
+    init(){
+        this.table.tb.onscroll = (ev) => {
+            if(this.table.direction == 'down'){
+                if (this.table.tb.scrollTop + this.table.tb.clientHeight >= this.table.tb.scrollHeight) {
+                    console.log('down')
+                    this.page += 1;
+                    this.table.Query(this.table.current_query).then(res => {
+                        this.table.append_rows(res);
+                    })
+                }
+            } else if(this.table.direction == 'up'){
+                if (this.table.tb.scrollTop == 0) {
+                    this.page += 1;
+                    const prevScrollHeight = this.table.tb.scrollHeight; // store current scroll height
+                    this.table.Query(this.table.current_query).then(res => {
+                        this.table.prepend_rows(res);
+                        const newScrollHeight = this.table.tb.scrollHeight; // calculate new scroll height
+                        const addedHeight = newScrollHeight - prevScrollHeight; // calculate added height
+                        this.table.tb.scrollTop += addedHeight; // adjust scroll position
+                    })
+                }
+            }
+        }
+    }
 }
 
 class RowManager{
@@ -210,7 +242,11 @@ class RowManager{
 
     new_row(row_num, data){
         var row = new TableRow({table: this.table, row_num: row_num, data: data});
-        this.rows.push(row);
+        if(this.table.direction == 'up'){
+            this.rows.unshift(row);
+        }else{
+            this.rows.push(row);
+        }
         this.row_count += 1;
         return row;
     }

@@ -58,11 +58,7 @@ export default class UserControls extends HTMLElement{
                 e.style.width = `calc(${item.width} - 10px)`;
             }
 
-
-
             item.auth_required ? window.UserManager.current_user.permission_level == 1 ? this.append(e) : {} : this.append(e)
-           
-
             this.style.overflow = 'scroll'
             this.style.display = 'block';
             this.style.position = 'absolute';
@@ -83,8 +79,9 @@ class TopControls extends HTMLElement{
                 modes: ['add', 'view'],
                 colors: ['var(--window-color-3)', 'var(--blue)'],
                 onclick: (ev) => {
+                    console.log('asdfasdlfkj;alskdf')
                     window.Table.mode = ev.target.getAttribute('toggled');
-                    window.Dispatcher.dispatch('UPDATE')
+                    window.Table.refresh()
                 }
             },
             {
@@ -95,7 +92,7 @@ class TopControls extends HTMLElement{
                 onclick: (ev) => {
                     console.log(ev.target.getAttribute('toggled'))
                     window.app.admin_mode = ev.target.getAttribute('toggled');
-                    window.Dispatcher.dispatch('UPDATE')
+                    window.Table.refresh()
                 }
             },
             {
@@ -106,7 +103,8 @@ class TopControls extends HTMLElement{
                 onclick: (ev) => {
                     console.log(ev.target.getAttribute('toggled'))
                     window.Table.delete_mode = ev.target.getAttribute('toggled');
-                    window.Dispatcher.dispatch('UPDATE')
+                    
+                    window.Table.refresh()
                 }
             },
             {

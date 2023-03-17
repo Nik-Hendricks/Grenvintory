@@ -119,7 +119,7 @@ function Query(props){
                         p[key] = new RegExp(value, 'i')
                     }
                 })
-                GrenventoryDB.tables[table_name].Query({query:p, skip:props.skip, limit: props.limit}).then(docs => {
+                GrenventoryDB.tables[table_name].Query({query:p, page: props.page}).then(docs => {
                     resolve(docs)
                 })
             }else{
@@ -312,7 +312,7 @@ export default function API() {
         if(typeof current_query == 'object'){
             Count('inventory').then(count => {
                 current_query.skip = 0;
-                Query({skip:0, limit: current_query.limit, table_name: 'inventory', query:current_query.query}).then(data => {
+                Query({page: 'all', table_name: 'inventory', query:current_query.query}).then(data => {
                     const wb = new xl.Workbook();
                     const ws = wb.addWorksheet('Inventory');
         

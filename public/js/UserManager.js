@@ -36,7 +36,6 @@ const UserManager = {
                                 resolve(true);
                             }else{
                                 var p = new Prompt({error:true, title:'Login Error', text: 'Incorrect password'});
-                                p.init();
                                 resolve(false);
                             }
                         })
@@ -51,7 +50,7 @@ const UserManager = {
         this.current_user = user;
         window.localStorage.setItem('user', JSON.stringify(user))
         window.Dispatcher.dispatch('SWITCH_USER', user)
-        window.Dispatcher.dispatch('UPDATE')
+        window.Table.refresh();
         window.Dispatcher.dispatch('CONTROL_UPDATE')
     },
 
