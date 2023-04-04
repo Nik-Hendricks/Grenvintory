@@ -115,8 +115,18 @@ class TopControls extends HTMLElement{
                 colors: ['var(--window-color-3)', 'var(--blue)'],
                 onclick: () => {
                     if(window.UserManager.current_user.permission_level == 1){
-                        //add new pick ticket
-
+                        ////add new pick ticket
+                        //if(window.Table.table_name == 'pick_tickets'){
+                        //    window.app.CurrentTable('inventory')
+                        //}else{
+                        //    window.app.CurrentTable('pick_tickets')
+                        //}
+                        new Prompt({
+                            title: 'Add New Pick Ticket',
+                            text: 'Enter a name for the new pick ticket',
+                            buttons: [{text: 'test', color: 'var(--green)'}]
+                            
+                        })
                     }else{
                         //load pick ticket
                         var p = new Prompt({})

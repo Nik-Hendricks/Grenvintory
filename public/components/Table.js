@@ -179,6 +179,7 @@ class Table extends HTMLElement{
     }
 
     connectedCallback(){
+        this.innerHTML = '';
         window.API.get_schema(this.table_name).then(schema => {
             this.schema = schema;
             this.CreateStructure()

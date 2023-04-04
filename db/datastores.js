@@ -5,4 +5,5 @@ module.exports = {
     inventory: new Datastore({filename: 'db/inventory.db', autoload: true}),
     users: new Datastore({filename: 'db/users.db', autoload:true}),
     parts_needed_list: new Datastore({filename: 'db/parts_needed_list.db', autoload:true}),
+    pick_tickets: new Datastore({filename: 'db/pick_tickets.db', autoload:true}),
 }

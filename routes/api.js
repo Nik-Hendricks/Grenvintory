@@ -20,6 +20,7 @@ var GrenventoryDB = new Database();
 GrenventoryDB.AddTable('inventory');
 GrenventoryDB.AddTable('users');
 GrenventoryDB.AddTable('parts_needed_list');
+GrenventoryDB.AddTable('pick_tickets');
 
 
 var db_schema = {
@@ -132,6 +133,7 @@ function Query(props){
 }
 
 function Count(table_name){
+    console.log(table_name)
     return new Promise(resolve => {
         GrenventoryDB.tables[table_name].Count().then(count => {
             resolve({count: count})

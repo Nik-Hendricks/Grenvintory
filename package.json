@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-  "author": "",
+  "author": "Nik Hendricks",
   "license": "ISC",
   "dependencies": {
     "excel4node": "^1.8.0",

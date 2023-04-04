@@ -10,12 +10,13 @@ export default class QueryControls extends HTMLElement{
     PreStyle(){
         this.title_el.style.margin = '0px';
         this.title_el.style.textAlign = 'center';
-        this.style.display = 'inline-block';
+        this.style.display = 'block';
         this.style.background = 'var(--window-color-1)';
         this.style.borderRadius = '5px';
         this.style.height = 'auto';
         this.style.color = 'white';
         this.style.paddingTop = '5px'
+        this.style.float = 'right';
     }
 
     CreateStructure(){

@@ -9,7 +9,7 @@ export default class Prompt extends HTMLElement{
             this.width = (typeof props.width !== 'undefined') ? props.width : '300px';
             this.height = (typeof props.height !== 'undefined') ? props.height : '150px';
             this.icon = (typeof props.icon !== 'undefined') ? props.icon : 'info';
-            this.buttons = (typeof props.buttons !== 'undefined') ? props.buttons : [{text: 'Ok', color: 'var(--green)'}];
+            this.buttons = (typeof props.buttons !== 'undefined') ? props.buttons : [{text: 'Ok', color: 'var(--green)', onclick: () => {this.remove()}}];
             this.error = (typeof props.error !== 'undefined') ? props.error : false;
             document.body.append(this)
             return this;
@@ -38,7 +38,7 @@ export default class Prompt extends HTMLElement{
                 var bc = (this.error && this.buttons.length == 1) ? '#e74c3c' : button.color;
                 var button_el = new CustomInput({type: 'button', text: button.text, background_color: bc, width: '25%', height: '30px', margin: '5px'});
                 button_el.addEventListener('click', () => {
-                    this.remove();
+                    button.onclick()
                 })
                 this.button_container.append(button_el);
                 button_el.style.float = 'right';
