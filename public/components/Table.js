@@ -110,8 +110,10 @@ class Table extends HTMLElement{
                 if(this.mode == 'view'){
                     this.ViewView();
                     this.ScrollManager.init();
-                }else{
+                }else if(this.mode == 'add'){
                     this.EditView();
+                }else if(this.mode == 'hybrid'){
+                    
                 }
             }, 100)
         })

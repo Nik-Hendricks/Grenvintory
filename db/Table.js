@@ -13,26 +13,30 @@ export default class Table{
     SetItem(data){
         return new Promise(resolve => {
             this.RowExist(data).then(exists => {
-                if(!exists){
+                if(!exists){ // row does not exist
                     delete data._id
                     this.MaxId += 1;
                     data.posted_id = this.MaxId;
 
-                    this.datastore.insert(data, (err, res) => {
+                    this.datastore.insert(data, (err, res) => { // insert new row
                         if(err){
                             resolve({error: err})
                         }else{
                             resolve(res)
                         }
                     })
-                }else{
-                    this.datastore.update({ _id: data._id }, { $set: data }, (err, numReplaced) => {
-                        if(err){
-                            resolve({error: err})
-                        }else if(numReplaced === 0){
-                            resolve({error: 'Record not found'})
-                        }else{
-                            resolve({success: 'Record updated'})
+                }else{ // row exists
+                    this.isTechLocked(data).then(locked => {
+                        if(!locked){
+                            this.datastore.update({ _id: data._id }, { $set: data }, (err, numReplaced) => { // update row
+                                if(err){
+                                    resolve({error: err})
+                                }else if(numReplaced === 0){
+                                    resolve({error: 'Record not found'})
+                                }else{
+                                    resolve({success: 'Record updated'})
+                                }
+                            })
                         }
                     })
                 }
@@ -52,6 +56,27 @@ export default class Table{
         });
     }
 
+    isTechLocked(data){
+        return new Promise(resolve => {
+            this.datastore.findOne({ _id: data._id }, (err, row) => {
+                if (err) {
+                    console.error(err);
+                    resolve(true);
+                    return;
+                }
+    
+                console.log("Row found: ", row);
+    
+                if (row && Date.now() <= row.date.getTime() + (5 * 60 * 1000)) {
+                    console.log('not locked');
+                    resolve(false);
+                } else {
+                    console.log('locked');
+                    resolve(true);
+                }
+            })
+        })
+    }
     Count(){
         return new Promise(resolve => {
             this.datastore.count({}, (err, count) => {

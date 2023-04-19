@@ -21,7 +21,7 @@ export default class PartsNeededList extends HTMLElement{
         }
 
         this.table_container = document.createElement('div');
-        this.table = new Table({table_name:'parts_needed_list', mode:'view'})
+        this.table = new Table({table_name:'parts_needed_list', mode:'hybrid'})
         this.table_container.append(this.table)
         this.table_container.style.height = '200px'
         this.table_container.style.marginBottom = '20px'
