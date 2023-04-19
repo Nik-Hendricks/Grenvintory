@@ -75,10 +75,10 @@ class Table extends HTMLElement{
 
     ViewView(){
         this.full_clear();
-        if(window.UserManager.current_user.permission_level == 1){
-            this.current_query = {}
+        if(window.UserManager.current_user.permission_level == 1){ // if admin
+            this.current_query = {} // get all
             this.Query(this.current_query).then(res => {
-                this.append_rows(res);
+                this.prepend_rows(res);
                 if(this.direction == 'up'){
                     this.tb.scrollTop = this.tb.scrollHeight;
                 }
@@ -86,7 +86,7 @@ class Table extends HTMLElement{
         }else{
             this.current_query = {by:window.UserManager.getInitials()}
             this.Query(this.current_query).then(res => {
-                this.append_rows(res);
+                this.prepend_rows(res);
                 if(this.direction == 'up'){
                     this.tb.scrollTop = this.tb.scrollHeight;
                 }
