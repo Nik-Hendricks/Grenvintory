@@ -96,13 +96,18 @@ class Table extends HTMLElement{
 
     HybridView(){
         this.full_clear();
-        this.current_query = {}
+        console.log('hybrid view')
+        this.current_query = {} // get all
         this.Query(this.current_query).then(res => {
-            this.append_rows(res);
+            this.prepend_rows(res);
+            if(this.direction == 'up'){
+                this.tb.scrollTop = this.tb.scrollHeight;
+            }
+            this.tb.getElementsByTagName('div')[0].append(this.RowManager.new_row(Object.entries(res).length + 1, {}))
         })
     }
 
-    refresh(a){
+    refresh(){
         this.ScrollManager.page = 0;
         window.API.get_schema(this.table_name, window.app.admin_mode).then(schema => {
             this.schema = schema;
@@ -113,9 +118,10 @@ class Table extends HTMLElement{
                 }else if(this.mode == 'add'){
                     this.EditView();
                 }else if(this.mode == 'hybrid'){
-                    
+                    this.HybridView();
+                    this.ScrollManager.init();
                 }
-            }, 100)
+            }, 50)
         })
     }
 
